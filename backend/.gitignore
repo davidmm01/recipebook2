@@ -1,0 +1,14 @@
+# Service account keys
+service-account.json
+*.json
+
+# Environment files
+.env
+
+# Go build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out

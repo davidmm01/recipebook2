@@ -1,0 +1,15 @@
+Hey Claude, here I am building a simple website to view/create/update our recipes for foods, cocktails, and maybe other things in
+the future.
+
+The idea is as follows.
+
+My website will have the following stack:
+- frontend vibe coded in react
+- go rest api on cloudrun
+
+As for infra, it'll all be on google cloud
+- recipes will be stored as objects in Firestore
+- servers will run on cloudrun
+
+What do you think of the stack?
+My goal is to run this cheaply, or as little as is practical while still following sane practises and keeping it all gcp for ease.
