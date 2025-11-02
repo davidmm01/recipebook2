@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to get user role
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    // Helper function to check if user has required role or higher
+    function hasRole(role) {
+      let userRole = getUserRole();
+      let roleHierarchy = {
+        'viewer': 1,
+        'editor': 2,
+        'admin': 3
+      };
+      return roleHierarchy[userRole] >= roleHierarchy[role];
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own document
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Only admins can read all user documents
+      allow read: if request.auth != null && hasRole('admin');
+
+      // Users can create their own document on first sign-in
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.role == 'viewer';
+
+      // Users can update their own lastLoginAt timestamp
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastLoginAt']);
+
+      // Only admins can update user roles
+      allow update: if request.auth != null && hasRole('admin');
+
+      // Only admins can delete users
+      allow delete: if request.auth != null && hasRole('admin');
+    }
+
+    // Recipes collection
+    match /recipes/{recipeId} {
+      // Anyone authenticated can read recipes
+      allow read: if request.auth != null;
+
+      // Editors and admins can create recipes
+      allow create: if request.auth != null && hasRole('editor');
+
+      // Editors and admins can update recipes
+      allow update: if request.auth != null && hasRole('editor');
+
+      // Only admins can delete recipes
+      allow delete: if request.auth != null && hasRole('admin');
+    }
+  }
+}

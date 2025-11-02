@@ -1,0 +1,18 @@
+# Ignore service account files
+*.json
+service-account.json
+
+# Ignore local database
+*.db
+*.db-shm
+*.db-wal
+
+# Ignore Go build artifacts
+server
+
+# Ignore Git
+.git
+.gitignore
+
+# Ignore documentation
+*.md

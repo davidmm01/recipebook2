@@ -11,7 +11,7 @@ A simple web application for managing recipes for food, cocktails, and more.
 - Go REST API (deployed on Google Cloud Run)
 
 **Database:**
-- Firestore (NoSQL document store)
+- SQLite + Cloud Storage (see [docs/DATABASE_ARCHITECTURE.md](docs/DATABASE_ARCHITECTURE.md) for details)
 
 **Infrastructure:**
 - Google Cloud Platform (GCP)
@@ -29,13 +29,27 @@ recipebook2/
 
 ## Features
 
-- View recipes
-- Create new recipes
-- Update existing recipes
+- **Public recipe viewing** - Anyone can browse and search recipes
+- **Authenticated editing** - Only you (and your girlfriend) can create/edit/delete
+- Markdown formatting for ingredients and methods
+- Full-text search across all recipes
 - Support for multiple recipe types (food, cocktails, etc.)
-- Firebase Authentication (email/password)
+- Firebase Authentication for editors (email/password)
+- Ultra-low cost (~$0.001/month)
 
-## Setup
+## Documentation
+
+📚 **[See docs/ for complete documentation](docs/)** including:
+- Deployment guide
+- Database architecture
+- Security model
+- API reference
+
+## Quick Start
+
+For complete deployment instructions, see **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**.
+
+## Local Development Setup
 
 ### 1. Firebase Project Setup
 
@@ -44,10 +58,7 @@ recipebook2/
 3. Enable **Authentication**:
    - Go to Authentication > Sign-in method
    - Enable "Email/Password"
-4. Enable **Firestore Database**:
-   - Go to Firestore Database > Create database
-   - Start in production mode (we'll add security rules later)
-5. Get your Firebase config:
+4. Get your Firebase config:
    - Go to Project Settings > General
    - Scroll to "Your apps" and click web icon to register app
    - Copy the Firebase configuration
@@ -70,23 +81,7 @@ npm install
 npm start
 ```
 
-### 3. Backend Setup
-
-```bash
-cd backend
-
-# For local development, download service account key:
-# Firebase Console > Project Settings > Service Accounts > Generate new private key
-# Save as service-account.json in backend/ directory
-
-# Set environment variable
-export GOOGLE_APPLICATION_CREDENTIALS="./service-account.json"
-
-# Run server
-go run .
-```
-
-### 4. Infrastructure Setup
+### 3. Infrastructure Setup
 
 ```bash
 cd infra
@@ -98,7 +93,28 @@ echo 'project_id = "your-gcp-project-id"' > terraform.tfvars
 terraform init
 terraform plan
 terraform apply
+
+# Note the output values (bucket name and service account)
 ```
+
+### 4. Backend Setup
+
+```bash
+cd backend
+
+# For local development, download service account key:
+# Firebase Console > Project Settings > Service Accounts > Generate new private key
+# Save as service-account.json in backend/ directory
+
+# Set environment variables
+export GOOGLE_APPLICATION_CREDENTIALS="./service-account.json"
+export DB_BUCKET_NAME="your-project-id-recipebook-db"
+
+# Run server
+go run .
+```
+
+See [docs/DATABASE_ARCHITECTURE.md](docs/DATABASE_ARCHITECTURE.md) for detailed database setup and deployment instructions.
 
 ## Development
 
@@ -115,6 +131,15 @@ terraform apply
 
 ## API Endpoints
 
-- `GET /health` - Health check (no auth required)
-- `GET /recipes` - List recipes (auth required)
-- `POST /recipes` - Create recipe (auth required)
+### Public (No Auth Required)
+- `GET /health` - Health check
+- `GET /recipes` - List all recipes
+- `GET /recipes/{id}` - Get single recipe
+- `GET /recipes/search?q=query` - Full-text search
+
+### Authenticated Only
+- `POST /recipes` - Create recipe
+- `PUT /recipes/{id}` - Update recipe
+- `DELETE /recipes/{id}` - Delete recipe
+
+**Note:** Recipes are publicly viewable but only authenticated users can create/edit/delete. Perfect for sharing your favorite recipes with friends and family!
