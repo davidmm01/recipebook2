@@ -1,0 +1,49 @@
+---
+name: Minestrone
+date_added: 2025-08-14
+source:
+  name: string
+  url: https://nutritionistmom.com/blogs/blog/high-protein-minestrone-soup?srsltid=AfmBOooHIvu5diRZIYGwelSVvXfbRB5I7GiILuxsf1XyVWy-PzgQWr-R
+  type: string #copy/pimping/original/research inspired
+  modifications: string
+  submitter: string
+type: meal
+descriptors:
+  - soup
+  - healthy
+  - fibre
+cuisine: italian
+ingredients:
+  - 6 cups (1.5L) chicken stock
+  - 250g celery, diced
+  - 250g carrot, diced
+  - 250g onion, diced
+  - 4 cloves garlic, minced
+  - 500g turkey/chicken minced
+  - 500g pork mince
+  - 1 can (400g) diced tomatoes
+  - 1 can (400g) chickpeas, drained
+  - 1 can beans (e.g. red kidney, most will work), drained
+  - 1 cup passata
+  - 250g pasta
+  # spices
+  - 1 tbsp dried parsley
+  - 1.5 tsp dried basil
+  - 1 tsp dried oregano
+  - 0.5 tsp dried thyme
+  - 0.5 tsp salt
+  - 0.5 tsp black pepper
+  # optional garnish
+  - parmesan (optional garnish)
+  - lemon (optional garnish)
+  - chilli flakes (optional garnish)
+instructions:
+  - Heat olive oil in a large saucepan or stock pot over medium heat.
+  - Add carrots, onion, and celery; cook for 2-3 minutes until onion is translucent.
+  - Add garlic and mince and cook until no longer pink.
+  - Add broth, diced tomatoes, tomato sauce, kidney beans, chickpeas, and spices.
+  - Reduce heat to low, and simmer for 20 minutes.
+  - Add pasta and cook for another 7-8 minutes until al dente.
+  - Garnish with parmesan, a squeeze of lemon, or red pepper flakes if desired.
+notes:
+next:

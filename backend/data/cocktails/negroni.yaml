@@ -1,0 +1,26 @@
+---
+name: Negroni
+date_added: 2025-09-28
+source:
+  name:
+  url:
+  type:
+  modifications:
+  submitter: dave
+type: cocktail
+descriptors:
+  - gin
+  - campari
+  - vermouth
+cuisine: string # this doesnt make sense with cocktails! changes needed
+ingredients:
+  - 1 part gin
+  - 1 part campari
+  - 1 part vermouth rosso
+  - orange slice for garnish
+instructions:
+  - Combine.
+  - Garnish with orange slice.
+  - Serve on the rocks.
+notes:
+next:

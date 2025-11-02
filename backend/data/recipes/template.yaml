@@ -1,0 +1,21 @@
+---
+name: Template # should match file name without being snake case lower letter
+date_added: 2023-11-27 # date?
+source:
+  name: string
+  url: string # https://www.therecipesource.com/the-recipe
+  type: string #copy/pimping/original/research inspired
+  modifications: string
+  submitter: string
+type: meal # meal/component/cocktail
+descriptors:
+  - string
+cuisine: string
+ingredients:
+  - string
+instructions:
+  - string
+notes:
+  - string
+next:
+  - string

@@ -38,8 +38,13 @@ func main() {
 	http.HandleFunc("/recipes", corsMiddleware(recipesHandler))
 	http.HandleFunc("/recipes/", corsMiddleware(recipeByIDHandler))
 	http.HandleFunc("/recipes/search", corsMiddleware(searchHandler))
+	// Filter metadata endpoints
+	http.HandleFunc("/tags", corsMiddleware(tagsHandler))
+	http.HandleFunc("/cuisines", corsMiddleware(cuisinesHandler))
 	// Image upload endpoint
 	http.HandleFunc("/recipes/images", corsMiddleware(imageUploadHandler))
+	// Icon endpoints
+	http.HandleFunc("/icons", corsMiddleware(iconsHandler))
 
 	log.Printf("Server starting on port %s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
@@ -58,7 +63,22 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		// Public read - no auth required
-		recipes, err := GetRecipes(r.Context())
+		// Check for filter parameters
+		searchQuery := r.URL.Query().Get("search")
+		cuisine := r.URL.Query().Get("cuisine")
+		tagsParam := r.URL.Query()["tags"] // Get all tags parameters (can be multiple)
+
+		var recipes []Recipe
+		var err error
+
+		// If any filters are provided, use FilterRecipes
+		if searchQuery != "" || cuisine != "" || len(tagsParam) > 0 {
+			recipes, err = FilterRecipes(r.Context(), searchQuery, tagsParam, cuisine)
+		} else {
+			// No filters, get all recipes
+			recipes, err = GetRecipes(r.Context())
+		}
+
 		if err != nil {
 			log.Printf("Error getting recipes: %v", err)
 			http.Error(w, "Failed to get recipes", http.StatusInternalServerError)
@@ -192,6 +212,44 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(recipes)
 }
 
+func tagsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Public read - no auth required
+	tags, err := GetAllTags(r.Context())
+	if err != nil {
+		log.Printf("Error getting tags: %v", err)
+		http.Error(w, "Failed to get tags", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(tags)
+}
+
+func cuisinesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Public read - no auth required
+	cuisines, err := GetAllCuisines(r.Context())
+	if err != nil {
+		log.Printf("Error getting cuisines: %v", err)
+		http.Error(w, "Failed to get cuisines", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(cuisines)
+}
+
 func imageUploadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -262,6 +320,79 @@ func imageUploadHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"imageUrl": imageURL,
 	})
+}
+
+func iconsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodGet:
+		// Public read - no auth required
+		icons, err := GetAllIcons(r.Context())
+		if err != nil {
+			log.Printf("Error getting icons: %v", err)
+			http.Error(w, "Failed to get icons", http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(icons)
+
+	case http.MethodPost:
+		// Auth required for uploads
+		userID, err := authenticateRequest(r)
+		if err != nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		log.Printf("Uploading icon - authenticated user: %s", userID)
+
+		// Parse multipart form (limit to 2MB for icons)
+		err = r.ParseMultipartForm(2 << 20)
+		if err != nil {
+			http.Error(w, "Failed to parse form", http.StatusBadRequest)
+			return
+		}
+
+		// Get file from form
+		file, fileHeader, err := r.FormFile("icon")
+		if err != nil {
+			http.Error(w, "Failed to get icon from form", http.StatusBadRequest)
+			return
+		}
+		defer file.Close()
+
+		// Upload to GCS
+		filename, iconURL, err := UploadIconToGCS(r.Context(), file, fileHeader)
+		if err != nil {
+			log.Printf("Error uploading icon: %v", err)
+			http.Error(w, fmt.Sprintf("Failed to upload icon: %v", err), http.StatusInternalServerError)
+			return
+		}
+
+		// Save to database
+		dbMutex.Lock()
+		iconID, err := createIcon(r.Context(), filename, iconURL)
+		dbMutex.Unlock()
+
+		if err != nil {
+			log.Printf("Error saving icon to database: %v", err)
+			// Try to delete from GCS
+			DeleteImageFromGCS(r.Context(), iconURL)
+			http.Error(w, "Failed to save icon", http.StatusInternalServerError)
+			return
+		}
+
+		// Return the created icon
+		icon := Icon{
+			ID:       iconID,
+			Filename: filename,
+			IconURL:  iconURL,
+		}
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(icon)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
 }
 
 // corsMiddleware adds CORS headers to allow cross-origin requests from the frontend

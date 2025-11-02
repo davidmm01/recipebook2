@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRecipe, updateRecipe } from '../utils/api';
+import IconManager from './IconManager';
 
 function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
   const isEditing = !!initialRecipe;
@@ -12,7 +13,9 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
     tags: '',
     ingredients: '',
     method: '',
-    notes: ''
+    notes: '',
+    sources: '',
+    iconId: null
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,7 +31,9 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
         tags: initialRecipe.tags ? initialRecipe.tags.join(', ') : '',
         ingredients: initialRecipe.ingredients || '',
         method: initialRecipe.method || '',
-        notes: initialRecipe.notes || ''
+        notes: initialRecipe.notes || '',
+        sources: initialRecipe.sources || '',
+        iconId: initialRecipe.iconId || null
       });
     }
   }, [initialRecipe]);
@@ -66,7 +71,9 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
           tags: '',
           ingredients: '',
           method: '',
-          notes: ''
+          notes: '',
+          sources: '',
+          iconId: null
         });
         if (onRecipeCreated) {
           onRecipeCreated();
@@ -165,6 +172,11 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
           </div>
         </div>
 
+        <IconManager
+          selectedIconId={formData.iconId}
+          onIconSelect={(iconId) => setFormData(prev => ({ ...prev, iconId }))}
+        />
+
         <div style={styles.field}>
           <label style={styles.label}>Ingredients *</label>
           <textarea
@@ -200,6 +212,18 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
             rows="3"
             style={{...styles.input, ...styles.textarea}}
             placeholder="Optional notes, tips, or variations"
+          />
+        </div>
+
+        <div style={styles.field}>
+          <label style={styles.label}>Sources</label>
+          <textarea
+            name="sources"
+            value={formData.sources}
+            onChange={handleChange}
+            rows="3"
+            style={{...styles.input, ...styles.textarea}}
+            placeholder="Recipe sources, references, or attribution (e.g., cookbook name, website URL)"
           />
         </div>
 

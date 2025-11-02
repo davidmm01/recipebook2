@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import Login from './components/Login';
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import RecipeDetail from './components/RecipeDetail';
+import RecipeFilters from './components/RecipeFilters';
 import { createOrUpdateUser } from './utils/userUtils';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -32,6 +34,10 @@ function App() {
     setRefreshTrigger(prev => prev + 1);
     setShowForm(false);
   };
+
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters(newFilters);
+  }, []);
 
   if (loading) {
     return <div style={{ padding: '20px' }}>Loading...</div>;
@@ -73,9 +79,12 @@ function App() {
                 </div>
               )}
 
+              <RecipeFilters onFilterChange={handleFilterChange} />
+
               <RecipeList
                 key={refreshTrigger}
                 onRecipeClick={(recipeId) => setSelectedRecipeId(recipeId)}
+                filters={filters}
               />
             </>
           )}

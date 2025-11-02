@@ -1,0 +1,29 @@
+---
+name: Margarita
+date_added: 2025-09-28
+source:
+  name:
+  url:
+  type:
+  modifications:
+  submitter: dave
+type: cocktail
+descriptors:
+  - tequila
+  - lime
+  - salt
+cuisine: string # this doesnt make sense with cocktails! changes needed
+ingredients:
+  - juice of 1 lime
+  - 45ml tequila (blanco or reposado)
+  - 15ml cointreu
+  - 15ml agave syrup
+  - pinch of salt
+instructions:
+  - Combine all ingredients.
+  - Shake
+  - Strain and serve.
+  - Optionally serve ice and or a splash of soda water.
+notes:
+  - Make no more than 2 margaritas into a standard shaker at a time, else you will not be able to add enough ice to the shaker.
+next:

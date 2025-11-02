@@ -1,0 +1,29 @@
+Task 1 - Pre-req database changes
+
+- need to add submitter to our db schema
+
+
+Task 2 - Base data for database
+
+Look at all my recipes and cocktails in the folders `backend/data/cocktails` and `backend/data/recipes`.
+I would like these to be converted into entries into our database. Please apply the following mappings:
+
+this will follow format:
+- <attribute for recipes row> should be <requirement>
+- id should be a new UUID v4
+- title should be the name from the yaml
+- description should be empty (this is a new field)
+- recipe_type should be food or drink based on whether the file is in the cocktails or the recipes directory
+- cuisine should be the cuisine from the yaml
+- tags should be the descriptors from the yaml
+- ingredients should be the ingredients from the yaml, you will notice for some ingreidents, there are comments, could you turn the comments into subheadings in the markdown? and make the ingrendients a list
+- method should be the instructions from the yaml. Do the same subheadings thing as the ingredients above
+- notes should be a combination of notes and next in the yaml, with subheadings to identify where each part came from
+- sources should come from all the fields under source OTHER THAN submitter (from the yaml again)
+- submitter should come from source.submitter in the taml
+- created_at should be the date_added
+- updated_at should be the current time
+
+You can ignore the type meal/component data point, thats useless.
+
+Any additional data that we weren't sure where to put it, let me know

@@ -27,9 +27,17 @@ var (
 	bucketName string
 )
 
+// Icon represents a recipe icon
+type Icon struct {
+	ID         int64     `json:"id"`
+	Filename   string    `json:"filename"`
+	IconURL    string    `json:"iconUrl"`
+	UploadedAt time.Time `json:"uploadedAt"`
+}
+
 // Recipe represents a recipe with markdown fields
 type Recipe struct {
-	ID          string        `json:"id"`          // UUID
+	ID          string        `json:"id"` // UUID
 	Title       string        `json:"title"`
 	Description string        `json:"description"` // Brief description
 	RecipeType  string        `json:"type"`        // "food", "cocktail", etc.
@@ -37,6 +45,9 @@ type Recipe struct {
 	Ingredients string        `json:"ingredients"` // markdown
 	Method      string        `json:"method"`      // markdown
 	Notes       string        `json:"notes"`       // markdown
+	Sources     string        `json:"sources"`     // markdown
+	IconID      *int64        `json:"iconId"`      // Nullable icon ID
+	Icon        *Icon         `json:"icon"`        // Icon details (loaded separately)
 	Tags        []string      `json:"tags"`        // Array of tag names
 	Images      []RecipeImage `json:"images"`      // Array of image URLs
 	CreatedAt   time.Time     `json:"createdAt"`
@@ -89,6 +100,14 @@ func createNewDB() error {
 	defer database.Close()
 
 	schema := `
+	-- Icons table (shared collection of recipe icons)
+	CREATE TABLE IF NOT EXISTS icons (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		filename TEXT NOT NULL,
+		icon_url TEXT NOT NULL,
+		uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+	);
+
 	CREATE TABLE IF NOT EXISTS recipes (
 		id TEXT PRIMARY KEY,
 		title TEXT NOT NULL,
@@ -98,12 +117,16 @@ func createNewDB() error {
 		ingredients TEXT,
 		method TEXT,
 		notes TEXT,
+		sources TEXT,
+		icon_id INTEGER,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (icon_id) REFERENCES icons(id)
 	);
 
 	CREATE INDEX IF NOT EXISTS idx_recipes_type ON recipes(recipe_type);
 	CREATE INDEX IF NOT EXISTS idx_recipes_cuisine ON recipes(cuisine);
+	CREATE INDEX IF NOT EXISTS idx_recipes_icon ON recipes(icon_id);
 
 	-- Tags table
 	CREATE TABLE IF NOT EXISTS tags (
@@ -135,23 +158,23 @@ func createNewDB() error {
 
 	CREATE INDEX IF NOT EXISTS idx_recipe_images_recipe ON recipe_images(recipe_id);
 
-	-- Full-text search table (now includes description and cuisine)
+	-- Full-text search table (now includes description, cuisine, and sources)
 	-- Note: We include recipe_id as an unindexed column to enable joining back to recipes table
 	CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
 		recipe_id UNINDEXED,
-		title, description, cuisine, ingredients, method, notes
+		title, description, cuisine, ingredients, method, notes, sources
 	);
 
 	-- Triggers to keep FTS in sync
 	CREATE TRIGGER IF NOT EXISTS recipes_fts_insert AFTER INSERT ON recipes BEGIN
-		INSERT INTO recipes_fts(recipe_id, title, description, cuisine, ingredients, method, notes)
-		VALUES (new.id, new.title, new.description, new.cuisine, new.ingredients, new.method, new.notes);
+		INSERT INTO recipes_fts(recipe_id, title, description, cuisine, ingredients, method, notes, sources)
+		VALUES (new.id, new.title, new.description, new.cuisine, new.ingredients, new.method, new.notes, new.sources);
 	END;
 
 	CREATE TRIGGER IF NOT EXISTS recipes_fts_update AFTER UPDATE ON recipes BEGIN
 		UPDATE recipes_fts
 		SET title=new.title, description=new.description, cuisine=new.cuisine,
-			ingredients=new.ingredients, method=new.method, notes=new.notes
+			ingredients=new.ingredients, method=new.method, notes=new.notes, sources=new.sources
 		WHERE recipe_id=new.id;
 	END;
 
@@ -234,7 +257,7 @@ func GetRecipes(ctx context.Context) ([]Recipe, error) {
 	defer dbMutex.RUnlock()
 
 	query := `
-		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, created_at, updated_at
+		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_at, updated_at
 		FROM recipes
 		ORDER BY updated_at DESC
 	`
@@ -248,9 +271,17 @@ func GetRecipes(ctx context.Context) ([]Recipe, error) {
 	var recipes []Recipe
 	for rows.Next() {
 		var r Recipe
-		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.CreatedAt, &r.UpdatedAt)
+		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt)
 		if err != nil {
 			return nil, err
+		}
+
+		// Load icon if iconID is set
+		if r.IconID != nil {
+			icon, err := getIconByID(ctx, *r.IconID)
+			if err == nil {
+				r.Icon = icon
+			}
 		}
 
 		// Load tags for this recipe
@@ -279,14 +310,14 @@ func GetRecipeByID(ctx context.Context, recipeID string) (*Recipe, error) {
 	defer dbMutex.RUnlock()
 
 	query := `
-		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, created_at, updated_at
+		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_at, updated_at
 		FROM recipes
 		WHERE id = ?
 	`
 
 	var r Recipe
 	err := db.QueryRowContext(ctx, query, recipeID).Scan(
-		&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.CreatedAt, &r.UpdatedAt,
+		&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt,
 	)
 
 	if err == sql.ErrNoRows {
@@ -294,6 +325,14 @@ func GetRecipeByID(ctx context.Context, recipeID string) (*Recipe, error) {
 	}
 	if err != nil {
 		return nil, err
+	}
+
+	// Load icon if iconID is set
+	if r.IconID != nil {
+		icon, err := getIconByID(ctx, *r.IconID)
+		if err == nil {
+			r.Icon = icon
+		}
 	}
 
 	// Load tags for this recipe
@@ -319,7 +358,7 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 	defer dbMutex.RUnlock()
 
 	sqlQuery := `
-		SELECT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.created_at, r.updated_at
+		SELECT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_at, r.updated_at
 		FROM recipes r
 		JOIN recipes_fts ON r.id = recipes_fts.recipe_id
 		WHERE recipes_fts MATCH ?
@@ -335,9 +374,17 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 	var recipes []Recipe
 	for rows.Next() {
 		var r Recipe
-		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.CreatedAt, &r.UpdatedAt)
+		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt)
 		if err != nil {
 			return nil, err
+		}
+
+		// Load icon if iconID is set
+		if r.IconID != nil {
+			icon, err := getIconByID(ctx, *r.IconID)
+			if err == nil {
+				r.Icon = icon
+			}
 		}
 
 		// Load tags for this recipe
@@ -346,6 +393,119 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 			return nil, err
 		}
 		r.Tags = tags
+
+		// Load images for this recipe
+		images, err := getRecipeImages(ctx, r.ID)
+		if err != nil {
+			return nil, err
+		}
+		r.Images = images
+
+		recipes = append(recipes, r)
+	}
+
+	return recipes, rows.Err()
+}
+
+// FilterRecipes performs filtering based on search text, tags, and cuisine
+// If searchQuery is provided, it uses FTS5 for text search
+// If tags are provided, filters recipes that have ALL specified tags
+// If cuisine is provided, filters by exact cuisine match
+func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisine string) ([]Recipe, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	var queryBuilder strings.Builder
+	var args []interface{}
+
+	// Base query - start with recipes table
+	if searchQuery != "" {
+		// Use FTS5 for text search
+		queryBuilder.WriteString(`
+			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_at, r.updated_at
+			FROM recipes r
+			JOIN recipes_fts ON r.id = recipes_fts.recipe_id
+			WHERE recipes_fts MATCH ?
+		`)
+		args = append(args, searchQuery)
+	} else {
+		// No text search, just filter
+		queryBuilder.WriteString(`
+			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_at, r.updated_at
+			FROM recipes r
+			WHERE 1=1
+		`)
+	}
+
+	// Add cuisine filter
+	if cuisine != "" {
+		if searchQuery != "" {
+			queryBuilder.WriteString(` AND r.cuisine = ?`)
+		} else {
+			queryBuilder.WriteString(` AND r.cuisine = ?`)
+		}
+		args = append(args, cuisine)
+	}
+
+	// Add tag filters - recipe must have ALL specified tags
+	if len(tags) > 0 {
+		queryBuilder.WriteString(`
+			AND r.id IN (
+				SELECT rt.recipe_id
+				FROM recipe_tags rt
+				JOIN tags t ON rt.tag_id = t.id
+				WHERE t.name IN (`)
+
+		for i, tag := range tags {
+			if i > 0 {
+				queryBuilder.WriteString(`, `)
+			}
+			queryBuilder.WriteString(`?`)
+			args = append(args, strings.TrimSpace(strings.ToLower(tag)))
+		}
+
+		queryBuilder.WriteString(`)
+				GROUP BY rt.recipe_id
+				HAVING COUNT(DISTINCT t.id) = ?
+			)`)
+		args = append(args, len(tags))
+	}
+
+	// Order by
+	if searchQuery != "" {
+		queryBuilder.WriteString(` ORDER BY rank`)
+	} else {
+		queryBuilder.WriteString(` ORDER BY r.updated_at DESC`)
+	}
+
+	rows, err := db.QueryContext(ctx, queryBuilder.String(), args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var recipes []Recipe
+	for rows.Next() {
+		var r Recipe
+		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		// Load icon if iconID is set
+		if r.IconID != nil {
+			icon, err := getIconByID(ctx, *r.IconID)
+			if err == nil {
+				r.Icon = icon
+			}
+		}
+
+		// Load tags for this recipe
+		recipeTags, err := getRecipeTags(ctx, r.ID)
+		if err != nil {
+			return nil, err
+		}
+		r.Tags = recipeTags
 
 		// Load images for this recipe
 		images, err := getRecipeImages(ctx, r.ID)
@@ -374,13 +534,13 @@ func CreateRecipe(ctx context.Context, recipe *Recipe) error {
 	recipe.UpdatedAt = time.Now()
 
 	query := `
-		INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
 	_, err := db.ExecContext(ctx, query,
 		recipe.ID, recipe.Title, recipe.Description, recipe.RecipeType, recipe.Cuisine,
-		recipe.Ingredients, recipe.Method, recipe.Notes, recipe.CreatedAt, recipe.UpdatedAt,
+		recipe.Ingredients, recipe.Method, recipe.Notes, recipe.Sources, recipe.IconID, recipe.CreatedAt, recipe.UpdatedAt,
 	)
 	if err != nil {
 		return err
@@ -413,13 +573,13 @@ func UpdateRecipe(ctx context.Context, recipe *Recipe) error {
 	query := `
 		UPDATE recipes
 		SET title = ?, description = ?, recipe_type = ?, cuisine = ?,
-		    ingredients = ?, method = ?, notes = ?, updated_at = ?
+		    ingredients = ?, method = ?, notes = ?, sources = ?, icon_id = ?, updated_at = ?
 		WHERE id = ?
 	`
 
 	result, err := db.ExecContext(ctx, query,
 		recipe.Title, recipe.Description, recipe.RecipeType, recipe.Cuisine,
-		recipe.Ingredients, recipe.Method, recipe.Notes, recipe.UpdatedAt,
+		recipe.Ingredients, recipe.Method, recipe.Notes, recipe.Sources, recipe.IconID, recipe.UpdatedAt,
 		recipe.ID,
 	)
 	if err != nil {
@@ -478,6 +638,104 @@ func DeleteRecipe(ctx context.Context, recipeID string) error {
 	}()
 
 	return nil
+}
+
+// Helper functions for icon management
+
+// getIconByID returns an icon by ID
+func getIconByID(ctx context.Context, iconID int64) (*Icon, error) {
+	query := `SELECT id, filename, icon_url, uploaded_at FROM icons WHERE id = ?`
+	var icon Icon
+	err := db.QueryRowContext(ctx, query, iconID).Scan(&icon.ID, &icon.Filename, &icon.IconURL, &icon.UploadedAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &icon, nil
+}
+
+// GetAllIcons returns all icons
+func GetAllIcons(ctx context.Context) ([]Icon, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	query := `SELECT id, filename, icon_url, uploaded_at FROM icons ORDER BY uploaded_at DESC`
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var icons []Icon
+	for rows.Next() {
+		var icon Icon
+		if err := rows.Scan(&icon.ID, &icon.Filename, &icon.IconURL, &icon.UploadedAt); err != nil {
+			return nil, err
+		}
+		icons = append(icons, icon)
+	}
+
+	return icons, rows.Err()
+}
+
+// createIcon creates a new icon record
+func createIcon(ctx context.Context, filename, iconURL string) (int64, error) {
+	query := `INSERT INTO icons (filename, icon_url) VALUES (?, ?)`
+	result, err := db.ExecContext(ctx, query, filename, iconURL)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}
+
+// GetAllTags returns all unique tags in the database
+func GetAllTags(ctx context.Context) ([]string, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	query := `SELECT name FROM tags ORDER BY name`
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tags []string
+	for rows.Next() {
+		var tag string
+		if err := rows.Scan(&tag); err != nil {
+			return nil, err
+		}
+		tags = append(tags, tag)
+	}
+
+	return tags, rows.Err()
+}
+
+// GetAllCuisines returns all unique cuisines in the database
+func GetAllCuisines(ctx context.Context) ([]string, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	query := `SELECT DISTINCT cuisine FROM recipes WHERE cuisine IS NOT NULL AND cuisine != '' ORDER BY cuisine`
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var cuisines []string
+	for rows.Next() {
+		var cuisine string
+		if err := rows.Scan(&cuisine); err != nil {
+			return nil, err
+		}
+		cuisines = append(cuisines, cuisine)
+	}
+
+	return cuisines, rows.Err()
 }
 
 // Helper functions for tag management

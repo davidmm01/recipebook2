@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { getRecipes } from '../utils/api';
 
-function RecipeList({ onRecipeClick }) {
+function RecipeList({ onRecipeClick, filters = {} }) {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     loadRecipes();
-  }, []);
+  }, [filters]);
 
   const loadRecipes = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getRecipes();
+      const data = await getRecipes(filters);
       setRecipes(data || []);
     } catch (err) {
       console.error('Error loading recipes:', err);
@@ -70,37 +70,76 @@ function RecipeList({ onRecipeClick }) {
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            <h3 style={{ margin: '0 0 10px 0' }}>{recipe.title}</h3>
-            {recipe.type && (
-              <span
-                style={{
-                  display: 'inline-block',
-                  backgroundColor: '#4285f4',
-                  color: 'white',
-                  padding: '4px 8px',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  marginBottom: '10px',
-                }}
-              >
-                {recipe.type}
-              </span>
-            )}
-            {recipe.ingredients && (
-              <div style={{ marginTop: '10px' }}>
-                <strong>Ingredients:</strong>
-                <div
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+              {recipe.icon && (
+                <img
+                  src={recipe.icon.iconUrl}
+                  alt="Recipe icon"
                   style={{
-                    whiteSpace: 'pre-wrap',
-                    fontSize: '14px',
-                    marginTop: '5px',
+                    width: '40px',
+                    height: '40px',
+                    objectFit: 'contain',
+                    flexShrink: 0
+                  }}
+                />
+              )}
+              <h3 style={{ margin: 0, flex: 1 }}>{recipe.title}</h3>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+              {recipe.type && (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    padding: '4px 12px',
+                    borderRadius: '12px',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
                   }}
                 >
-                  {recipe.ingredients.substring(0, 150)}
-                  {recipe.ingredients.length > 150 && '...'}
-                </div>
+                  {recipe.type}
+                </span>
+              )}
+              {recipe.cuisine && (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    padding: '4px 12px',
+                    borderRadius: '12px',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {recipe.cuisine}
+                </span>
+              )}
+            </div>
+
+            {recipe.tags && recipe.tags.length > 0 && (
+              <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                {recipe.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      padding: '3px 8px',
+                      fontSize: '12px',
+                      color: '#007bff',
+                      backgroundColor: '#e7f3ff',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
               </div>
             )}
+
             <div style={{ marginTop: '10px', fontSize: '12px', color: '#666' }}>
               Updated: {new Date(recipe.updatedAt).toLocaleDateString()}
             </div>

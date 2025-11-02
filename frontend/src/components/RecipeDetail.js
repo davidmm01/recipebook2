@@ -110,7 +110,21 @@ function RecipeDetail({ recipeId, onBack }) {
       </div>
 
       <div style={styles.header}>
-        <h1 style={styles.title}>{recipe.title}</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
+          {recipe.icon && (
+            <img
+              src={recipe.icon.iconUrl}
+              alt="Recipe icon"
+              style={{
+                width: '60px',
+                height: '60px',
+                objectFit: 'contain',
+                flexShrink: 0
+              }}
+            />
+          )}
+          <h1 style={{ ...styles.title, margin: 0, flex: 1 }}>{recipe.title}</h1>
+        </div>
         {recipe.description && (
           <p style={styles.description}>{recipe.description}</p>
         )}
@@ -162,6 +176,13 @@ function RecipeDetail({ recipeId, onBack }) {
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}>Notes</h2>
           <pre style={styles.content}>{recipe.notes}</pre>
+        </div>
+      )}
+
+      {recipe.sources && (
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>Sources</h2>
+          <pre style={styles.content}>{recipe.sources}</pre>
         </div>
       )}
 

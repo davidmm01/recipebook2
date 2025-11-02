@@ -1,0 +1,25 @@
+---
+name: Sauce For Fried Rice
+date_added: 2023-09-18
+source:
+  name: Savor The Best
+  url: https://savorthebest.com/sauce-for-fried-rice/
+  type: copy
+  modifications: minimal
+  submitter: croach
+type: component
+descriptors:
+  - sauce
+  - rice
+cuisine: chinese
+ingredients:
+  - 1/3 cup Soy sauce
+  - 1/3 cup Oyster sauce
+  - 1/3 cup Mirin
+  - 1/4 cup Sesame oil
+  - 1 tablespoon white pepper
+instructions:
+  - Combine all the ingredients in a jar. Keep sealed and store in the fridge.
+  - Use approximately 1-1/2 to 2 tablespoons of sauce for every cup of rice in your fried rice recipe. Taste and add more if desired.
+notes:
+next:

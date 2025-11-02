@@ -67,8 +67,28 @@ async function publicFetch(url, options = {}) {
 
 // Recipe API functions
 
-export async function getRecipes() {
-  return await publicFetch('/recipes');
+export async function getRecipes(filters = {}) {
+  // Build query string from filters
+  const params = new URLSearchParams();
+
+  if (filters.search) {
+    params.append('search', filters.search);
+  }
+
+  if (filters.cuisine) {
+    params.append('cuisine', filters.cuisine);
+  }
+
+  if (filters.tags && filters.tags.length > 0) {
+    filters.tags.forEach(tag => {
+      params.append('tags', tag);
+    });
+  }
+
+  const queryString = params.toString();
+  const url = queryString ? `/recipes?${queryString}` : '/recipes';
+
+  return await publicFetch(url);
 }
 
 export async function getRecipeById(id) {
@@ -97,4 +117,43 @@ export async function deleteRecipe(id) {
 
 export async function searchRecipes(query) {
   return await publicFetch(`/recipes/search?q=${encodeURIComponent(query)}`);
+}
+
+// Filter metadata functions
+
+export async function getAllTags() {
+  return await publicFetch('/tags');
+}
+
+export async function getAllCuisines() {
+  return await publicFetch('/cuisines');
+}
+
+// Icon API functions
+
+export async function getAllIcons() {
+  return await publicFetch('/icons');
+}
+
+export async function uploadIcon(file) {
+  const token = await getAuthToken();
+
+  const formData = new FormData();
+  formData.append('icon', file);
+
+  const response = await fetch(`${API_BASE_URL}/icons`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      // Don't set Content-Type for FormData - browser sets it with boundary
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`API Error: ${response.status} - ${error}`);
+  }
+
+  return await response.json();
 }

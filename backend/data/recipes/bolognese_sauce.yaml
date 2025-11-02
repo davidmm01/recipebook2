@@ -1,0 +1,49 @@
+---
+name: Bolognese Sauce
+date_added: 2024-09-05
+source:
+  name: Vincenzo's plate
+  url: https://www.vincenzosplate.com/authentic-bolognese-sauce/
+  type: string #copy/pimping/original/research inspired
+  modifications: string
+  submitter: string
+type: component
+descriptors:
+  - pasta
+  - tomato
+  - mince
+  - sauce
+cuisine: italian
+ingredients:
+  - 6 carrots (~640g) chopped
+  - 6 celery (~690g) chopped
+  - 3 medium onions (~280g) chopped
+  - 80ml EVOO
+  - 1kg beef mince (10% fat)
+  - 1kg pork mince (10% fat) (mix lean and regular)
+  - 35g garlic
+  - 2L passata
+  - 2 cans crushed tomatos
+  - 300g tomato paste
+  - 1.5tsp white sugar
+  - 1 good pinch MSG
+  - 400ml white wine
+  - dried italian herb mix
+  - salt and pepper
+instructions:
+  - Place a large pot on medium heat, add EVOO and once warm, add onion. Cook until soft.
+  - Add carrots and celery. Leave to cook for 10 minutes.
+  - Add 200ml of the wine and leave to simmer on low until the alcohol evaporates.
+  - Add the mince and break it down before seasoning with salt and pepper.
+  - Leave mince to brown and excess water to evaporate.
+  - Mix in the remaining 200ml of wine.
+  - After allowing the wine to evaporate again, and garlic and cook for 30s.
+  - Mix through the passata, tomato paste and peeled tomatoes.
+  - Cook the sauce down to desired consistency (should take around 90mins).
+  - Season with salt, msg and dried herbs.
+  - You are done and may eat. Optionally, add some water and cook the sauce down again. Repeat for up to 4 or 5 hours of total cooking time.
+notes:
+  - Makes about 5.5kg of sugo
+  - stir through a little bit of milk or cream before serving to make it delicious
+next:
+  - Less tomato paste

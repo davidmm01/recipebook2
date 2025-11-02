@@ -1,0 +1,25 @@
+---
+name: Gin Jam Fizz
+date_added: 2023-12-27
+source:
+  name:
+  url:
+  type:
+  modifications:
+  submitter: megasaur
+type: cocktail
+descriptors:
+  - gin
+cuisine: string # this doesnt make sense with cocktails! changes needed
+ingredients:
+  - 45ml pink gin
+  - 2 tsp raspberry jam
+  - 1/2 cup ice
+  - 15ml lemon juice
+instructions:
+  - Shake
+  - Top up the (wine) glass with soda water to liking.
+notes:
+  - Could easily add 1 tsp of jam or sugar syrup for more sweetness
+  - could use 60ml gin if you want it strong
+next:

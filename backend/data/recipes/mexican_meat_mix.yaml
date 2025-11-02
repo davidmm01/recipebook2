@@ -1,0 +1,47 @@
+---
+name: Mexican Meat Mix # should match file name without being snake case lower letter
+date_added: 2024-08-20
+source:
+  name: original by davo
+  url:
+  type:
+  modifications:
+  submitter: croach
+type: component # meal/component/cocktail
+descriptors:
+  - beef
+  - mince
+  - beans
+  - meal prep
+  - lunch
+cuisine: mexican
+ingredients:
+  - 1 large onion, diced
+  - 3 cloves garlic, finely diced
+  - 500g extra lean beef mince
+  - 1 can mexican bean mix, drained and lightly rinsed
+  - 1 green capsicum, cut into medium sized peices
+  - 1 tomato
+  - 1 carrot, juillianned
+  # spice mix
+  - 1 tbsp sweet paprika
+  - 2 tsp cumin
+  - 2 tsp corriander
+  - 1 tsp salt
+  - 1 tsp extra hot chilli powder
+  # to season
+  - salt
+  - pepper
+instructions:
+  - Combine spice mix
+  - Heat pan with medium heat
+  - In some oil add onion and cook for a minute or two. Then add garlic, cook for 30s.
+  - Add the mince meat, breaking it up and making sure its getting browned. Give it a little salt and pepper.
+  - Once most of the pink is gone, add in the beans. Combine and continue cooking till all the pink is gone.
+  - Add In the capsicum, carrot, and then tomato in installments, allowing them to soften a bit.
+  - Sprinkle over all the spice mix and combine well, adding water to get it slightly more wet than you want and letting it evaporate.
+notes:
+  - serve with rice. garnish with conriander or parsley or soemthing?
+  - can add any kinds of fresh chillis when u add the garlic, or when u are adding veg towards the end
+next:
+  - wrote this recipe a bit baked so check the accuracy

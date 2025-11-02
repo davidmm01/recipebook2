@@ -1,0 +1,26 @@
+---
+name: Boulevardier
+date_added: 2025-09-28
+source:
+  name:
+  url:
+  type:
+  modifications:
+  submitter: dave
+type: cocktail
+descriptors:
+  - bourbon
+  - campari
+  - vermouth
+cuisine: string # this doesnt make sense with cocktails! changes needed
+ingredients:
+  - 1 part bourbon
+  - 1 part campari
+  - 1 part vermouth rosso
+  - orange slice or peel for garnish
+instructions:
+  - Combine.
+  - Garnish with orange slice.
+  - Serve on the rocks.
+notes:
+next:
