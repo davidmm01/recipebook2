@@ -36,6 +36,11 @@ service cloud.firestore {
                     && request.auth.uid == userId
                     && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastLoginAt']);
 
+      // DEV MODE: Allow users to upgrade their own role (remove this in production!)
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role']);
+
       // Only admins can update user roles
       allow update: if request.auth != null && hasRole('admin');
 

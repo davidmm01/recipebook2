@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { createRecipe } from '../utils/api';
+import React, { useState, useEffect } from 'react';
+import { createRecipe, updateRecipe } from '../utils/api';
 
-function RecipeForm({ onRecipeCreated }) {
+function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
+  const isEditing = !!initialRecipe;
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -14,6 +16,22 @@ function RecipeForm({ onRecipeCreated }) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Load initial data when editing
+  useEffect(() => {
+    if (initialRecipe) {
+      setFormData({
+        title: initialRecipe.title || '',
+        description: initialRecipe.description || '',
+        type: initialRecipe.type || 'food',
+        cuisine: initialRecipe.cuisine || '',
+        tags: initialRecipe.tags ? initialRecipe.tags.join(', ') : '',
+        ingredients: initialRecipe.ingredients || '',
+        method: initialRecipe.method || '',
+        notes: initialRecipe.notes || ''
+      });
+    }
+  }, [initialRecipe]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,25 +50,30 @@ function RecipeForm({ onRecipeCreated }) {
         tags: tagsArray
       };
 
-      await createRecipe(recipeData);
-
-      // Reset form
-      setFormData({
-        title: '',
-        description: '',
-        type: 'food',
-        cuisine: '',
-        tags: '',
-        ingredients: '',
-        method: '',
-        notes: ''
-      });
-
-      if (onRecipeCreated) {
-        onRecipeCreated();
+      if (isEditing) {
+        await updateRecipe(initialRecipe.id, recipeData);
+        if (onRecipeUpdated) {
+          onRecipeUpdated();
+        }
+      } else {
+        await createRecipe(recipeData);
+        // Reset form only when creating
+        setFormData({
+          title: '',
+          description: '',
+          type: 'food',
+          cuisine: '',
+          tags: '',
+          ingredients: '',
+          method: '',
+          notes: ''
+        });
+        if (onRecipeCreated) {
+          onRecipeCreated();
+        }
       }
     } catch (err) {
-      setError(err.message || 'Failed to create recipe');
+      setError(err.message || `Failed to ${isEditing ? 'update' : 'create'} recipe`);
     } finally {
       setLoading(false);
     }
@@ -66,7 +89,7 @@ function RecipeForm({ onRecipeCreated }) {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Create New Recipe</h2>
+      <h2 style={styles.heading}>{isEditing ? 'Edit Recipe' : 'Create New Recipe'}</h2>
 
       {error && (
         <div style={styles.error}>
@@ -188,7 +211,7 @@ function RecipeForm({ onRecipeCreated }) {
             ...(loading ? styles.buttonDisabled : {})
           }}
         >
-          {loading ? 'Creating...' : 'Create Recipe'}
+          {loading ? (isEditing ? 'Updating...' : 'Creating...') : (isEditing ? 'Update Recipe' : 'Create Recipe')}
         </button>
       </form>
     </div>

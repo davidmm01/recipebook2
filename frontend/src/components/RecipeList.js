@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getRecipes } from '../utils/api';
 
-function RecipeList() {
+function RecipeList({ onRecipeClick }) {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,11 +52,22 @@ function RecipeList() {
         {recipes.map((recipe) => (
           <div
             key={recipe.id}
+            onClick={() => onRecipeClick && onRecipeClick(recipe.id)}
             style={{
               border: '1px solid #ddd',
               borderRadius: '8px',
               padding: '15px',
               backgroundColor: '#f9f9f9',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#e9e9e9';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#f9f9f9';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             <h3 style={{ margin: '0 0 10px 0' }}>{recipe.title}</h3>

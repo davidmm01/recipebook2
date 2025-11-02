@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { createOrUpdateUser } from '../utils/userUtils';
+import RoleDisplay from './RoleDisplay';
+import { upgradeToAdmin } from '../utils/devUtils';
 
 function Login({ user }) {
   const [error, setError] = useState('');
+
+  const handleUpgradeToAdmin = async () => {
+    try {
+      await upgradeToAdmin();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     setError('');
@@ -29,10 +39,28 @@ function Login({ user }) {
   if (user) {
     return (
       <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-        <p>Logged in as: {user.email}</p>
-        <button onClick={handleSignOut} style={{ padding: '10px 20px', cursor: 'pointer' }}>
-          Sign Out
-        </button>
+        <p>
+          Logged in as: {user.email}
+          <RoleDisplay />
+        </p>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={handleSignOut} style={{ padding: '10px 20px', cursor: 'pointer' }}>
+            Sign Out
+          </button>
+          <button
+            onClick={handleUpgradeToAdmin}
+            style={{
+              padding: '10px 20px',
+              cursor: 'pointer',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px'
+            }}
+          >
+            🔧 Upgrade to Admin (Dev)
+          </button>
+        </div>
       </div>
     );
   }

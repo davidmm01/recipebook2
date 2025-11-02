@@ -4,6 +4,7 @@ import { auth } from './firebase';
 import Login from './components/Login';
 import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
+import RecipeDetail from './components/RecipeDetail';
 import { createOrUpdateUser } from './utils/userUtils';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -41,30 +43,42 @@ function App() {
       <Login user={user} />
       {user && (
         <div style={{ marginTop: '20px' }}>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            style={{
-              padding: '12px 24px',
-              fontSize: '16px',
-              fontWeight: '500',
-              color: '#fff',
-              backgroundColor: showForm ? '#6c757d' : '#28a745',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginBottom: '20px'
-            }}
-          >
-            {showForm ? 'Cancel' : '+ New Recipe'}
-          </button>
+          {selectedRecipeId ? (
+            <RecipeDetail
+              recipeId={selectedRecipeId}
+              onBack={() => setSelectedRecipeId(null)}
+            />
+          ) : (
+            <>
+              <button
+                onClick={() => setShowForm(!showForm)}
+                style={{
+                  padding: '12px 24px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  color: '#fff',
+                  backgroundColor: showForm ? '#6c757d' : '#28a745',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  marginBottom: '20px'
+                }}
+              >
+                {showForm ? 'Cancel' : '+ New Recipe'}
+              </button>
 
-          {showForm && (
-            <div style={{ marginBottom: '40px' }}>
-              <RecipeForm onRecipeCreated={handleRecipeCreated} />
-            </div>
+              {showForm && (
+                <div style={{ marginBottom: '40px' }}>
+                  <RecipeForm onRecipeCreated={handleRecipeCreated} />
+                </div>
+              )}
+
+              <RecipeList
+                key={refreshTrigger}
+                onRecipeClick={(recipeId) => setSelectedRecipeId(recipeId)}
+              />
+            </>
           )}
-
-          <RecipeList key={refreshTrigger} />
         </div>
       )}
     </div>
