@@ -47,10 +47,13 @@ This document describes the SQLite + Cloud Storage database architecture for the
 ## Database Schema
 
 ```sql
+-- Main recipes table with UUID primary keys
 CREATE TABLE recipes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,        -- UUID string (e.g., "550e8400-e29b-41d4-a716-446655440000")
     title TEXT NOT NULL,
+    description TEXT,           -- Brief description of the recipe
     recipe_type TEXT,           -- 'food', 'cocktail', etc.
+    cuisine TEXT,               -- 'italian', 'mexican', 'chinese', etc.
     ingredients TEXT,           -- markdown format
     method TEXT,                -- markdown format
     notes TEXT,                 -- markdown format
@@ -58,32 +61,74 @@ CREATE TABLE recipes (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Full-text search table
+-- Tags table for recipe categorization
+CREATE TABLE tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL   -- lowercase tag names (e.g., 'pasta', 'quick', 'vegetarian')
+);
+
+-- Many-to-many relationship between recipes and tags
+CREATE TABLE recipe_tags (
+    recipe_id TEXT NOT NULL,
+    tag_id INTEGER NOT NULL,
+    PRIMARY KEY (recipe_id, tag_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+);
+
+-- Recipe images stored in Google Cloud Storage
+CREATE TABLE recipe_images (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    recipe_id TEXT NOT NULL,
+    image_url TEXT NOT NULL,    -- Full GCS URL (https://storage.googleapis.com/bucket/path)
+    display_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_recipe_images_recipe_id ON recipe_images(recipe_id);
+
+-- Full-text search table (includes new description and cuisine fields)
 CREATE VIRTUAL TABLE recipes_fts USING fts5(
-    title, ingredients, method, notes,
+    title, description, cuisine, ingredients, method, notes,
     content=recipes,
     content_rowid=id
 );
 ```
 
-**Note:** All recipes are shared across users. Firebase Auth is used for access control (only authenticated users can view/modify recipes), but there is no per-user filtering.
+**Access Control:** All recipes are public for reading. Role-based access control is implemented via Firestore:
+- **Viewers**: Can read recipes (public access)
+- **Editors**: Can create and update recipes
+- **Admins**: Can delete recipes and manage user roles
+
+**Image Storage:** Recipe images are stored in Google Cloud Storage, not in the database. The `recipe_images` table stores only the URLs and metadata.
 
 ## API Endpoints
 
 ### List all recipes
 ```
 GET /recipes
-Authorization: Bearer <firebase-token>
+(Public - no authentication required)
 
 Response:
 [
   {
-    "id": 1,
+    "id": "550e8400-e29b-41d4-a716-446655440000",
     "title": "Chicken Pasta",
+    "description": "Creamy pasta with pan-fried chicken",
     "type": "food",
+    "cuisine": "italian",
+    "tags": ["pasta", "quick", "italian"],
     "ingredients": "## Ingredients\n\n- 2 chicken breasts\n- 500g pasta\n...",
     "method": "## Method\n\n1. Cook pasta...",
     "notes": "Optional notes...",
+    "images": [
+      {
+        "id": 1,
+        "recipeId": "550e8400-e29b-41d4-a716-446655440000",
+        "imageUrl": "https://storage.googleapis.com/bucket/recipe-images/550e8400.../abc123.jpg",
+        "displayOrder": 0
+      }
+    ],
     "createdAt": "2025-01-01T12:00:00Z",
     "updatedAt": "2025-01-01T12:00:00Z"
   }
@@ -93,7 +138,7 @@ Response:
 ### Get single recipe
 ```
 GET /recipes/{id}
-Authorization: Bearer <firebase-token>
+(Public - no authentication required)
 ```
 
 ### Create recipe
@@ -104,7 +149,10 @@ Content-Type: application/json
 
 {
   "title": "Chicken Pasta",
+  "description": "Creamy pasta with pan-fried chicken",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "quick", "italian"],
   "ingredients": "## Ingredients\n\n- 2 chicken breasts\n- 500g pasta",
   "method": "## Method\n\n1. Cook pasta according to package",
   "notes": "Great for meal prep"
@@ -119,7 +167,10 @@ Content-Type: application/json
 
 {
   "title": "Updated title",
+  "description": "Updated description",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "updated"],
   "ingredients": "...",
   "method": "...",
   "notes": "..."
@@ -130,15 +181,66 @@ Content-Type: application/json
 ```
 DELETE /recipes/{id}
 Authorization: Bearer <firebase-token>
+(Requires admin role)
 ```
 
 ### Search recipes (full-text)
 ```
 GET /recipes/search?q=chicken+pasta
-Authorization: Bearer <firebase-token>
+(Public - no authentication required)
 
-Searches across title, ingredients, method, and notes fields.
+Searches across title, description, cuisine, ingredients, method, and notes fields.
 ```
+
+### Upload recipe image
+```
+POST /recipes/images
+Authorization: Bearer <firebase-token>
+Content-Type: multipart/form-data
+
+Form fields:
+- recipeId: UUID of the recipe
+- image: Image file (max 10MB, .jpg/.jpeg/.png/.gif/.webp)
+- displayOrder: (optional) Integer for ordering multiple images
+
+Response:
+{
+  "imageUrl": "https://storage.googleapis.com/bucket/recipe-images/550e8400.../abc123.jpg"
+}
+```
+
+## Image Storage Architecture
+
+Recipe images are stored separately from the database in Google Cloud Storage:
+
+### Storage Structure
+```
+gs://{bucket-name}/
+├── recipes.db                          # SQLite database file
+└── recipe-images/                      # Image directory
+    └── {recipe-uuid}/                  # One folder per recipe
+        ├── {image-uuid-1}.jpg
+        ├── {image-uuid-2}.png
+        └── ...
+```
+
+### How Image Upload Works
+1. User uploads image via multipart form to `/recipes/images` endpoint
+2. Backend validates file size (max 10MB) and type (.jpg, .jpeg, .png, .gif, .webp)
+3. Backend generates unique UUID filename: `recipe-images/{recipeId}/{uuid}.{ext}`
+4. Image uploaded directly to GCS with public read access
+5. Image URL and metadata saved to `recipe_images` table
+6. Public URL returned: `https://storage.googleapis.com/{bucket}/{path}`
+
+### Why This Approach?
+- **Database stays small**: Images not stored in SQLite
+- **Fast serving**: Images served directly from GCS (no backend involvement)
+- **Simple**: Backend handles upload once, then forgets about it
+- **Scalable**: GCS handles all image serving load
+- **Cheap**: GCS storage is ~$0.02/GB/month
+
+### Permissions
+The same service account that accesses the database also handles image uploads. The `storage.objectAdmin` role on the bucket allows both database sync and image management.
 
 ## How It Works
 

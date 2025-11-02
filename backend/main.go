@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -39,6 +38,8 @@ func main() {
 	http.HandleFunc("/recipes", corsMiddleware(recipesHandler))
 	http.HandleFunc("/recipes/", corsMiddleware(recipeByIDHandler))
 	http.HandleFunc("/recipes/search", corsMiddleware(searchHandler))
+	// Image upload endpoint
+	http.HandleFunc("/recipes/images", corsMiddleware(imageUploadHandler))
 
 	log.Printf("Server starting on port %s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
@@ -97,10 +98,9 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 func recipeByIDHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// Extract recipe ID from URL path
-	path := strings.TrimPrefix(r.URL.Path, "/recipes/")
-	recipeID, err := strconv.ParseInt(path, 10, 64)
-	if err != nil {
+	// Extract recipe ID from URL path (now a UUID string)
+	recipeID := strings.TrimPrefix(r.URL.Path, "/recipes/")
+	if recipeID == "" || recipeID == "search" {
 		http.Error(w, "Invalid recipe ID", http.StatusBadRequest)
 		return
 	}
@@ -190,6 +190,78 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(recipes)
+}
+
+func imageUploadHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Auth required
+	userID, err := authenticateRequest(r)
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	log.Printf("Uploading image - authenticated user: %s", userID)
+
+	// Parse multipart form (limit to 10MB)
+	err = r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		return
+	}
+
+	// Get recipe ID
+	recipeID := r.FormValue("recipeId")
+	if recipeID == "" {
+		http.Error(w, "Missing recipeId", http.StatusBadRequest)
+		return
+	}
+
+	// Get file from form
+	file, fileHeader, err := r.FormFile("image")
+	if err != nil {
+		http.Error(w, "Failed to get image from form", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Upload to GCS
+	imageURL, err := UploadImageToGCS(r.Context(), file, fileHeader, recipeID)
+	if err != nil {
+		log.Printf("Error uploading image: %v", err)
+		http.Error(w, fmt.Sprintf("Failed to upload image: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Get display order (optional, defaults to 0)
+	displayOrder := 0
+	if orderStr := r.FormValue("displayOrder"); orderStr != "" {
+		if order, err := fmt.Sscanf(orderStr, "%d", &displayOrder); err == nil && order == 1 {
+			// Successfully parsed
+		}
+	}
+
+	// Save to database
+	dbMutex.Lock()
+	err = addRecipeImage(r.Context(), recipeID, imageURL, displayOrder)
+	dbMutex.Unlock()
+
+	if err != nil {
+		log.Printf("Error saving image to database: %v", err)
+		// Try to delete from GCS
+		DeleteImageFromGCS(r.Context(), imageURL)
+		http.Error(w, "Failed to save image", http.StatusInternalServerError)
+		return
+	}
+
+	// Return the image URL
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"imageUrl": imageURL,
+	})
 }
 
 // corsMiddleware adds CORS headers to allow cross-origin requests from the frontend

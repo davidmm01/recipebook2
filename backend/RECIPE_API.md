@@ -10,16 +10,28 @@ This allows you to share your recipes publicly while maintaining control over wh
 
 ## Recipe Format
 
-All recipes use markdown format for text fields.
+All recipes use markdown format for text fields and UUID strings for IDs.
 
 ```json
 {
-  "id": 1,
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "title": "Chicken Pasta",
+  "description": "Creamy pasta with pan-fried chicken breast",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "quick", "italian"],
   "ingredients": "## Ingredients\n\n- 2 chicken breasts\n- 500g pasta\n- 400ml cream\n- Salt and pepper",
   "method": "## Method\n\n1. Cook pasta according to package instructions\n2. Pan-fry chicken until cooked through\n3. Add cream and simmer\n4. Season to taste",
   "notes": "## Notes\n\nGreat for meal prep. Can freeze for up to 3 months.",
+  "images": [
+    {
+      "id": 1,
+      "recipeId": "550e8400-e29b-41d4-a716-446655440000",
+      "imageUrl": "https://storage.googleapis.com/bucket/recipe-images/550e8400.../image.jpg",
+      "displayOrder": 0,
+      "createdAt": "2025-01-24T12:00:00Z"
+    }
+  ],
   "createdAt": "2025-01-24T12:00:00Z",
   "updatedAt": "2025-01-24T12:00:00Z"
 }
@@ -34,12 +46,24 @@ List all recipes. **Public endpoint - no authentication required.**
 ```json
 [
   {
-    "id": 1,
+    "id": "550e8400-e29b-41d4-a716-446655440000",
     "title": "Chicken Pasta",
+    "description": "Creamy pasta with pan-fried chicken breast",
     "type": "food",
+    "cuisine": "italian",
+    "tags": ["pasta", "quick", "italian"],
     "ingredients": "...",
     "method": "...",
     "notes": "...",
+    "images": [
+      {
+        "id": 1,
+        "recipeId": "550e8400-e29b-41d4-a716-446655440000",
+        "imageUrl": "https://storage.googleapis.com/bucket/recipe-images/550e8400.../image.jpg",
+        "displayOrder": 0,
+        "createdAt": "2025-01-24T12:00:00Z"
+      }
+    ],
     "createdAt": "2025-01-24T12:00:00Z",
     "updatedAt": "2025-01-24T12:00:00Z"
   }
@@ -49,7 +73,7 @@ List all recipes. **Public endpoint - no authentication required.**
 ---
 
 ### POST /recipes
-Create a new recipe.
+Create a new recipe. **Requires authentication (editor or admin role).**
 
 **Headers:**
 ```
@@ -61,7 +85,10 @@ Content-Type: application/json
 ```json
 {
   "title": "Chicken Pasta",
+  "description": "Creamy pasta with pan-fried chicken breast",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "quick", "italian"],
   "ingredients": "## Ingredients\n\n- 2 chicken breasts\n- 500g pasta",
   "method": "## Method\n\n1. Cook pasta...",
   "notes": "Optional notes"
@@ -71,12 +98,16 @@ Content-Type: application/json
 **Response:** `201 Created`
 ```json
 {
-  "id": 1,
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "title": "Chicken Pasta",
+  "description": "Creamy pasta with pan-fried chicken breast",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "quick", "italian"],
   "ingredients": "...",
   "method": "...",
   "notes": "...",
+  "images": [],
   "createdAt": "2025-01-24T12:00:00Z",
   "updatedAt": "2025-01-24T12:00:00Z"
 }
@@ -85,17 +116,31 @@ Content-Type: application/json
 ---
 
 ### GET /recipes/{id}
-Get a single recipe by ID. **Public endpoint - no authentication required.**
+Get a single recipe by UUID. **Public endpoint - no authentication required.**
+
+**Example:** `GET /recipes/550e8400-e29b-41d4-a716-446655440000`
 
 **Response:** `200 OK`
 ```json
 {
-  "id": 1,
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "title": "Chicken Pasta",
+  "description": "Creamy pasta with pan-fried chicken breast",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "quick", "italian"],
   "ingredients": "...",
   "method": "...",
   "notes": "...",
+  "images": [
+    {
+      "id": 1,
+      "recipeId": "550e8400-e29b-41d4-a716-446655440000",
+      "imageUrl": "https://storage.googleapis.com/bucket/recipe-images/550e8400.../image.jpg",
+      "displayOrder": 0,
+      "createdAt": "2025-01-24T12:00:00Z"
+    }
+  ],
   "createdAt": "2025-01-24T12:00:00Z",
   "updatedAt": "2025-01-24T12:00:00Z"
 }
@@ -106,7 +151,7 @@ Get a single recipe by ID. **Public endpoint - no authentication required.**
 ---
 
 ### PUT /recipes/{id}
-Update an existing recipe.
+Update an existing recipe. **Requires authentication (editor or admin role).**
 
 **Headers:**
 ```
@@ -118,7 +163,10 @@ Content-Type: application/json
 ```json
 {
   "title": "Updated Title",
+  "description": "Updated description",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "updated"],
   "ingredients": "...",
   "method": "...",
   "notes": "..."
@@ -128,12 +176,16 @@ Content-Type: application/json
 **Response:** `200 OK`
 ```json
 {
-  "id": 1,
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "title": "Updated Title",
+  "description": "Updated description",
   "type": "food",
+  "cuisine": "italian",
+  "tags": ["pasta", "updated"],
   "ingredients": "...",
   "method": "...",
   "notes": "...",
+  "images": [],
   "createdAt": "2025-01-24T12:00:00Z",
   "updatedAt": "2025-01-24T14:30:00Z"
 }
@@ -144,7 +196,7 @@ Content-Type: application/json
 ---
 
 ### DELETE /recipes/{id}
-Delete a recipe.
+Delete a recipe. **Requires authentication (admin role).**
 
 **Headers:**
 ```
@@ -158,33 +210,87 @@ Authorization: Bearer <firebase-id-token>
 ---
 
 ### GET /recipes/search?q=query
-Full-text search across all recipe fields. **Public endpoint - no authentication required.**
+Full-text search across all recipe text fields. **Public endpoint - no authentication required.**
 
 **Query Parameters:**
 - `q` (required): Search query
+
+**Searchable Fields:**
+- title
+- description
+- cuisine
+- ingredients
+- method
+- notes
 
 **Examples:**
 - `/recipes/search?q=chicken` - Find recipes containing "chicken"
 - `/recipes/search?q=pasta AND tomato` - Find recipes with both terms
 - `/recipes/search?q="chicken breast"` - Exact phrase search
+- `/recipes/search?q=italian` - Find Italian recipes (searches cuisine field)
 
 **Response:** `200 OK`
 ```json
 [
   {
-    "id": 1,
+    "id": "550e8400-e29b-41d4-a716-446655440000",
     "title": "Chicken Pasta",
+    "description": "Creamy pasta with pan-fried chicken breast",
     "type": "food",
+    "cuisine": "italian",
+    "tags": ["pasta", "quick", "italian"],
     "ingredients": "...",
     "method": "...",
     "notes": "...",
+    "images": [],
     "createdAt": "2025-01-24T12:00:00Z",
     "updatedAt": "2025-01-24T12:00:00Z"
   }
 ]
 ```
 
-Results are ranked by relevance.
+Results are ranked by relevance using SQLite FTS5.
+
+---
+
+### POST /recipes/images
+Upload an image for a recipe. **Requires authentication (editor or admin role).**
+
+**Headers:**
+```
+Authorization: Bearer <firebase-id-token>
+Content-Type: multipart/form-data
+```
+
+**Form Fields:**
+- `recipeId` (required): UUID of the recipe to attach the image to
+- `image` (required): Image file (max 10MB)
+- `displayOrder` (optional): Integer for ordering multiple images (default: 0)
+
+**Supported Formats:**
+- `.jpg` / `.jpeg`
+- `.png`
+- `.gif`
+- `.webp`
+
+**Response:** `200 OK`
+```json
+{
+  "imageUrl": "https://storage.googleapis.com/bucket/recipe-images/550e8400.../abc123.jpg"
+}
+```
+
+**Notes:**
+- Images are stored in Google Cloud Storage
+- Each recipe can have multiple images
+- Images are publicly accessible via the returned URL
+- Image URLs are automatically included in recipe responses
+- If database save fails, the uploaded image is automatically cleaned up from storage
+
+**Errors:**
+- `400 Bad Request` - Invalid file type, missing fields, or file too large
+- `401 Unauthorized` - Missing or invalid authentication token
+- `500 Internal Server Error` - Upload or storage failure
 
 ---
 
@@ -222,8 +328,32 @@ Results are ranked by relevance.
 
 ## Notes
 
-- All recipes are shared across authenticated users
-- Firebase Auth is required for all endpoints except `/health`
-- Markdown formatting is supported in `ingredients`, `method`, and `notes` fields
-- Full-text search uses SQLite FTS5 for fast, relevant results
-- Recipe updates modify the `updatedAt` timestamp automatically
+### Access Control
+- All recipes are **public for reading** (GET requests require no authentication)
+- **Write operations** require authentication and appropriate role:
+  - **Viewers**: Can only read recipes
+  - **Editors**: Can create and update recipes
+  - **Admins**: Can delete recipes and manage user roles
+- User roles are managed in Firestore
+
+### Data Format
+- Recipe IDs are **UUID strings**, not integers
+- Markdown formatting is supported in `ingredients`, `method`, `notes`, and `description` fields
+- Tags are stored as lowercase strings for consistency
+- Multiple tags can be assigned to each recipe
+
+### Search
+- Full-text search uses SQLite **FTS5** for fast, relevant results
+- Searches across: title, description, cuisine, ingredients, method, and notes
+- Results are ranked by relevance
+
+### Images
+- Images are stored in **Google Cloud Storage**, not in the database
+- Each recipe can have **multiple images** with configurable display order
+- Images are **publicly accessible** via GCS URLs
+- Maximum file size: **10MB**
+- Supported formats: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`
+
+### Timestamps
+- Recipe creation sets `createdAt`
+- Recipe updates automatically modify `updatedAt`
