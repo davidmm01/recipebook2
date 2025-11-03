@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
-import { createOrUpdateUser } from '../utils/userUtils';
 import RoleDisplay from './RoleDisplay';
 
 function Login({ user }) {
@@ -12,8 +11,8 @@ function Login({ user }) {
     const provider = new GoogleAuthProvider();
 
     try {
-      const result = await signInWithPopup(auth, provider);
-      await createOrUpdateUser(result.user);
+      await signInWithPopup(auth, provider);
+      // User is auto-created in SQLite on first authenticated API request
     } catch (err) {
       setError(err.message);
     }

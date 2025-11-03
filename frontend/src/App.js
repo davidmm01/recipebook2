@@ -6,7 +6,7 @@ import RecipeList from './components/RecipeList';
 import RecipeForm from './components/RecipeForm';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeFilters from './components/RecipeFilters';
-import { createOrUpdateUser } from './utils/userUtils';
+import UserProfile from './components/UserProfile';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -15,13 +15,11 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [filters, setFilters] = useState({});
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        // Create or update user document when auth state changes
-        await createOrUpdateUser(currentUser);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      // User creation now happens automatically on backend during first authenticated request
       setUser(currentUser);
       setLoading(false);
     });
@@ -45,8 +43,33 @@ function App() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>RecipeBook</h1>
-      <Login user={user} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h1 style={{ margin: 0 }}>RecipeBook</h1>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          {user && (
+            <button
+              onClick={() => setShowProfile(true)}
+              style={{
+                padding: '8px 16px',
+                fontSize: '14px',
+                color: '#007bff',
+                backgroundColor: 'white',
+                border: '1px solid #007bff',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              Profile
+            </button>
+          )}
+          <Login user={user} />
+        </div>
+      </div>
+
+      {showProfile && (
+        <UserProfile onClose={() => setShowProfile(false)} />
+      )}
+
       {user && (
         <div style={{ marginTop: '20px' }}>
           {selectedRecipeId ? (

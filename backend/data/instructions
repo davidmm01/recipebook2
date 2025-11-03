@@ -1,9 +1,4 @@
-Task 1 - Pre-req database changes
-
-- need to add submitter to our db schema
-
-
-Task 2 - Base data for database
+Task - Base data for database
 
 Look at all my recipes and cocktails in the folders `backend/data/cocktails` and `backend/data/recipes`.
 I would like these to be converted into entries into our database. Please apply the following mappings:
@@ -20,10 +15,12 @@ this will follow format:
 - method should be the instructions from the yaml. Do the same subheadings thing as the ingredients above
 - notes should be a combination of notes and next in the yaml, with subheadings to identify where each part came from
 - sources should come from all the fields under source OTHER THAN submitter (from the yaml again)
-- submitter should come from source.submitter in the taml
-- created_at should be the date_added
+- created_at should be the date_added in the yaml
 - updated_at should be the current time
+- created_by_name should come from source.submitter in the yaml
 
 You can ignore the type meal/component data point, thats useless.
 
 Any additional data that we weren't sure where to put it, let me know
+
+I want this to be a repeatable thing I can easily run myself to set up some base data

@@ -157,3 +157,16 @@ export async function uploadIcon(file) {
 
   return await response.json();
 }
+
+// User Profile API functions
+
+export async function getUserProfile() {
+  return await authenticatedFetch('/user/profile');
+}
+
+export async function updateUserProfile(updates) {
+  return await authenticatedFetch('/user/profile', {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  });
+}

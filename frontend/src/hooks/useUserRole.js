@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
+import { getUserProfile } from '../utils/api';
 import { USER_ROLES, hasRole } from '../utils/userUtils';
 
 /**
- * Hook to get and subscribe to the current user's role
+ * Hook to get the current user's role from backend
  * @param {Object} user - Firebase Auth user object
  * @returns {Object} { role, loading, isViewer, isEditor, isAdmin, canEdit, canManageUsers }
  */
@@ -19,26 +18,20 @@ export function useUserRole(user) {
       return;
     }
 
-    // Subscribe to real-time updates of the user's role
-    const userRef = doc(db, 'users', user.uid);
-    const unsubscribe = onSnapshot(
-      userRef,
-      (doc) => {
-        if (doc.exists()) {
-          setRole(doc.data().role || USER_ROLES.VIEWER);
-        } else {
-          setRole(USER_ROLES.VIEWER);
-        }
-        setLoading(false);
-      },
-      (error) => {
+    // Fetch user profile from backend API
+    const fetchUserRole = async () => {
+      try {
+        const profile = await getUserProfile();
+        setRole(profile.role || USER_ROLES.VIEWER);
+      } catch (error) {
         console.error('Error fetching user role:', error);
         setRole(USER_ROLES.VIEWER); // Default to viewer on error
+      } finally {
         setLoading(false);
       }
-    );
+    };
 
-    return () => unsubscribe();
+    fetchUserRole();
   }, [user]);
 
   return {

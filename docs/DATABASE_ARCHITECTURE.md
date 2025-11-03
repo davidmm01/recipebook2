@@ -95,7 +95,7 @@ CREATE VIRTUAL TABLE recipes_fts USING fts5(
 );
 ```
 
-**Access Control:** All recipes are public for reading. Role-based access control is implemented via Firestore:
+**Access Control:** All recipes are public for reading. Role-based access control is implemented via SQLite `users` table:
 - **Viewers**: Can read recipes (public access)
 - **Editors**: Can create and update recipes
 - **Admins**: Can delete recipes and manage user roles

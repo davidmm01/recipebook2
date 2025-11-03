@@ -32,10 +32,17 @@ All recipes use markdown format for text fields and UUID strings for IDs.
       "createdAt": "2025-01-24T12:00:00Z"
     }
   ],
+  "createdByUserId": "firebase-uid-abc123",
+  "createdByName": "John Doe",
   "createdAt": "2025-01-24T12:00:00Z",
   "updatedAt": "2025-01-24T12:00:00Z"
 }
 ```
+
+**New Creator Fields:**
+- `createdByUserId` (string, nullable): Firebase UID of the user who created the recipe
+- `createdByName` (string, nullable): Display name of the user who created the recipe
+- Both fields are optional and will be `null` for legacy recipes or anonymous submissions
 
 ## Endpoints
 
@@ -294,6 +301,68 @@ Content-Type: multipart/form-data
 
 ---
 
+## User Profile Endpoints
+
+### GET /user/profile
+Get the authenticated user's profile. **Requires authentication.**
+
+**Headers:**
+```
+Authorization: Bearer <firebase-id-token>
+```
+
+**Response:** `200 OK`
+```json
+{
+  "email": "user@example.com",
+  "displayName": "John Doe",
+  "role": "editor",
+  "lastLoginAt": "2025-01-24T12:00:00Z"
+}
+```
+
+**Notes:**
+- Returns the profile of the currently authenticated user
+- `displayName` can be updated via PUT request
+- User profiles are stored in SQLite database
+- Users are automatically created on first login with default "viewer" role
+
+---
+
+### PUT /user/profile
+Update the authenticated user's display name. **Requires authentication.**
+
+**Headers:**
+```
+Authorization: Bearer <firebase-id-token>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "displayName": "Jane Smith"
+}
+```
+
+**Response:** `200 OK`
+```json
+{
+  "email": "user@example.com",
+  "displayName": "Jane Smith",
+  "role": "editor",
+  "lastLoginAt": "2025-01-24T12:00:00Z"
+}
+```
+
+**Notes:**
+- Only `displayName` can be updated by the user via this endpoint
+- Role changes must be done via CLI tool (see `backend/cmd/manage-users/`)
+- Email cannot be changed (tied to Firebase Auth account)
+- Display name is automatically used when creating recipes
+
+---
+
 ## Error Responses
 
 ### 400 Bad Request
@@ -334,7 +403,10 @@ Content-Type: multipart/form-data
   - **Viewers**: Can only read recipes
   - **Editors**: Can create and update recipes
   - **Admins**: Can delete recipes and manage user roles
-- User roles are managed in Firestore
+- User profiles and roles are stored in SQLite database
+- **Authentication**: Firebase Authentication for Google login
+- **Authorization**: Role-based access control via SQLite `users` table
+- Users are auto-created on first login with "viewer" role
 
 ### Data Format
 - Recipe IDs are **UUID strings**, not integers
@@ -357,3 +429,21 @@ Content-Type: multipart/form-data
 ### Timestamps
 - Recipe creation sets `createdAt`
 - Recipe updates automatically modify `updatedAt`
+
+### Creator Tracking
+- New recipes automatically capture the creator's **Firebase UID** in `createdByUserId`
+- If the user has set a **display name**, it's captured in `createdByName`
+- Both fields are **nullable** to support:
+  - Legacy recipes created before this feature
+  - Anonymous recipe submissions (if enabled)
+  - Recipes without attribution
+- User display names can be managed via `/user/profile` endpoint
+
+### User Role Management
+- User roles are managed via **CLI tool only** (not through the API)
+- CLI tool location: `backend/cmd/manage-users/`
+- Commands:
+  - `./manage-users list` - List all users
+  - `./manage-users set-role --email <email> --role <role>` - Change user role
+- See `backend/cmd/manage-users/README.md` for full documentation
+- This prevents users from escalating their own privileges

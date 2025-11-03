@@ -45,6 +45,8 @@ func main() {
 	http.HandleFunc("/recipes/images", corsMiddleware(imageUploadHandler))
 	// Icon endpoints
 	http.HandleFunc("/icons", corsMiddleware(iconsHandler))
+	// User profile endpoint
+	http.HandleFunc("/user/profile", corsMiddleware(userProfileHandler))
 
 	log.Printf("Server starting on port %s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
@@ -99,6 +101,14 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 		if err := json.NewDecoder(r.Body).Decode(&recipe); err != nil {
 			http.Error(w, "Invalid request body", http.StatusBadRequest)
 			return
+		}
+
+		// Set creator information
+		recipe.CreatedByUserID = &userID
+
+		// Try to get user's display name from SQLite
+		if user, err := GetUserByUID(r.Context(), userID); err == nil && user != nil && user.DisplayName != "" {
+			recipe.CreatedByName = &user.DisplayName
 		}
 
 		if err := CreateRecipe(r.Context(), &recipe); err != nil {
@@ -418,6 +428,7 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 // authenticateRequest validates Firebase ID token and returns user ID
+// Auto-creates user in SQLite on first login
 func authenticateRequest(r *http.Request) (string, error) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
@@ -435,5 +446,35 @@ func authenticateRequest(r *http.Request) (string, error) {
 		return "", fmt.Errorf("invalid or expired token: %w", err)
 	}
 
-	return token.UID, nil
+	userID := token.UID
+
+	// Check if user exists in SQLite, create if not (first login)
+	user, err := GetUserByUID(r.Context(), userID)
+	if err != nil {
+		return "", fmt.Errorf("failed to check user existence: %w", err)
+	}
+
+	if user == nil {
+		// User doesn't exist - create them (first login)
+		email := ""
+		if emailClaim, ok := token.Claims["email"]; ok {
+			if e, ok := emailClaim.(string); ok {
+				email = e
+			}
+		}
+
+		log.Printf("First login for user %s (%s), creating user record", userID, email)
+		_, err := CreateUser(r.Context(), userID, email, "viewer")
+		if err != nil {
+			return "", fmt.Errorf("failed to create user: %w", err)
+		}
+	} else {
+		// User exists - update last login time
+		if err := UpdateUserLastLogin(r.Context(), userID); err != nil {
+			log.Printf("Warning: failed to update last login for user %s: %v", userID, err)
+			// Don't fail the request if this fails
+		}
+	}
+
+	return userID, nil
 }

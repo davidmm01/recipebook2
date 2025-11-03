@@ -37,21 +37,23 @@ type Icon struct {
 
 // Recipe represents a recipe with markdown fields
 type Recipe struct {
-	ID          string        `json:"id"` // UUID
-	Title       string        `json:"title"`
-	Description string        `json:"description"` // Brief description
-	RecipeType  string        `json:"type"`        // "food", "cocktail", etc.
-	Cuisine     string        `json:"cuisine"`     // "italian", "japanese", "mexican", etc.
-	Ingredients string        `json:"ingredients"` // markdown
-	Method      string        `json:"method"`      // markdown
-	Notes       string        `json:"notes"`       // markdown
-	Sources     string        `json:"sources"`     // markdown
-	IconID      *int64        `json:"iconId"`      // Nullable icon ID
-	Icon        *Icon         `json:"icon"`        // Icon details (loaded separately)
-	Tags        []string      `json:"tags"`        // Array of tag names
-	Images      []RecipeImage `json:"images"`      // Array of image URLs
-	CreatedAt   time.Time     `json:"createdAt"`
-	UpdatedAt   time.Time     `json:"updatedAt"`
+	ID              string        `json:"id"` // UUID
+	Title           string        `json:"title"`
+	Description     string        `json:"description"`     // Brief description
+	RecipeType      string        `json:"type"`            // "food", "cocktail", etc.
+	Cuisine         string        `json:"cuisine"`         // "italian", "japanese", "mexican", etc.
+	Ingredients     string        `json:"ingredients"`     // markdown
+	Method          string        `json:"method"`          // markdown
+	Notes           string        `json:"notes"`           // markdown
+	Sources         string        `json:"sources"`         // markdown
+	IconID          *int64        `json:"iconId"`          // Nullable icon ID
+	Icon            *Icon         `json:"icon"`            // Icon details (loaded separately)
+	Tags            []string      `json:"tags"`            // Array of tag names
+	Images          []RecipeImage `json:"images"`          // Array of image URLs
+	CreatedByUserID *string       `json:"createdByUserId"` // Firebase UID of creator (nullable)
+	CreatedByName   *string       `json:"createdByName"`   // Display name of creator (nullable)
+	CreatedAt       time.Time     `json:"createdAt"`
+	UpdatedAt       time.Time     `json:"updatedAt"`
 }
 
 // RecipeImage represents an image associated with a recipe
@@ -87,6 +89,11 @@ func InitDatabase(ctx context.Context, bucket string) error {
 		return fmt.Errorf("failed to ping database: %w", err)
 	}
 
+	// Run migrations for existing databases
+	if err := runMigrations(ctx); err != nil {
+		return fmt.Errorf("failed to run migrations: %w", err)
+	}
+
 	log.Println("Database initialized successfully")
 	return nil
 }
@@ -100,6 +107,18 @@ func createNewDB() error {
 	defer database.Close()
 
 	schema := `
+	-- Users table (stores user profiles from Firebase Auth)
+	CREATE TABLE IF NOT EXISTS users (
+		firebase_uid TEXT PRIMARY KEY,
+		email TEXT NOT NULL,
+		display_name TEXT,
+		role TEXT DEFAULT 'viewer' CHECK(role IN ('viewer', 'editor', 'admin')),
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		last_login_at DATETIME DEFAULT CURRENT_TIMESTAMP
+	);
+
+	CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
 	-- Icons table (shared collection of recipe icons)
 	CREATE TABLE IF NOT EXISTS icons (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,6 +138,8 @@ func createNewDB() error {
 		notes TEXT,
 		sources TEXT,
 		icon_id INTEGER,
+		created_by_user_id TEXT,
+		created_by_name TEXT,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (icon_id) REFERENCES icons(id)
@@ -191,6 +212,59 @@ func createNewDB() error {
 	return nil
 }
 
+// runMigrations applies database migrations for schema changes
+func runMigrations(ctx context.Context) error {
+	// Migration 1: Add creator fields to recipes table
+	var columnExists int
+	err := db.QueryRow("SELECT COUNT(*) FROM pragma_table_info('recipes') WHERE name='created_by_user_id'").Scan(&columnExists)
+	if err != nil {
+		return fmt.Errorf("failed to check for column existence: %w", err)
+	}
+
+	if columnExists == 0 {
+		log.Println("Running migration: Adding creator fields to recipes table")
+		migrations := []string{
+			"ALTER TABLE recipes ADD COLUMN created_by_user_id TEXT",
+			"ALTER TABLE recipes ADD COLUMN created_by_name TEXT",
+		}
+
+		for _, migration := range migrations {
+			if _, err := db.ExecContext(ctx, migration); err != nil {
+				return fmt.Errorf("failed to run migration '%s': %w", migration, err)
+			}
+		}
+		log.Println("Migration completed: Creator fields added")
+	}
+
+	// Migration 2: Add users table
+	var tableExists int
+	err = db.QueryRow("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='users'").Scan(&tableExists)
+	if err != nil {
+		return fmt.Errorf("failed to check for users table existence: %w", err)
+	}
+
+	if tableExists == 0 {
+		log.Println("Running migration: Creating users table")
+		userTableSQL := `
+			CREATE TABLE users (
+				firebase_uid TEXT PRIMARY KEY,
+				email TEXT NOT NULL,
+				display_name TEXT,
+				role TEXT DEFAULT 'viewer' CHECK(role IN ('viewer', 'editor', 'admin')),
+				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+				last_login_at DATETIME DEFAULT CURRENT_TIMESTAMP
+			);
+			CREATE INDEX idx_users_email ON users(email);
+		`
+		if _, err := db.ExecContext(ctx, userTableSQL); err != nil {
+			return fmt.Errorf("failed to create users table: %w", err)
+		}
+		log.Println("Migration completed: Users table created")
+	}
+
+	return nil
+}
+
 // downloadDBFromGCS downloads the SQLite database from Cloud Storage
 func downloadDBFromGCS(ctx context.Context) error {
 	client, err := storage.NewClient(ctx)
@@ -257,7 +331,7 @@ func GetRecipes(ctx context.Context) ([]Recipe, error) {
 	defer dbMutex.RUnlock()
 
 	query := `
-		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_at, updated_at
+		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_by_user_id, created_by_name, created_at, updated_at
 		FROM recipes
 		ORDER BY updated_at DESC
 	`
@@ -271,7 +345,7 @@ func GetRecipes(ctx context.Context) ([]Recipe, error) {
 	var recipes []Recipe
 	for rows.Next() {
 		var r Recipe
-		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt)
+		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedByUserID, &r.CreatedByName, &r.CreatedAt, &r.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -310,14 +384,14 @@ func GetRecipeByID(ctx context.Context, recipeID string) (*Recipe, error) {
 	defer dbMutex.RUnlock()
 
 	query := `
-		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_at, updated_at
+		SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_by_user_id, created_by_name, created_at, updated_at
 		FROM recipes
 		WHERE id = ?
 	`
 
 	var r Recipe
 	err := db.QueryRowContext(ctx, query, recipeID).Scan(
-		&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt,
+		&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedByUserID, &r.CreatedByName, &r.CreatedAt, &r.UpdatedAt,
 	)
 
 	if err == sql.ErrNoRows {
@@ -358,7 +432,7 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 	defer dbMutex.RUnlock()
 
 	sqlQuery := `
-		SELECT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_at, r.updated_at
+		SELECT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_by_user_id, r.created_by_name, r.created_at, r.updated_at
 		FROM recipes r
 		JOIN recipes_fts ON r.id = recipes_fts.recipe_id
 		WHERE recipes_fts MATCH ?
@@ -374,7 +448,7 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 	var recipes []Recipe
 	for rows.Next() {
 		var r Recipe
-		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt)
+		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedByUserID, &r.CreatedByName, &r.CreatedAt, &r.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -422,7 +496,7 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 	if searchQuery != "" {
 		// Use FTS5 for text search
 		queryBuilder.WriteString(`
-			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_at, r.updated_at
+			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_by_user_id, r.created_by_name, r.created_at, r.updated_at
 			FROM recipes r
 			JOIN recipes_fts ON r.id = recipes_fts.recipe_id
 			WHERE recipes_fts MATCH ?
@@ -431,7 +505,7 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 	} else {
 		// No text search, just filter
 		queryBuilder.WriteString(`
-			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_at, r.updated_at
+			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_by_user_id, r.created_by_name, r.created_at, r.updated_at
 			FROM recipes r
 			WHERE 1=1
 		`)
@@ -487,7 +561,7 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 	var recipes []Recipe
 	for rows.Next() {
 		var r Recipe
-		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedAt, &r.UpdatedAt)
+		err := rows.Scan(&r.ID, &r.Title, &r.Description, &r.RecipeType, &r.Cuisine, &r.Ingredients, &r.Method, &r.Notes, &r.Sources, &r.IconID, &r.CreatedByUserID, &r.CreatedByName, &r.CreatedAt, &r.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -534,13 +608,14 @@ func CreateRecipe(ctx context.Context, recipe *Recipe) error {
 	recipe.UpdatedAt = time.Now()
 
 	query := `
-		INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_by_user_id, created_by_name, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
 	_, err := db.ExecContext(ctx, query,
 		recipe.ID, recipe.Title, recipe.Description, recipe.RecipeType, recipe.Cuisine,
-		recipe.Ingredients, recipe.Method, recipe.Notes, recipe.Sources, recipe.IconID, recipe.CreatedAt, recipe.UpdatedAt,
+		recipe.Ingredients, recipe.Method, recipe.Notes, recipe.Sources, recipe.IconID,
+		recipe.CreatedByUserID, recipe.CreatedByName, recipe.CreatedAt, recipe.UpdatedAt,
 	)
 	if err != nil {
 		return err
@@ -864,4 +939,139 @@ func deleteRecipeImage(ctx context.Context, imageID int64) error {
 	query := `DELETE FROM recipe_images WHERE id = ?`
 	_, err := db.ExecContext(ctx, query, imageID)
 	return err
+}
+
+// User management functions
+
+// DBUser represents a user in the SQLite database
+type DBUser struct {
+	FirebaseUID string    `json:"firebaseUid"`
+	Email       string    `json:"email"`
+	DisplayName string    `json:"displayName"`
+	Role        string    `json:"role"`
+	CreatedAt   time.Time `json:"createdAt"`
+	LastLoginAt time.Time `json:"lastLoginAt"`
+}
+
+// GetUserByUID retrieves a user from SQLite by Firebase UID
+func GetUserByUID(ctx context.Context, firebaseUID string) (*DBUser, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	query := `SELECT firebase_uid, email, display_name, role, created_at, last_login_at FROM users WHERE firebase_uid = ?`
+
+	var user DBUser
+	var displayName sql.NullString
+	err := db.QueryRowContext(ctx, query, firebaseUID).Scan(
+		&user.FirebaseUID, &user.Email, &displayName, &user.Role, &user.CreatedAt, &user.LastLoginAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, nil // User not found
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	// Handle nullable display_name
+	if displayName.Valid {
+		user.DisplayName = displayName.String
+	} else {
+		user.DisplayName = ""
+	}
+
+	return &user, nil
+}
+
+// CreateUser creates a new user in SQLite
+func CreateUser(ctx context.Context, firebaseUID, email, role string) (*DBUser, error) {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	now := time.Now()
+	query := `INSERT INTO users (firebase_uid, email, role, created_at, last_login_at) VALUES (?, ?, ?, ?, ?)`
+
+	_, err := db.ExecContext(ctx, query, firebaseUID, email, role, now, now)
+	if err != nil {
+		return nil, err
+	}
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return &DBUser{
+		FirebaseUID: firebaseUID,
+		Email:       email,
+		DisplayName: "",
+		Role:        role,
+		CreatedAt:   now,
+		LastLoginAt: now,
+	}, nil
+}
+
+// UpdateUserDisplayName updates a user's display name
+func UpdateUserDisplayName(ctx context.Context, firebaseUID, displayName string) error {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	query := `UPDATE users SET display_name = ? WHERE firebase_uid = ?`
+	_, err := db.ExecContext(ctx, query, displayName, firebaseUID)
+	if err != nil {
+		return err
+	}
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return nil
+}
+
+// UpdateUserLastLogin updates a user's last login timestamp
+func UpdateUserLastLogin(ctx context.Context, firebaseUID string) error {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	query := `UPDATE users SET last_login_at = ? WHERE firebase_uid = ?`
+	_, err := db.ExecContext(ctx, query, time.Now(), firebaseUID)
+	if err != nil {
+		return err
+	}
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return nil
+}
+
+// UpdateUserRole updates a user's role (admin only)
+func UpdateUserRole(ctx context.Context, firebaseUID, role string) error {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	query := `UPDATE users SET role = ? WHERE firebase_uid = ?`
+	_, err := db.ExecContext(ctx, query, role, firebaseUID)
+	if err != nil {
+		return err
+	}
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return nil
 }

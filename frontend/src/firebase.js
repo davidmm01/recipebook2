@@ -1,8 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 
-// TODO: Replace with your Firebase project configuration
+// Firebase configuration from environment variables
 // Get this from Firebase Console > Project Settings > General > Your apps
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -16,8 +15,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication
+// Initialize Firebase Authentication (for Google login)
 export const auth = getAuth(app);
-
-// Initialize Firestore
-export const db = getFirestore(app);
