@@ -1,35 +1,35 @@
 -- Auto-generated SQL import script
--- Generated at: 2025-11-04T17:56:31+11:00
+-- Generated at: 2025-11-04T18:03:24+11:00
 
 BEGIN TRANSACTION;
 
 -- Recipe: Boulevardier
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('5db41c55-c38c-4e27-aed1-0beaa83f7a09', 'Boulevardier', '', 'drink', 'string', '- 1 part bourbon
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('9dbb6523-bdd2-40ac-acd8-9a0cc50fb711', 'Boulevardier', '', 'drink', 'string', '- 1 part bourbon
 - 1 part campari
 - 1 part vermouth rosso
 - orange slice or peel for garnish', '- Combine.
 - Garnish with orange slice.
-- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2025-11-04 17:56:31');
+- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('bourbon');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '5db41c55-c38c-4e27-aed1-0beaa83f7a09', id FROM tags WHERE name = 'bourbon';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '9dbb6523-bdd2-40ac-acd8-9a0cc50fb711', id FROM tags WHERE name = 'bourbon';
 INSERT OR IGNORE INTO tags (name) VALUES ('campari');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '5db41c55-c38c-4e27-aed1-0beaa83f7a09', id FROM tags WHERE name = 'campari';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '9dbb6523-bdd2-40ac-acd8-9a0cc50fb711', id FROM tags WHERE name = 'campari';
 INSERT OR IGNORE INTO tags (name) VALUES ('vermouth');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '5db41c55-c38c-4e27-aed1-0beaa83f7a09', id FROM tags WHERE name = 'vermouth';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '9dbb6523-bdd2-40ac-acd8-9a0cc50fb711', id FROM tags WHERE name = 'vermouth';
 
 -- Recipe: Gin Jam Fizz
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('242aab8d-e653-4a34-b5fa-e86ec3374a38', 'Gin Jam Fizz', '', 'drink', 'string', '- 45ml pink gin
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('f15062be-0675-4897-86bc-20c1193ce9b8', 'Gin Jam Fizz', '', 'drink', 'string', '- 45ml pink gin
 - 2 tsp raspberry jam
 - 1/2 cup ice
 - 15ml lemon juice', '- Shake
 - Top up the (wine) glass with soda water to liking.', '### Notes
 - Could easily add 1 tsp of jam or sugar syrup for more sweetness
-- could use 60ml gin if you want it strong', '', 'megasaur', '2023-12-27 00:00:00', '2025-11-04 17:56:31');
+- could use 60ml gin if you want it strong', '', 'megasaur', '2023-12-27 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('gin');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '242aab8d-e653-4a34-b5fa-e86ec3374a38', id FROM tags WHERE name = 'gin';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'f15062be-0675-4897-86bc-20c1193ce9b8', id FROM tags WHERE name = 'gin';
 
 -- Recipe: Margarita
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('f029717a-fedf-4683-8e3d-dd22f7cd8866', 'Margarita', '', 'drink', 'string', '- juice of 1 lime
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('531d6c7a-9a19-4362-9195-ba2e1d226cac', 'Margarita', '', 'drink', 'string', '- juice of 1 lime
 - 45ml tequila (blanco or reposado)
 - 15ml cointreu
 - 15ml agave syrup
@@ -37,30 +37,30 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Shake
 - Strain and serve.
 - Optionally serve ice and or a splash of soda water.', '### Notes
-- Make no more than 2 margaritas into a standard shaker at a time, else you will not be able to add enough ice to the shaker.', '', 'dave', '2025-09-28 00:00:00', '2025-11-04 17:56:31');
+- Make no more than 2 margaritas into a standard shaker at a time, else you will not be able to add enough ice to the shaker.', '', 'dave', '2025-09-28 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('tequila');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'f029717a-fedf-4683-8e3d-dd22f7cd8866', id FROM tags WHERE name = 'tequila';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '531d6c7a-9a19-4362-9195-ba2e1d226cac', id FROM tags WHERE name = 'tequila';
 INSERT OR IGNORE INTO tags (name) VALUES ('lime');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'f029717a-fedf-4683-8e3d-dd22f7cd8866', id FROM tags WHERE name = 'lime';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '531d6c7a-9a19-4362-9195-ba2e1d226cac', id FROM tags WHERE name = 'lime';
 INSERT OR IGNORE INTO tags (name) VALUES ('salt');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'f029717a-fedf-4683-8e3d-dd22f7cd8866', id FROM tags WHERE name = 'salt';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '531d6c7a-9a19-4362-9195-ba2e1d226cac', id FROM tags WHERE name = 'salt';
 
 -- Recipe: Negroni
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('88b3a40e-6865-4c46-9252-32702615d5ce', 'Negroni', '', 'drink', 'string', '- 1 part gin
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('c8e95760-1f47-4f13-ab38-4f2c766658b8', 'Negroni', '', 'drink', 'string', '- 1 part gin
 - 1 part campari
 - 1 part vermouth rosso
 - orange slice for garnish', '- Combine.
 - Garnish with orange slice.
-- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2025-11-04 17:56:31');
+- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('gin');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '88b3a40e-6865-4c46-9252-32702615d5ce', id FROM tags WHERE name = 'gin';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c8e95760-1f47-4f13-ab38-4f2c766658b8', id FROM tags WHERE name = 'gin';
 INSERT OR IGNORE INTO tags (name) VALUES ('campari');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '88b3a40e-6865-4c46-9252-32702615d5ce', id FROM tags WHERE name = 'campari';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c8e95760-1f47-4f13-ab38-4f2c766658b8', id FROM tags WHERE name = 'campari';
 INSERT OR IGNORE INTO tags (name) VALUES ('vermouth');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '88b3a40e-6865-4c46-9252-32702615d5ce', id FROM tags WHERE name = 'vermouth';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c8e95760-1f47-4f13-ab38-4f2c766658b8', id FROM tags WHERE name = 'vermouth';
 
 -- Recipe: Baked Lemon Cream Fish
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('eb0e663c-90d7-43df-bdd8-f802b2aff0e5', 'Baked Lemon Cream Fish', '', 'food', 'western', '- 600g fish fillets
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('819e527f-32db-49ca-b8a6-9c252d324791', 'Baked Lemon Cream Fish', '', 'food', 'western', '- 600g fish fillets
 - 60g unsalted butter
 - 1/2 cup cooking cream
 - 3 cloves garlic, minced
@@ -77,14 +77,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Used frozen whiting fillets from Aldi for this and it worked great, note this goes directly against the advise on recipetineats website, so YMMV.', '**Name:** recipe tin eats
 **URL:** https://www.recipetineats.com/baked-fish-with-lemon-cream-sauce/
 **Type:** copy
-**Modifications:** ratios, fish type', 'croach', '2023-11-22 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** ratios, fish type', 'croach', '2023-11-22 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('fish');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb0e663c-90d7-43df-bdd8-f802b2aff0e5', id FROM tags WHERE name = 'fish';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '819e527f-32db-49ca-b8a6-9c252d324791', id FROM tags WHERE name = 'fish';
 INSERT OR IGNORE INTO tags (name) VALUES ('lemon');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb0e663c-90d7-43df-bdd8-f802b2aff0e5', id FROM tags WHERE name = 'lemon';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '819e527f-32db-49ca-b8a6-9c252d324791', id FROM tags WHERE name = 'lemon';
 
 -- Recipe: Bastard Beans
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('dc1ec1ac-29d4-4222-8646-f680200264e5', 'Bastard Beans', '', 'food', 'mexican', '- 1 onion, grated (important)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('8c28aaf3-fc36-4ad6-beee-6a50b74c72ce', 'Bastard Beans', '', 'food', 'mexican', '- 1 onion, grated (important)
 - 10g garlic, fincely minced
 - 2x400g beans
 - olive oil
@@ -107,14 +107,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - black beans i like as a mixer', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-07-27 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2025-07-27 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('beans');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dc1ec1ac-29d4-4222-8646-f680200264e5', id FROM tags WHERE name = 'beans';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '8c28aaf3-fc36-4ad6-beee-6a50b74c72ce', id FROM tags WHERE name = 'beans';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dc1ec1ac-29d4-4222-8646-f680200264e5', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '8c28aaf3-fc36-4ad6-beee-6a50b74c72ce', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Beef And Broccoli Noodles
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b1e938b9-685e-4522-963e-fd800063d61d', 'Beef And Broccoli Noodles', '', 'food', 'chinese', '- 500g beef quick cooking beef, thinly sliced e.g. scotch, rump
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('be51bcad-3ec6-4e05-8e28-4fa185801e22', 'Beef And Broccoli Noodles', '', 'food', 'chinese', '- 500g beef quick cooking beef, thinly sliced e.g. scotch, rump
 - 1 1/2 tbsp peanut or vegetable oil
 - 2 garlic cloves, finely chopped
 - 1 onion, sliced
@@ -146,14 +146,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Add noodles, broccoli and sauce. Toss together for 1 1/2 - 2 minutes or until Sauce thickens and coats the noodles. Apply garnish.', '', '**Name:** recipe tin eats
 **URL:** https://www.recipetineats.com/chinese-beef-broccoli-noodles/
 **Type:** copy
-**Modifications:** a few', 'croach', '2023-10-20 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** a few', 'croach', '2023-10-20 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('beef');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b1e938b9-685e-4522-963e-fd800063d61d', id FROM tags WHERE name = 'beef';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'be51bcad-3ec6-4e05-8e28-4fa185801e22', id FROM tags WHERE name = 'beef';
 INSERT OR IGNORE INTO tags (name) VALUES ('noodles');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b1e938b9-685e-4522-963e-fd800063d61d', id FROM tags WHERE name = 'noodles';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'be51bcad-3ec6-4e05-8e28-4fa185801e22', id FROM tags WHERE name = 'noodles';
 
 -- Recipe: Beef Mince Bulgogi
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('3f1d1002-16ff-4d5e-a071-1b4ccc839dc7', 'Beef Mince Bulgogi', '', 'food', 'korean', '### main part of recipe
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('4deada78-7ead-4fcd-b097-039466a8b967', 'Beef Mince Bulgogi', '', 'food', 'korean', '### main part of recipe
 - 4 spring onions
 - 1 large brown onion
 - ~400g of mushrooms, whatever kind (shitake, button, oyster, dried, some mix of these)
@@ -191,14 +191,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve with rice, add an egg or some greens.', '**Name:** Aaron & Claire
 **URL:** https://aaronandclaire.com/ground-beef-bulgogi/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-24 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** minimal', 'croach', '2023-09-24 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '3f1d1002-16ff-4d5e-a071-1b4ccc839dc7', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '4deada78-7ead-4fcd-b097-039466a8b967', id FROM tags WHERE name = 'mince';
 INSERT OR IGNORE INTO tags (name) VALUES ('rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '3f1d1002-16ff-4d5e-a071-1b4ccc839dc7', id FROM tags WHERE name = 'rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '4deada78-7ead-4fcd-b097-039466a8b967', id FROM tags WHERE name = 'rice';
 
 -- Recipe: Bolognese Sauce
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a4e69be9-fd71-4ad2-a899-14e01a524d10', 'Bolognese Sauce', '', 'food', 'italian', '- 6 carrots (~640g) chopped
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1cb3a15f-1f72-416f-b863-83912a762cdf', 'Bolognese Sauce', '', 'food', 'italian', '- 6 carrots (~640g) chopped
 - 6 celery (~690g) chopped
 - 3 medium onions (~280g) chopped
 - 80ml EVOO
@@ -230,18 +230,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Less tomato paste', '**Name:** Vincenzo''s plate
 **URL:** https://www.vincenzosplate.com/authentic-bolognese-sauce/
 **Type:** string
-**Modifications:** string', 'string', '2024-09-05 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2024-09-05 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('pasta');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a4e69be9-fd71-4ad2-a899-14e01a524d10', id FROM tags WHERE name = 'pasta';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1cb3a15f-1f72-416f-b863-83912a762cdf', id FROM tags WHERE name = 'pasta';
 INSERT OR IGNORE INTO tags (name) VALUES ('tomato');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a4e69be9-fd71-4ad2-a899-14e01a524d10', id FROM tags WHERE name = 'tomato';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1cb3a15f-1f72-416f-b863-83912a762cdf', id FROM tags WHERE name = 'tomato';
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a4e69be9-fd71-4ad2-a899-14e01a524d10', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1cb3a15f-1f72-416f-b863-83912a762cdf', id FROM tags WHERE name = 'mince';
 INSERT OR IGNORE INTO tags (name) VALUES ('sauce');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a4e69be9-fd71-4ad2-a899-14e01a524d10', id FROM tags WHERE name = 'sauce';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1cb3a15f-1f72-416f-b863-83912a762cdf', id FROM tags WHERE name = 'sauce';
 
 -- Recipe: Chef John's Meatballs
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('6d4d6221-4957-4ace-b685-05b3df918f8f', 'Chef John''s Meatballs', '', 'food', 'italian', '- ⅓ cup plain bread crumbs
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('0fed6405-4a03-4949-b0cc-a9c6cebec211', 'Chef John''s Meatballs', '', 'food', 'italian', '- ⅓ cup plain bread crumbs
 - ½ cup milk
 - 2 tablespoons olive oil
 - 1 onion, diced
@@ -263,12 +263,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Great to serve with a red sauce pasta, or as is.', '**Name:** Chef John
 **URL:** https://www.allrecipes.com/recipe/220854/chef-johns-italian-meatballs/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '6d4d6221-4957-4ace-b685-05b3df918f8f', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0fed6405-4a03-4949-b0cc-a9c6cebec211', id FROM tags WHERE name = 'mince';
 
 -- Recipe: Chilli Wine Garlic Prawn Pasta
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('0cc2a30c-5e23-483f-ae11-10684fc35807', 'Chilli Wine Garlic Prawn Pasta', '', 'food', 'fusion', '- 1kg prawns
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b601d7e0-be25-452e-9d70-5d05034f5abb', 'Chilli Wine Garlic Prawn Pasta', '', 'food', 'fusion', '- 1kg prawns
 - 360g linguine or similar
 - 3 shallot, diced or half a white onion
 - 2 red chilli, deseeded and diced
@@ -293,14 +293,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 
 ### Next
 - pasta quantity is a bit of a guess, measure and see what works', '**Name:** Carrie''s Kitchen
-**URL:** https://carriecarvalho.com/chilli-prawn-linguine/', '', '2023-12-19 00:00:00', '2025-11-04 17:56:31');
+**URL:** https://carriecarvalho.com/chilli-prawn-linguine/', '', '2023-12-19 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('pasta');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0cc2a30c-5e23-483f-ae11-10684fc35807', id FROM tags WHERE name = 'pasta';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b601d7e0-be25-452e-9d70-5d05034f5abb', id FROM tags WHERE name = 'pasta';
 INSERT OR IGNORE INTO tags (name) VALUES ('prawn');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0cc2a30c-5e23-483f-ae11-10684fc35807', id FROM tags WHERE name = 'prawn';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b601d7e0-be25-452e-9d70-5d05034f5abb', id FROM tags WHERE name = 'prawn';
 
 -- Recipe: Creamy Chicken Mushroom Pasta
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('62a3199c-e573-4f13-8033-e83780fa1f72', 'Creamy Chicken Mushroom Pasta', '', 'food', 'western', '- 1kg chicken breast, cubed
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('65dd1b8f-c4f3-4c55-bd07-9aed6da3cab9', 'Creamy Chicken Mushroom Pasta', '', 'food', 'western', '- 1kg chicken breast, cubed
 - 500g mushrooms, sliced
 - 280g fresh spinach leaves
 - 1 340ml carnation creamy evaporated milk
@@ -323,20 +323,20 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Top off with extra parmesan and serve.', '', '**Name:** tasty
 **URL:** https://tasty.co/recipe/one-pot-chicken-and-mushroom-pasta
 **Type:** string
-**Modifications:** string', 'meggles', '2025-04-25 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'meggles', '2025-04-25 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('chicken');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '62a3199c-e573-4f13-8033-e83780fa1f72', id FROM tags WHERE name = 'chicken';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65dd1b8f-c4f3-4c55-bd07-9aed6da3cab9', id FROM tags WHERE name = 'chicken';
 INSERT OR IGNORE INTO tags (name) VALUES ('mushroom');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '62a3199c-e573-4f13-8033-e83780fa1f72', id FROM tags WHERE name = 'mushroom';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65dd1b8f-c4f3-4c55-bd07-9aed6da3cab9', id FROM tags WHERE name = 'mushroom';
 INSERT OR IGNORE INTO tags (name) VALUES ('pasta');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '62a3199c-e573-4f13-8033-e83780fa1f72', id FROM tags WHERE name = 'pasta';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65dd1b8f-c4f3-4c55-bd07-9aed6da3cab9', id FROM tags WHERE name = 'pasta';
 INSERT OR IGNORE INTO tags (name) VALUES ('one pot');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '62a3199c-e573-4f13-8033-e83780fa1f72', id FROM tags WHERE name = 'one pot';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65dd1b8f-c4f3-4c55-bd07-9aed6da3cab9', id FROM tags WHERE name = 'one pot';
 INSERT OR IGNORE INTO tags (name) VALUES ('dutch oven');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '62a3199c-e573-4f13-8033-e83780fa1f72', id FROM tags WHERE name = 'dutch oven';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65dd1b8f-c4f3-4c55-bd07-9aed6da3cab9', id FROM tags WHERE name = 'dutch oven';
 
 -- Recipe: Easy Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('7e085a7c-3b0e-4605-bcdd-9bc0e7f378b9', 'Easy Chicken Curry', '', 'food', 'indian', '- 1kg chicken breast/thighs, cut into cubes
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('284014c7-73fd-46b7-bbed-520ea6f37ed5', 'Easy Chicken Curry', '', 'food', 'indian', '- 1kg chicken breast/thighs, cut into cubes
 - 2 onions
 - 3 garlic cloves, grated
 - 1 knob ginger, grated
@@ -354,14 +354,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve with naan bread or rice.', '', '**Name:** The Cooking Foodie
 **URL:** https://www.thecookingfoodie.com/recipe/Quick-and-Easy-Chicken-Curry-Recipe
 **Type:** copy
-**Modifications:** minimal', 'snapper', '2023-09-24 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** minimal', 'snapper', '2023-09-24 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '7e085a7c-3b0e-4605-bcdd-9bc0e7f378b9', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '284014c7-73fd-46b7-bbed-520ea6f37ed5', id FROM tags WHERE name = 'curry';
 INSERT OR IGNORE INTO tags (name) VALUES ('chicken');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '7e085a7c-3b0e-4605-bcdd-9bc0e7f378b9', id FROM tags WHERE name = 'chicken';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '284014c7-73fd-46b7-bbed-520ea6f37ed5', id FROM tags WHERE name = 'chicken';
 
 -- Recipe: Ez Green Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e5592114-5981-4579-94ab-959bff2608f1', 'Ez Green Chicken Curry', '', 'food', 'thai', '### vegetables
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('179fc586-7018-491f-9755-4b6618ffd0c8', 'Ez Green Chicken Curry', '', 'food', 'thai', '### vegetables
 - ~600g assorted chopped vegetables (think snow peas, eggplant, asparagus, carrot, green beans, zuchinni) etc
 - 150g onion
 - 20g garlic
@@ -379,18 +379,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - add lime, lemongrass paste or frozen lemongrass chopped up, and fakkir lime leaves?', '**Name:** recipetineats
 **URL:** https://www.recipetineats.com/thai-green-curry/#h-the-best-green-curry-paste
 **Type:** made simpler, changed ratios, specified brands, better macros
-**Modifications:** string', 'string', '2025-03-28 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2025-03-28 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e5592114-5981-4579-94ab-959bff2608f1', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '179fc586-7018-491f-9755-4b6618ffd0c8', id FROM tags WHERE name = 'curry';
 INSERT OR IGNORE INTO tags (name) VALUES ('chicken');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e5592114-5981-4579-94ab-959bff2608f1', id FROM tags WHERE name = 'chicken';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '179fc586-7018-491f-9755-4b6618ffd0c8', id FROM tags WHERE name = 'chicken';
 INSERT OR IGNORE INTO tags (name) VALUES ('jar');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e5592114-5981-4579-94ab-959bff2608f1', id FROM tags WHERE name = 'jar';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '179fc586-7018-491f-9755-4b6618ffd0c8', id FROM tags WHERE name = 'jar';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e5592114-5981-4579-94ab-959bff2608f1', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '179fc586-7018-491f-9755-4b6618ffd0c8', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Ez Guilin Chicken
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('715866ed-0064-45ec-b4da-cfba0f3b60dc', 'Ez Guilin Chicken', '', 'food', 'chinese', '- 1 large onion
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1283c346-4d31-480d-ac67-bf8980d5d7e4', 'Ez Guilin Chicken', '', 'food', 'chinese', '- 1 large onion
 - 4 cloves of garlic, minced or paste
 - knob of ginger, minced or paste
 - 1.2kg chicken thighs cut into bite sized pieces
@@ -403,18 +403,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - nice as meal prep served with rice and some veg', '', '**Name:** OG
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-09-10 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2025-09-10 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('chicken');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '715866ed-0064-45ec-b4da-cfba0f3b60dc', id FROM tags WHERE name = 'chicken';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1283c346-4d31-480d-ac67-bf8980d5d7e4', id FROM tags WHERE name = 'chicken';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '715866ed-0064-45ec-b4da-cfba0f3b60dc', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1283c346-4d31-480d-ac67-bf8980d5d7e4', id FROM tags WHERE name = 'with rice';
 INSERT OR IGNORE INTO tags (name) VALUES ('easy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '715866ed-0064-45ec-b4da-cfba0f3b60dc', id FROM tags WHERE name = 'easy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1283c346-4d31-480d-ac67-bf8980d5d7e4', id FROM tags WHERE name = 'easy';
 INSERT OR IGNORE INTO tags (name) VALUES ('spicy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '715866ed-0064-45ec-b4da-cfba0f3b60dc', id FROM tags WHERE name = 'spicy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1283c346-4d31-480d-ac67-bf8980d5d7e4', id FROM tags WHERE name = 'spicy';
 
 -- Recipe: Ez Mapo Tofu
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('807403ca-6738-4d38-927e-669e80ebc57e', 'Ez Mapo Tofu', '', 'food', 'chinese', '- neutral oil
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('208dc31b-45eb-4ec8-89ad-47de72408983', 'Ez Mapo Tofu', '', 'food', 'chinese', '- neutral oil
 - 1 brown onion, sliced finely
 - 2 cloves garlic, grated/sliced/chopped
 - 1 knob of ginger, grated/sliced/chopped
@@ -434,22 +434,22 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve with rice
 
 ### Next
-- the added oyster sauce and soy sauce was a guess at what i did, validate this and iterate', '**Type:** pimping/original/research inspired', 'croach', '2023-11-25 00:00:00', '2025-11-04 17:56:31');
+- the added oyster sauce and soy sauce was a guess at what i did, validate this and iterate', '**Type:** pimping/original/research inspired', 'croach', '2023-11-25 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('tofu');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '807403ca-6738-4d38-927e-669e80ebc57e', id FROM tags WHERE name = 'tofu';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '208dc31b-45eb-4ec8-89ad-47de72408983', id FROM tags WHERE name = 'tofu';
 INSERT OR IGNORE INTO tags (name) VALUES ('pork');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '807403ca-6738-4d38-927e-669e80ebc57e', id FROM tags WHERE name = 'pork';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '208dc31b-45eb-4ec8-89ad-47de72408983', id FROM tags WHERE name = 'pork';
 INSERT OR IGNORE INTO tags (name) VALUES ('spicy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '807403ca-6738-4d38-927e-669e80ebc57e', id FROM tags WHERE name = 'spicy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '208dc31b-45eb-4ec8-89ad-47de72408983', id FROM tags WHERE name = 'spicy';
 INSERT OR IGNORE INTO tags (name) VALUES ('rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '807403ca-6738-4d38-927e-669e80ebc57e', id FROM tags WHERE name = 'rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '208dc31b-45eb-4ec8-89ad-47de72408983', id FROM tags WHERE name = 'rice';
 INSERT OR IGNORE INTO tags (name) VALUES ('jar');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '807403ca-6738-4d38-927e-669e80ebc57e', id FROM tags WHERE name = 'jar';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '208dc31b-45eb-4ec8-89ad-47de72408983', id FROM tags WHERE name = 'jar';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '807403ca-6738-4d38-927e-669e80ebc57e', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '208dc31b-45eb-4ec8-89ad-47de72408983', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Firecracker Chicken
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('56172ea6-8406-4a8b-8a0f-0b2eeb4bcff1', 'Firecracker Chicken', '', 'food', 'fusion', '- 500g chicken mince
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b0d94d13-6f4e-487a-b98c-2effc5efe8a8', 'Firecracker Chicken', '', 'food', 'fusion', '- 500g chicken mince
 - 10h chilli oil
 - 30g honey
 - 60g frank red hot buffalo sauce
@@ -467,18 +467,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - serve with rice, broccoli and a boiled egg', '**Name:** KindaHealthyRecipes
 **URL:** https://masonfit.com/low-carb-firecracker-ground-chicken/
 **Type:** string
-**Modifications:** string', 'string', '2024-06-08 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2024-06-08 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('mealprep');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '56172ea6-8406-4a8b-8a0f-0b2eeb4bcff1', id FROM tags WHERE name = 'mealprep';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b0d94d13-6f4e-487a-b98c-2effc5efe8a8', id FROM tags WHERE name = 'mealprep';
 INSERT OR IGNORE INTO tags (name) VALUES ('spicy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '56172ea6-8406-4a8b-8a0f-0b2eeb4bcff1', id FROM tags WHERE name = 'spicy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b0d94d13-6f4e-487a-b98c-2effc5efe8a8', id FROM tags WHERE name = 'spicy';
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '56172ea6-8406-4a8b-8a0f-0b2eeb4bcff1', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b0d94d13-6f4e-487a-b98c-2effc5efe8a8', id FROM tags WHERE name = 'mince';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '56172ea6-8406-4a8b-8a0f-0b2eeb4bcff1', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b0d94d13-6f4e-487a-b98c-2effc5efe8a8', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Gyudon
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('bbf84d82-86f2-4a1f-9fbf-1ba888677d7c', 'Gyudon', '', 'food', 'japanese', '- 750g thinly sliced beef strips
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e6bc7920-0c01-48a8-a49c-77b22cbeffa3', 'Gyudon', '', 'food', 'japanese', '- 750g thinly sliced beef strips
 - 2 onions, thinly sliced into long strips
 - 3 cups boiling water
 - 2 teaspoons dashi powder
@@ -498,16 +498,16 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve over rice and eat immediately. Garnish with spring onion and/or pickled ginger.', '### Notes
 - You might choose to replace pouring the egg in, with instead serving the meal with a fried egg on top for each bowl.
 - I think this might be great with lamb slices too
-- For the sliced meat, easiest way is to buy the hot pot/sukiyaki/bulgogi meat from freezer section of asian grocer, but has higher fat content. Healthier to buy leaner meat and slice yourself.', '**Type:** research inspired/amalgamation', 'croach', '2023-11-29 00:00:00', '2025-11-04 17:56:31');
+- For the sliced meat, easiest way is to buy the hot pot/sukiyaki/bulgogi meat from freezer section of asian grocer, but has higher fat content. Healthier to buy leaner meat and slice yourself.', '**Type:** research inspired/amalgamation', 'croach', '2023-11-29 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('beef');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bbf84d82-86f2-4a1f-9fbf-1ba888677d7c', id FROM tags WHERE name = 'beef';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e6bc7920-0c01-48a8-a49c-77b22cbeffa3', id FROM tags WHERE name = 'beef';
 INSERT OR IGNORE INTO tags (name) VALUES ('rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bbf84d82-86f2-4a1f-9fbf-1ba888677d7c', id FROM tags WHERE name = 'rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e6bc7920-0c01-48a8-a49c-77b22cbeffa3', id FROM tags WHERE name = 'rice';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bbf84d82-86f2-4a1f-9fbf-1ba888677d7c', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e6bc7920-0c01-48a8-a49c-77b22cbeffa3', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Healthy Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('99f14d7f-637b-412a-a174-c1b17ec8d733', 'Healthy Curry', '', 'food', 'indian', '### Protein & marinade
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('7c7530c3-9bcb-4db6-97b6-c7630c5ab5fa', 'Healthy Curry', '', 'food', 'indian', '### Protein & marinade
 - 10g tbsp oil
 - 1.2kg chicken thighs, each cut into 6
 - 1 tsp tumeric powder
@@ -560,14 +560,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - put the powder additions earlier? so they get fried off too?', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-10-22 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2025-10-22 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '99f14d7f-637b-412a-a174-c1b17ec8d733', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '7c7530c3-9bcb-4db6-97b6-c7630c5ab5fa', id FROM tags WHERE name = 'curry';
 INSERT OR IGNORE INTO tags (name) VALUES ('with recipe');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '99f14d7f-637b-412a-a174-c1b17ec8d733', id FROM tags WHERE name = 'with recipe';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '7c7530c3-9bcb-4db6-97b6-c7630c5ab5fa', id FROM tags WHERE name = 'with recipe';
 
 -- Recipe: Honey Pepper Stirfry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('72fb8a8c-01cd-4530-9c7d-e5b443e36838', 'Honey Pepper Stirfry', '', 'food', 'chinese', '### sauce
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('dd8fdffc-12c7-4736-a0d0-bfd6d4b7e199', 'Honey Pepper Stirfry', '', 'food', 'chinese', '### sauce
 - 100ml soy sauce
 - 60g honey
 - 70g tbsp Oyster sauce (sub Hoisin)
@@ -593,18 +593,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - would work with pork or chicken too', '**Name:** recipetineats
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2024-04-06 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2024-04-06 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('beef');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '72fb8a8c-01cd-4530-9c7d-e5b443e36838', id FROM tags WHERE name = 'beef';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dd8fdffc-12c7-4736-a0d0-bfd6d4b7e199', id FROM tags WHERE name = 'beef';
 INSERT OR IGNORE INTO tags (name) VALUES ('stirfry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '72fb8a8c-01cd-4530-9c7d-e5b443e36838', id FROM tags WHERE name = 'stirfry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dd8fdffc-12c7-4736-a0d0-bfd6d4b7e199', id FROM tags WHERE name = 'stirfry';
 INSERT OR IGNORE INTO tags (name) VALUES ('honey');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '72fb8a8c-01cd-4530-9c7d-e5b443e36838', id FROM tags WHERE name = 'honey';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dd8fdffc-12c7-4736-a0d0-bfd6d4b7e199', id FROM tags WHERE name = 'honey';
 INSERT OR IGNORE INTO tags (name) VALUES ('pepper');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '72fb8a8c-01cd-4530-9c7d-e5b443e36838', id FROM tags WHERE name = 'pepper';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dd8fdffc-12c7-4736-a0d0-bfd6d4b7e199', id FROM tags WHERE name = 'pepper';
 
 -- Recipe: Japanese Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b2ef7c40-31e1-450a-bb7a-f027ada5fe51', 'Japanese Chicken Curry', '', 'food', 'string', '- 670g onions, sliced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e986a7a6-104c-446c-8e0b-2de6bc496cf0', 'Japanese Chicken Curry', '', 'food', 'string', '- 670g onions, sliced
 - 2 carrots (6.7 oz, 190 g)
 - 3 Yukon gold potatoes (15 oz, 432 g)
 - 1 tsp ginger (grated)
@@ -638,14 +638,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - string', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2023-11-27 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2023-11-27 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b2ef7c40-31e1-450a-bb7a-f027ada5fe51', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e986a7a6-104c-446c-8e0b-2de6bc496cf0', id FROM tags WHERE name = 'with rice';
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b2ef7c40-31e1-450a-bb7a-f027ada5fe51', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e986a7a6-104c-446c-8e0b-2de6bc496cf0', id FROM tags WHERE name = 'curry';
 
 -- Recipe: Kimchi Chikki Stew
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('15282a12-66c1-45cb-b68d-80e48e32554f', 'Kimchi Chikki Stew', '', 'food', 'korean', '### initial addition
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('fd0365e8-ac0f-4e5c-bf53-991742d9d81f', 'Kimchi Chikki Stew', '', 'food', 'korean', '### initial addition
 - 1 container kimchi (~700g), and don''t skimp on quality
 - 1.5kg chicken thighs
 - 3 green onions, sliced
@@ -669,18 +669,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - serve with rice', '', '**Name:** string
 **URL:** https://www.maangchi.com/recipe/kimchi-jjigae
 **Type:** string
-**Modifications:** based on but many changes', 'string', '2025-09-10 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** based on but many changes', 'string', '2025-09-10 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '15282a12-66c1-45cb-b68d-80e48e32554f', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'fd0365e8-ac0f-4e5c-bf53-991742d9d81f', id FROM tags WHERE name = 'with rice';
 INSERT OR IGNORE INTO tags (name) VALUES ('spicy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '15282a12-66c1-45cb-b68d-80e48e32554f', id FROM tags WHERE name = 'spicy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'fd0365e8-ac0f-4e5c-bf53-991742d9d81f', id FROM tags WHERE name = 'spicy';
 INSERT OR IGNORE INTO tags (name) VALUES ('soup');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '15282a12-66c1-45cb-b68d-80e48e32554f', id FROM tags WHERE name = 'soup';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'fd0365e8-ac0f-4e5c-bf53-991742d9d81f', id FROM tags WHERE name = 'soup';
 INSERT OR IGNORE INTO tags (name) VALUES ('stew');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '15282a12-66c1-45cb-b68d-80e48e32554f', id FROM tags WHERE name = 'stew';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'fd0365e8-ac0f-4e5c-bf53-991742d9d81f', id FROM tags WHERE name = 'stew';
 
 -- Recipe: Lamb Burgers
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('bd0a5637-61ec-41b1-9e3d-b0544da11912', 'Lamb Burgers', '', 'food', 'continental', '- 500g lamb mince
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e1b63d93-9d3b-4bdb-b3f5-3d0ef6b47064', 'Lamb Burgers', '', 'food', 'continental', '- 500g lamb mince
 - 2 cloves garlic, minced
 - 1 large egg
 - 1/2 teaspoon cumin
@@ -694,14 +694,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Burger inclusion inspo - cheese, red onion, tomato, lettuce, sauce (tomato, hot english mustard, other mustards, kewpie mayo all work)
 - Also works as a greek flavours burger with tzatziki, feta etc...', '**Name:** The Big Man''s World
 **URL:** https://thebigmansworld.com/lamb-burgers/
-**Type:** copy', 'croach', '2023-12-26 00:00:00', '2025-11-04 17:56:31');
+**Type:** copy', 'croach', '2023-12-26 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('lamb');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bd0a5637-61ec-41b1-9e3d-b0544da11912', id FROM tags WHERE name = 'lamb';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e1b63d93-9d3b-4bdb-b3f5-3d0ef6b47064', id FROM tags WHERE name = 'lamb';
 INSERT OR IGNORE INTO tags (name) VALUES ('burger');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bd0a5637-61ec-41b1-9e3d-b0544da11912', id FROM tags WHERE name = 'burger';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'e1b63d93-9d3b-4bdb-b3f5-3d0ef6b47064', id FROM tags WHERE name = 'burger';
 
 -- Recipe: Lamb Shanks Massaman Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('c49970db-f288-4ce2-8ed2-bf4cdfb3eb50', 'Lamb Shanks Massaman Curry', '', 'food', 'thai', '- 1.5kg lamb shanks (5 small, 4 medium, 2 - 3 large)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2c4f2bad-0cec-458b-9c3a-b831a60efc3f', 'Lamb Shanks Massaman Curry', '', 'food', 'thai', '- 1.5kg lamb shanks (5 small, 4 medium, 2 - 3 large)
 - 114g/ 4oz Maesri Massaman curry paste (1 can), or other brand (Note 1)
 - 400ml coconut milk, full fat (Ayam brand is best, Note 3)
 - 2 cups chicken stock/broth
@@ -721,14 +721,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - 3. Coconut milk - the quality/flavour comes down to the % of the liquid that is actually coconut milk. Ayam is the highest at 89%, cheap ones can be as low as 45%.', '**Name:** recipe tin eats
 **URL:** https://www.recipetineats.com/lamb-shanks-in-massaman-curry/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c49970db-f288-4ce2-8ed2-bf4cdfb3eb50', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '2c4f2bad-0cec-458b-9c3a-b831a60efc3f', id FROM tags WHERE name = 'curry';
 INSERT OR IGNORE INTO tags (name) VALUES ('lamb shanks');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c49970db-f288-4ce2-8ed2-bf4cdfb3eb50', id FROM tags WHERE name = 'lamb shanks';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '2c4f2bad-0cec-458b-9c3a-b831a60efc3f', id FROM tags WHERE name = 'lamb shanks';
 
 -- Recipe: Mexican Meat Mix
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('0c0a881a-7985-4292-b4f4-26d3c4d597bb', 'Mexican Meat Mix', '', 'food', 'mexican', '- 1 large onion, diced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('65752f99-f4cc-4dd7-89ec-353afc973dc2', 'Mexican Meat Mix', '', 'food', 'mexican', '- 1 large onion, diced
 - 3 cloves garlic, finely diced
 - 500g extra lean beef mince
 - 1 can mexican bean mix, drained and lightly rinsed
@@ -756,20 +756,20 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - can add any kinds of fresh chillis when u add the garlic, or when u are adding veg towards the end
 
 ### Next
-- wrote this recipe a bit baked so check the accuracy', '**Name:** original by davo', 'croach', '2024-08-20 00:00:00', '2025-11-04 17:56:31');
+- wrote this recipe a bit baked so check the accuracy', '**Name:** original by davo', 'croach', '2024-08-20 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('beef');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0c0a881a-7985-4292-b4f4-26d3c4d597bb', id FROM tags WHERE name = 'beef';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65752f99-f4cc-4dd7-89ec-353afc973dc2', id FROM tags WHERE name = 'beef';
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0c0a881a-7985-4292-b4f4-26d3c4d597bb', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65752f99-f4cc-4dd7-89ec-353afc973dc2', id FROM tags WHERE name = 'mince';
 INSERT OR IGNORE INTO tags (name) VALUES ('beans');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0c0a881a-7985-4292-b4f4-26d3c4d597bb', id FROM tags WHERE name = 'beans';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65752f99-f4cc-4dd7-89ec-353afc973dc2', id FROM tags WHERE name = 'beans';
 INSERT OR IGNORE INTO tags (name) VALUES ('meal prep');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0c0a881a-7985-4292-b4f4-26d3c4d597bb', id FROM tags WHERE name = 'meal prep';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65752f99-f4cc-4dd7-89ec-353afc973dc2', id FROM tags WHERE name = 'meal prep';
 INSERT OR IGNORE INTO tags (name) VALUES ('lunch');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '0c0a881a-7985-4292-b4f4-26d3c4d597bb', id FROM tags WHERE name = 'lunch';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '65752f99-f4cc-4dd7-89ec-353afc973dc2', id FROM tags WHERE name = 'lunch';
 
 -- Recipe: Minestrone
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('6661b317-21b3-4543-bb48-f98fc4a8b6a6', 'Minestrone', '', 'food', 'italian', '- 6 cups (1.5L) chicken stock
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('dee42d11-559c-4172-9482-90656b71fdfd', 'Minestrone', '', 'food', 'italian', '- 6 cups (1.5L) chicken stock
 - 250g celery, diced
 - 250g carrot, diced
 - 250g onion, diced
@@ -802,16 +802,16 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Garnish with parmesan, a squeeze of lemon, or red pepper flakes if desired.', '', '**Name:** string
 **URL:** https://nutritionistmom.com/blogs/blog/high-protein-minestrone-soup?srsltid=AfmBOooHIvu5diRZIYGwelSVvXfbRB5I7GiILuxsf1XyVWy-PzgQWr-R
 **Type:** string
-**Modifications:** string', 'string', '2025-08-14 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2025-08-14 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('soup');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '6661b317-21b3-4543-bb48-f98fc4a8b6a6', id FROM tags WHERE name = 'soup';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dee42d11-559c-4172-9482-90656b71fdfd', id FROM tags WHERE name = 'soup';
 INSERT OR IGNORE INTO tags (name) VALUES ('healthy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '6661b317-21b3-4543-bb48-f98fc4a8b6a6', id FROM tags WHERE name = 'healthy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dee42d11-559c-4172-9482-90656b71fdfd', id FROM tags WHERE name = 'healthy';
 INSERT OR IGNORE INTO tags (name) VALUES ('fibre');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '6661b317-21b3-4543-bb48-f98fc4a8b6a6', id FROM tags WHERE name = 'fibre';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'dee42d11-559c-4172-9482-90656b71fdfd', id FROM tags WHERE name = 'fibre';
 
 -- Recipe: Oyakodon
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('498079db-25df-4165-a0e1-e371ccdb4f00', 'Oyakodon', '', 'food', 'japanese', '- 2 cups (500ml) dashi stock
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('779b1147-1777-4b0a-b188-c60af0b2a2a7', 'Oyakodon', '', 'food', 'japanese', '- 2 cups (500ml) dashi stock
 - 60ml sake
 - 30ml soy sauce, plus more to taste
 - 30g sugar, plus more to taste
@@ -828,16 +828,16 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - consider adding mushrooms, experiment with this', '**Name:** Serious Eats
 **URL:** https://www.seriouseats.com/oyakodon-japanese-chicken-and-egg-rice-bowl-recipe
 **Type:** copy
-**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('chicken');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '498079db-25df-4165-a0e1-e371ccdb4f00', id FROM tags WHERE name = 'chicken';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '779b1147-1777-4b0a-b188-c60af0b2a2a7', id FROM tags WHERE name = 'chicken';
 INSERT OR IGNORE INTO tags (name) VALUES ('egg');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '498079db-25df-4165-a0e1-e371ccdb4f00', id FROM tags WHERE name = 'egg';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '779b1147-1777-4b0a-b188-c60af0b2a2a7', id FROM tags WHERE name = 'egg';
 INSERT OR IGNORE INTO tags (name) VALUES ('rice bowl');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '498079db-25df-4165-a0e1-e371ccdb4f00', id FROM tags WHERE name = 'rice bowl';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '779b1147-1777-4b0a-b188-c60af0b2a2a7', id FROM tags WHERE name = 'rice bowl';
 
 -- Recipe: Palak Paneer
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a55fc352-6004-4ac1-8241-538ea28bdfa9', 'Palak Paneer', '', 'food', 'indian', '- 3 medium onions, diced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('6a79c089-5827-4c7a-9163-900ee13714e6', 'Palak Paneer', '', 'food', 'indian', '- 3 medium onions, diced
 - 30g garlic, minced
 - 30g ginger, minced
 - 450g paneer
@@ -876,14 +876,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Not all spices are absolutely mandatory. I''m really just chucking in whatever i have that smells good.', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-08-14 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2025-08-14 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a55fc352-6004-4ac1-8241-538ea28bdfa9', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '6a79c089-5827-4c7a-9163-900ee13714e6', id FROM tags WHERE name = 'curry';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a55fc352-6004-4ac1-8241-538ea28bdfa9', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '6a79c089-5827-4c7a-9163-900ee13714e6', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Pork Dumplings
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('eb784672-5dca-4f81-ba80-8abc717c1042', 'Pork Dumplings', '', 'food', 'chinese', '- 3 * 500g packs dumpling wrappers (gyoza, wonton etc...)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('bcc2adc3-8514-4eda-beef-7deee6205c3a', 'Pork Dumplings', '', 'food', 'chinese', '- 3 * 500g packs dumpling wrappers (gyoza, wonton etc...)
 
 ### filling mixture
 - 1kg pork mince, 5% fat
@@ -914,24 +914,24 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - could do with a teeny bit more salt', '**Name:** string
 **URL:** https://www.maxiskitchen.com/blog/potstickers
 **Type:** string
-**Modifications:** string', 'string', '2024-09-29 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2024-09-29 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('pork');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'pork';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'pork';
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'mince';
 INSERT OR IGNORE INTO tags (name) VALUES ('freeze');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'freeze';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'freeze';
 INSERT OR IGNORE INTO tags (name) VALUES ('mealprep');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'mealprep';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'mealprep';
 INSERT OR IGNORE INTO tags (name) VALUES ('dumpling');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'dumpling';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'dumpling';
 INSERT OR IGNORE INTO tags (name) VALUES ('gyoza');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'gyoza';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'gyoza';
 INSERT OR IGNORE INTO tags (name) VALUES ('wonton');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'eb784672-5dca-4f81-ba80-8abc717c1042', id FROM tags WHERE name = 'wonton';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bcc2adc3-8514-4eda-beef-7deee6205c3a', id FROM tags WHERE name = 'wonton';
 
 -- Recipe: Pork Tenderloin Honey Garlic
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('ab3a0206-fef9-4e52-9660-788295eedef6', 'Pork Tenderloin Honey Garlic', '', 'food', 'chinese', '- 2 pork tenderloin (pork fillet), 500g/1lb each (Note 1)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('cabb4578-6f7f-457e-9cb7-4b697853d538', 'Pork Tenderloin Honey Garlic', '', 'food', 'chinese', '- 2 pork tenderloin (pork fillet), 500g/1lb each (Note 1)
 - 1 1/2 tbsp olive oil (or butter)
 - 3 garlic cloves , very finely chopped
 
@@ -957,32 +957,32 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Cut pork into thick slices and serve with sauce!', '', '**Name:** Recipe Tin Eats
 **URL:** https://www.recipetineats.com/pork-tenderloin-with-honey-garlic-sauce/
 **Type:** string
-**Modifications:** string', 'string', '2024-06-08 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2024-06-08 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('asian');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'ab3a0206-fef9-4e52-9660-788295eedef6', id FROM tags WHERE name = 'asian';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'cabb4578-6f7f-457e-9cb7-4b697853d538', id FROM tags WHERE name = 'asian';
 INSERT OR IGNORE INTO tags (name) VALUES ('garlic');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'ab3a0206-fef9-4e52-9660-788295eedef6', id FROM tags WHERE name = 'garlic';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'cabb4578-6f7f-457e-9cb7-4b697853d538', id FROM tags WHERE name = 'garlic';
 INSERT OR IGNORE INTO tags (name) VALUES ('honey');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'ab3a0206-fef9-4e52-9660-788295eedef6', id FROM tags WHERE name = 'honey';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'cabb4578-6f7f-457e-9cb7-4b697853d538', id FROM tags WHERE name = 'honey';
 INSERT OR IGNORE INTO tags (name) VALUES ('pork');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'ab3a0206-fef9-4e52-9660-788295eedef6', id FROM tags WHERE name = 'pork';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'cabb4578-6f7f-457e-9cb7-4b697853d538', id FROM tags WHERE name = 'pork';
 
 -- Recipe: Punjabi Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('08178bca-add2-48dd-9d40-5d6113abd21f', 'Punjabi Chicken Curry', '', 'food', 'indian', '### Chicken', '- Combine the yogurt with the salt, spices, garlic, and ginger in a bowl, and mix well. Add the chicken thighs and make sure that the chicken is coated well in the yogurt marinade. Let it rest overnight, or 1 hour at least, in the fridge.
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('bc3ab227-8fc9-4f02-8b8d-58047774e606', 'Punjabi Chicken Curry', '', 'food', 'indian', '### Chicken', '- Combine the yogurt with the salt, spices, garlic, and ginger in a bowl, and mix well. Add the chicken thighs and make sure that the chicken is coated well in the yogurt marinade. Let it rest overnight, or 1 hour at least, in the fridge.
 - Heat the oil in a pan. Add the cumin seeds, mustard seeds and bay leaf. Once they start to sizzle, add the onions and cook for 15 minutes, until a lovely golden color. Now add the tomatoes and cook for 10 minutes, until softened. Add the spices and salt, and cook for 1 minute. Add the marinated chicken, mix well, and cover. Cook for 40 to 45 minutes over low heat until the chicken is cooked through.
 - Once you have cooked the curry, let it rest for 30 minutes to 1 hour. This makes the curry really intense and the chicken soaks up the flavors better. Sprinkle with some coriander and serve.', '', '**Name:** Food52
 **URL:** https://food52.com/recipes/83814-punjabi-style-chicken-curry-recipe
 **Type:** few changes
-**Modifications:** string', 'dave', '2025-02-20 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'dave', '2025-02-20 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '08178bca-add2-48dd-9d40-5d6113abd21f', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bc3ab227-8fc9-4f02-8b8d-58047774e606', id FROM tags WHERE name = 'curry';
 INSERT OR IGNORE INTO tags (name) VALUES ('chicken');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '08178bca-add2-48dd-9d40-5d6113abd21f', id FROM tags WHERE name = 'chicken';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bc3ab227-8fc9-4f02-8b8d-58047774e606', id FROM tags WHERE name = 'chicken';
 INSERT OR IGNORE INTO tags (name) VALUES ('with rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '08178bca-add2-48dd-9d40-5d6113abd21f', id FROM tags WHERE name = 'with rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'bc3ab227-8fc9-4f02-8b8d-58047774e606', id FROM tags WHERE name = 'with rice';
 
 -- Recipe: Qeema Mince
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('23e1628a-e109-49cb-9825-6a752836cc98', 'Qeema Mince', '', 'food', 'indian', '- 3 tbsp vegetable or canola oil, or other neutral oil
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('c9b3da68-e2e9-4fd3-8a64-79578bb26699', 'Qeema Mince', '', 'food', 'indian', '- 3 tbsp vegetable or canola oil, or other neutral oil
 - 18g ginger, finely minced or as paste
 - 15g garlic, finely minced or as paste
 - 1 large onion, finely diced
@@ -1005,16 +1005,16 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - I often do a 50/50 beef/pork mix. Literally any mince will work here.', '**Name:** recipetineats
 **URL:** https://www.recipetineats.com/qeema-indian-curried-beef/
 **Type:** copy
-**Modifications:** string', 'string', '2024-03-17 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'string', '2024-03-17 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('mince');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '23e1628a-e109-49cb-9825-6a752836cc98', id FROM tags WHERE name = 'mince';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c9b3da68-e2e9-4fd3-8a64-79578bb26699', id FROM tags WHERE name = 'mince';
 INSERT OR IGNORE INTO tags (name) VALUES ('beef');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '23e1628a-e109-49cb-9825-6a752836cc98', id FROM tags WHERE name = 'beef';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c9b3da68-e2e9-4fd3-8a64-79578bb26699', id FROM tags WHERE name = 'beef';
 INSERT OR IGNORE INTO tags (name) VALUES ('curry');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '23e1628a-e109-49cb-9825-6a752836cc98', id FROM tags WHERE name = 'curry';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'c9b3da68-e2e9-4fd3-8a64-79578bb26699', id FROM tags WHERE name = 'curry';
 
 -- Recipe: Sauce For Fried Rice
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('d020be49-deaa-4e36-aa3c-7a73b56bbc8d', 'Sauce For Fried Rice', '', 'food', 'chinese', '- 1/3 cup Soy sauce
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a71ab7bb-3e0b-4549-8f92-066cadbe6097', 'Sauce For Fried Rice', '', 'food', 'chinese', '- 1/3 cup Soy sauce
 - 1/3 cup Oyster sauce
 - 1/3 cup Mirin
 - 1/4 cup Sesame oil
@@ -1022,14 +1022,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Use approximately 1-1/2 to 2 tablespoons of sauce for every cup of rice in your fried rice recipe. Taste and add more if desired.', '', '**Name:** Savor The Best
 **URL:** https://savorthebest.com/sauce-for-fried-rice/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('sauce');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'd020be49-deaa-4e36-aa3c-7a73b56bbc8d', id FROM tags WHERE name = 'sauce';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a71ab7bb-3e0b-4549-8f92-066cadbe6097', id FROM tags WHERE name = 'sauce';
 INSERT OR IGNORE INTO tags (name) VALUES ('rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'd020be49-deaa-4e36-aa3c-7a73b56bbc8d', id FROM tags WHERE name = 'rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a71ab7bb-3e0b-4549-8f92-066cadbe6097', id FROM tags WHERE name = 'rice';
 
 -- Recipe: Smoked Salmon Pasta
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b8824be2-838a-4ce5-91ff-206e5f206a32', 'Smoked Salmon Pasta', '', 'food', 'western', '- 1 large brown onion, thinly sliced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('07eba082-b037-4d15-b00c-9c8c7d828ee9', 'Smoked Salmon Pasta', '', 'food', 'western', '- 1 large brown onion, thinly sliced
 - 2 tablespoons olive oil
 - 500g button mushrooms, peeled and sliced
 - 600 grams smoked salmon, roughly sliced
@@ -1044,18 +1044,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Cook the pasta and add the sauce', '', '**Name:** Gina
 **URL:** string
 **Type:** string
-**Modifications:** string', 'geenie', '2025-04-06 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** string', 'geenie', '2025-04-06 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('pasta');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b8824be2-838a-4ce5-91ff-206e5f206a32', id FROM tags WHERE name = 'pasta';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '07eba082-b037-4d15-b00c-9c8c7d828ee9', id FROM tags WHERE name = 'pasta';
 INSERT OR IGNORE INTO tags (name) VALUES ('smoked salmon');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b8824be2-838a-4ce5-91ff-206e5f206a32', id FROM tags WHERE name = 'smoked salmon';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '07eba082-b037-4d15-b00c-9c8c7d828ee9', id FROM tags WHERE name = 'smoked salmon';
 INSERT OR IGNORE INTO tags (name) VALUES ('mushroom');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b8824be2-838a-4ce5-91ff-206e5f206a32', id FROM tags WHERE name = 'mushroom';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '07eba082-b037-4d15-b00c-9c8c7d828ee9', id FROM tags WHERE name = 'mushroom';
 INSERT OR IGNORE INTO tags (name) VALUES ('creamy');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'b8824be2-838a-4ce5-91ff-206e5f206a32', id FROM tags WHERE name = 'creamy';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '07eba082-b037-4d15-b00c-9c8c7d828ee9', id FROM tags WHERE name = 'creamy';
 
 -- Recipe: Sweet And Sour Fish
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a19fc6fc-bbbf-4b1d-81e6-e3cd4a15dcee', 'Sweet And Sour Fish', '', 'food', 'chinese', '### TODO: how to handle subheadings?
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('64057e6d-2862-4694-b44b-d441fdcc5b89', 'Sweet And Sour Fish', '', 'food', 'chinese', '### TODO: how to handle subheadings?
 
 ### For the fish:
 - 900g fish cut into small portions (i used frozen basa)
@@ -1096,18 +1096,18 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - try adding some msg in the sauce', '**Name:** The Woks of Life
 **URL:** https://thewoksoflife.com/sweet-sour-fish-fillet/
 **Type:** copy
-**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('pineapple');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a19fc6fc-bbbf-4b1d-81e6-e3cd4a15dcee', id FROM tags WHERE name = 'pineapple';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '64057e6d-2862-4694-b44b-d441fdcc5b89', id FROM tags WHERE name = 'pineapple';
 INSERT OR IGNORE INTO tags (name) VALUES ('fish');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a19fc6fc-bbbf-4b1d-81e6-e3cd4a15dcee', id FROM tags WHERE name = 'fish';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '64057e6d-2862-4694-b44b-d441fdcc5b89', id FROM tags WHERE name = 'fish';
 INSERT OR IGNORE INTO tags (name) VALUES ('fried');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a19fc6fc-bbbf-4b1d-81e6-e3cd4a15dcee', id FROM tags WHERE name = 'fried';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '64057e6d-2862-4694-b44b-d441fdcc5b89', id FROM tags WHERE name = 'fried';
 INSERT OR IGNORE INTO tags (name) VALUES ('frozen fish');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'a19fc6fc-bbbf-4b1d-81e6-e3cd4a15dcee', id FROM tags WHERE name = 'frozen fish';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '64057e6d-2862-4694-b44b-d441fdcc5b89', id FROM tags WHERE name = 'frozen fish';
 
 -- Recipe: Tomato Egg Prawn Stirfry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1ba2e24d-7e46-479a-a106-e1098dea3122', 'Tomato Egg Prawn Stirfry', '', 'food', 'chinese', '- 3 very large tomatoes
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('beef3c3d-24d2-42fc-9c55-7d9291e7f5c7', 'Tomato Egg Prawn Stirfry', '', 'food', 'chinese', '- 3 very large tomatoes
 - 500g prawns
 - 6 eggs
 - 5 cloves of garlic, minced or chopped
@@ -1136,20 +1136,20 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - try adding 1 or 2tbsp of tomato sauce for more tomato richness', '**Name:** Genius Eats
 **URL:** https://www.therecipesource.com/the-recipe
 **Type:** copy
-**Modifications:** ratios, ingredients', 'croach', '2023-12-01 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** ratios, ingredients', 'croach', '2023-12-01 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('chinese');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1ba2e24d-7e46-479a-a106-e1098dea3122', id FROM tags WHERE name = 'chinese';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'beef3c3d-24d2-42fc-9c55-7d9291e7f5c7', id FROM tags WHERE name = 'chinese';
 INSERT OR IGNORE INTO tags (name) VALUES ('prawn');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1ba2e24d-7e46-479a-a106-e1098dea3122', id FROM tags WHERE name = 'prawn';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'beef3c3d-24d2-42fc-9c55-7d9291e7f5c7', id FROM tags WHERE name = 'prawn';
 INSERT OR IGNORE INTO tags (name) VALUES ('egg');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1ba2e24d-7e46-479a-a106-e1098dea3122', id FROM tags WHERE name = 'egg';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'beef3c3d-24d2-42fc-9c55-7d9291e7f5c7', id FROM tags WHERE name = 'egg';
 INSERT OR IGNORE INTO tags (name) VALUES ('tomato');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1ba2e24d-7e46-479a-a106-e1098dea3122', id FROM tags WHERE name = 'tomato';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'beef3c3d-24d2-42fc-9c55-7d9291e7f5c7', id FROM tags WHERE name = 'tomato';
 INSERT OR IGNORE INTO tags (name) VALUES ('rice');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1ba2e24d-7e46-479a-a106-e1098dea3122', id FROM tags WHERE name = 'rice';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT 'beef3c3d-24d2-42fc-9c55-7d9291e7f5c7', id FROM tags WHERE name = 'rice';
 
 -- Recipe: Unagi Sauce
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1c4a1502-aad7-4eee-a36a-4d9ed5dc70f2', 'Unagi Sauce', '', 'food', 'japanese', '- 60ml mirin
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('623dde25-c032-451a-acff-2d20ad1c950e', 'Unagi Sauce', '', 'food', 'japanese', '- 60ml mirin
 - 1½ Tbsp sake
 - 2½ Tbsp sugar
 - 60ml soy sauce', '- In a small saucepan, add the mirin, sake and sugar. Turn on the heat to medium and whisk all the ingredients together.
@@ -1158,14 +1158,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - A great way to dress up frozen unagi. Leftovers can be used to dress fried rice for a sweeter taste.', '**Name:** Just One Cookbook
 **URL:** https://www.justonecookbook.com/homemade-unagi-sauce/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('sauce');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1c4a1502-aad7-4eee-a36a-4d9ed5dc70f2', id FROM tags WHERE name = 'sauce';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '623dde25-c032-451a-acff-2d20ad1c950e', id FROM tags WHERE name = 'sauce';
 INSERT OR IGNORE INTO tags (name) VALUES ('eel');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '1c4a1502-aad7-4eee-a36a-4d9ed5dc70f2', id FROM tags WHERE name = 'eel';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '623dde25-c032-451a-acff-2d20ad1c950e', id FROM tags WHERE name = 'eel';
 
 -- Recipe: Vietnamese Noodle Salad
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('8f8ecdbc-d2f8-4166-a229-b04f98995b1b', 'Vietnamese Noodle Salad', '', 'food', 'vietnamese', '### For the chicken & marinade:
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('550f0cd6-08c7-44df-ad85-7cf5424a6344', 'Vietnamese Noodle Salad', '', 'food', 'vietnamese', '### For the chicken & marinade:
 - 450 g boneless, skinless chicken thighs
 - 2 cloves garlic, minced
 - 1 lime, juiced
@@ -1203,10 +1203,10 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - We haven''t actually tried this with the chicken yet, do that!', '**Name:** The Woks of Life
 **URL:** https://thewoksoflife.com/vietnamese-rice-noodle-salad-chicken/
 **Type:** string
-**Modifications:** removed meat', 'meggles', '2024-03-24 00:00:00', '2025-11-04 17:56:31');
+**Modifications:** removed meat', 'meggles', '2024-03-24 00:00:00', '2025-11-04 18:03:24');
 INSERT OR IGNORE INTO tags (name) VALUES ('salad');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '8f8ecdbc-d2f8-4166-a229-b04f98995b1b', id FROM tags WHERE name = 'salad';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '550f0cd6-08c7-44df-ad85-7cf5424a6344', id FROM tags WHERE name = 'salad';
 INSERT OR IGNORE INTO tags (name) VALUES ('noodle');
-INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '8f8ecdbc-d2f8-4166-a229-b04f98995b1b', id FROM tags WHERE name = 'noodle';
+INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '550f0cd6-08c7-44df-ad85-7cf5424a6344', id FROM tags WHERE name = 'noodle';
 
 COMMIT;

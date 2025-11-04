@@ -426,6 +426,35 @@ func GetRecipeByID(ctx context.Context, recipeID string) (*Recipe, error) {
 	return &r, nil
 }
 
+// prepareFTS5Query prepares a search query for FTS5 prefix matching
+// Converts "bou" to "bou*" and "lime juice" to "lime* juice*" for better partial matching
+func prepareFTS5Query(query string) string {
+	// Split by whitespace
+	words := strings.Fields(query)
+	if len(words) == 0 {
+		return query
+	}
+
+	// Add prefix matching (*) to each word that doesn't already have FTS5 operators
+	var prepared []string
+	for _, word := range words {
+		word = strings.TrimSpace(word)
+		if word == "" {
+			continue
+		}
+		// Don't add * if the word already has FTS5 operators like *, OR, AND, NOT
+		if !strings.Contains(word, "*") &&
+		   !strings.EqualFold(word, "OR") &&
+		   !strings.EqualFold(word, "AND") &&
+		   !strings.EqualFold(word, "NOT") {
+			word = word + "*"
+		}
+		prepared = append(prepared, word)
+	}
+
+	return strings.Join(prepared, " ")
+}
+
 // SearchRecipes performs full-text search across recipes
 func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 	dbMutex.RLock()
@@ -439,7 +468,9 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 		ORDER BY rank
 	`
 
-	rows, err := db.QueryContext(ctx, sqlQuery, query)
+	// Prepare query for prefix matching
+	preparedQuery := prepareFTS5Query(query)
+	rows, err := db.QueryContext(ctx, sqlQuery, preparedQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -495,14 +526,14 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 
 	// Base query - start with recipes table
 	if searchQuery != "" {
-		// Use FTS5 for text search
+		// Use FTS5 for text search with prefix matching
 		queryBuilder.WriteString(`
 			SELECT DISTINCT r.id, r.title, r.description, r.recipe_type, r.cuisine, r.ingredients, r.method, r.notes, r.sources, r.icon_id, r.created_by_user_id, r.created_by_name, r.created_at, r.updated_at
 			FROM recipes r
 			JOIN recipes_fts ON r.id = recipes_fts.recipe_id
 			WHERE recipes_fts MATCH ?
 		`)
-		args = append(args, searchQuery)
+		args = append(args, prepareFTS5Query(searchQuery))
 	} else {
 		// No text search, just filter
 		queryBuilder.WriteString(`
