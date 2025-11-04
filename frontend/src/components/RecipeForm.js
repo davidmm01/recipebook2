@@ -252,7 +252,9 @@ const styles = {
     padding: '20px',
     backgroundColor: '#fff',
     borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    boxSizing: 'border-box',
+    width: '100%'
   },
   heading: {
     marginTop: 0,
@@ -265,14 +267,17 @@ const styles = {
     gap: '16px'
   },
   row: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '16px'
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '16px',
+    flexWrap: 'wrap'
   },
   field: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px'
+    gap: '4px',
+    flex: '1',
+    minWidth: '250px'
   },
   label: {
     fontSize: '14px',

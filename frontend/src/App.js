@@ -48,8 +48,8 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+    <div style={{ padding: '20px', boxSizing: 'border-box', maxWidth: '100%', overflowX: 'hidden' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
         <h1 style={{ margin: 0 }}>RecipeBook</h1>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {user && (
@@ -86,7 +86,7 @@ function App() {
           ) : (
             <>
               {/* Recipe Type Toggle */}
-              <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => handleRecipeTypeChange('food')}
                   style={{
@@ -130,7 +130,8 @@ function App() {
                     border: 'none',
                     borderRadius: '4px',
                     cursor: 'pointer',
-                    marginLeft: 'auto'
+                    marginLeft: 'auto',
+                    flexShrink: 0
                   }}
                 >
                   {showForm ? 'Cancel' : '+ New Recipe'}

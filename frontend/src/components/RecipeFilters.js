@@ -5,6 +5,7 @@ function RecipeFilters({ onFilterChange, recipeType }) {
   const [search, setSearch] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCuisine, setSelectedCuisine] = useState('');
+  const [sortBy, setSortBy] = useState('updated_desc');
   const [availableTags, setAvailableTags] = useState([]);
   const [availableCuisines, setAvailableCuisines] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ function RecipeFilters({ onFilterChange, recipeType }) {
     setSearch('');
     setSelectedTags([]);
     setSelectedCuisine('');
+    setSortBy('updated_desc');
   }, [recipeType]);
 
   // Notify parent component whenever filters change
@@ -39,9 +41,10 @@ function RecipeFilters({ onFilterChange, recipeType }) {
     onFilterChange({
       search,
       tags: selectedTags,
-      cuisine: selectedCuisine
+      cuisine: selectedCuisine,
+      sortBy
     });
-  }, [search, selectedTags, selectedCuisine, onFilterChange]);
+  }, [search, selectedTags, selectedCuisine, sortBy, onFilterChange]);
 
   const handleTagToggle = (tag) => {
     setSelectedTags(prev =>
@@ -55,9 +58,10 @@ function RecipeFilters({ onFilterChange, recipeType }) {
     setSearch('');
     setSelectedTags([]);
     setSelectedCuisine('');
+    setSortBy('updated_desc');
   };
 
-  const hasActiveFilters = search || selectedTags.length > 0 || selectedCuisine;
+  const hasActiveFilters = search || selectedTags.length > 0 || selectedCuisine || sortBy !== 'updated_desc';
 
   if (loading) {
     return <div style={styles.container}>Loading filters...</div>;
@@ -76,20 +80,38 @@ function RecipeFilters({ onFilterChange, recipeType }) {
         />
       </div>
 
-      <div style={styles.filterSection}>
-        <label style={styles.label}>Cuisine</label>
-        <select
-          value={selectedCuisine}
-          onChange={(e) => setSelectedCuisine(e.target.value)}
-          style={styles.select}
-        >
-          <option value="">All Cuisines</option>
-          {availableCuisines.map(cuisine => (
-            <option key={cuisine} value={cuisine}>
-              {cuisine}
-            </option>
-          ))}
-        </select>
+      <div style={styles.row}>
+        <div style={styles.filterSection}>
+          <label style={styles.label}>Cuisine</label>
+          <select
+            value={selectedCuisine}
+            onChange={(e) => setSelectedCuisine(e.target.value)}
+            style={styles.select}
+          >
+            <option value="">All Cuisines</option>
+            {availableCuisines.map(cuisine => (
+              <option key={cuisine} value={cuisine}>
+                {cuisine}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div style={styles.filterSection}>
+          <label style={styles.label}>Sort By</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            style={styles.select}
+          >
+            <option value="updated_desc">Recently Updated</option>
+            <option value="created_desc">Recently Created</option>
+            <option value="name_asc">Name (A-Z)</option>
+            <option value="name_desc">Name (Z-A)</option>
+            <option value="made_desc">Most Made</option>
+            <option value="made_asc">Least Made</option>
+          </select>
+        </div>
       </div>
 
       {availableTags.length > 0 && (
@@ -128,8 +150,17 @@ const styles = {
     borderRadius: '8px',
     marginBottom: '20px'
   },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '16px',
+    marginBottom: '16px',
+    flexWrap: 'wrap'
+  },
   filterSection: {
-    marginBottom: '16px'
+    marginBottom: '16px',
+    flex: '1',
+    minWidth: '250px'
   },
   label: {
     display: 'block',

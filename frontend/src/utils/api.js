@@ -89,6 +89,10 @@ export async function getRecipes(filters = {}) {
     });
   }
 
+  if (filters.sortBy) {
+    params.append('sort', filters.sortBy);
+  }
+
   const queryString = params.toString();
   const url = queryString ? `/recipes?${queryString}` : '/recipes';
 
@@ -174,5 +178,18 @@ export async function updateUserProfile(updates) {
   return await authenticatedFetch('/user/profile', {
     method: 'PUT',
     body: JSON.stringify(updates),
+  });
+}
+
+// Make Log API functions
+
+export async function getMakeLogs(recipeId) {
+  return await publicFetch(`/make-logs/${recipeId}`);
+}
+
+export async function createMakeLog(recipeId, makeLog) {
+  return await authenticatedFetch(`/make-logs/${recipeId}`, {
+    method: 'POST',
+    body: JSON.stringify(makeLog),
   });
 }

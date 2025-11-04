@@ -47,6 +47,8 @@ func main() {
 	http.HandleFunc("/icons", corsMiddleware(iconsHandler))
 	// User profile endpoint
 	http.HandleFunc("/user/profile", corsMiddleware(userProfileHandler))
+	// Make log endpoints
+	http.HandleFunc("/make-logs/", corsMiddleware(makeLogsHandler))
 
 	log.Printf("Server starting on port %s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
@@ -69,14 +71,15 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 		searchQuery := r.URL.Query().Get("search")
 		cuisine := r.URL.Query().Get("cuisine")
 		recipeType := r.URL.Query().Get("type")
+		sortBy := r.URL.Query().Get("sort")
 		tagsParam := r.URL.Query()["tags"] // Get all tags parameters (can be multiple)
 
 		var recipes []Recipe
 		var err error
 
 		// If any filters are provided, use FilterRecipes
-		if searchQuery != "" || cuisine != "" || recipeType != "" || len(tagsParam) > 0 {
-			recipes, err = FilterRecipes(r.Context(), searchQuery, tagsParam, cuisine, recipeType)
+		if searchQuery != "" || cuisine != "" || recipeType != "" || len(tagsParam) > 0 || sortBy != "" {
+			recipes, err = FilterRecipes(r.Context(), searchQuery, tagsParam, cuisine, recipeType, sortBy)
 		} else {
 			// No filters, get all recipes
 			recipes, err = GetRecipes(r.Context())
@@ -408,12 +411,68 @@ func iconsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func makeLogsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	// Extract recipe ID from URL path: /make-logs/{recipeId}
+	recipeID := strings.TrimPrefix(r.URL.Path, "/make-logs/")
+	if recipeID == "" {
+		http.Error(w, "Invalid recipe ID", http.StatusBadRequest)
+		return
+	}
+
+	switch r.Method {
+	case http.MethodGet:
+		// Public read - no auth required
+		logs, err := GetMakeLogsByRecipe(r.Context(), recipeID)
+		if err != nil {
+			log.Printf("Error getting make logs: %v", err)
+			http.Error(w, "Failed to get make logs", http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(logs)
+
+	case http.MethodPost:
+		// Auth required for creating make logs
+		userID, err := authenticateRequest(r)
+		if err != nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		log.Printf("Creating make log - authenticated user: %s", userID)
+
+		var makeLog MakeLog
+		if err := json.NewDecoder(r.Body).Decode(&makeLog); err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		// Set recipe ID from URL and user ID from auth
+		makeLog.RecipeID = recipeID
+		makeLog.CreatedByUserID = &userID
+
+		if err := CreateMakeLog(r.Context(), &makeLog); err != nil {
+			log.Printf("Error creating make log: %v", err)
+			http.Error(w, "Failed to create make log", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(makeLog)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 // corsMiddleware adds CORS headers to allow cross-origin requests from the frontend
 func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Allow requests from frontend (localhost:3000 for local dev)
 		origin := r.Header.Get("Origin")
-		if origin == "http://localhost:3000" || origin == "" {
+		if origin != "" {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		} else {
 			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

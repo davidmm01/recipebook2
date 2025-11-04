@@ -140,8 +140,13 @@ function RecipeList({ onRecipeClick, filters = {} }) {
               </div>
             )}
 
-            <div style={{ marginTop: '10px', fontSize: '12px', color: '#666' }}>
-              Updated: {new Date(recipe.updatedAt).toLocaleDateString()}
+            <div style={{ marginTop: '10px', fontSize: '12px', color: '#666', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>Updated: {new Date(recipe.updatedAt).toLocaleDateString()}</span>
+              {recipe.makeCount > 0 && (
+                <span style={{ fontWeight: '600', color: '#28a745' }}>
+                  Made {recipe.makeCount} {recipe.makeCount === 1 ? 'time' : 'times'}
+                </span>
+              )}
             </div>
           </div>
         ))}

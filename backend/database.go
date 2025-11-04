@@ -50,6 +50,7 @@ type Recipe struct {
 	Icon            *Icon         `json:"icon"`            // Icon details (loaded separately)
 	Tags            []string      `json:"tags"`            // Array of tag names
 	Images          []RecipeImage `json:"images"`          // Array of image URLs
+	MakeCount       int           `json:"makeCount"`       // Number of times this recipe was made
 	CreatedByUserID *string       `json:"createdByUserId"` // Firebase UID of creator (nullable)
 	CreatedByName   *string       `json:"createdByName"`   // Display name of creator (nullable)
 	CreatedAt       time.Time     `json:"createdAt"`
@@ -63,6 +64,16 @@ type RecipeImage struct {
 	ImageURL     string    `json:"imageUrl"`
 	DisplayOrder int       `json:"displayOrder"`
 	CreatedAt    time.Time `json:"createdAt"`
+}
+
+// MakeLog represents a record of when a recipe was made
+type MakeLog struct {
+	ID              int64     `json:"id"`
+	RecipeID        string    `json:"recipeId"`
+	MadeAt          string    `json:"madeAt"` // Date in YYYY-MM-DD format
+	Notes           string    `json:"notes"`
+	CreatedByUserID *string   `json:"createdByUserId"`
+	CreatedAt       time.Time `json:"createdAt"`
 }
 
 // InitDatabase initializes SQLite database and downloads from Cloud Storage if available
@@ -179,6 +190,21 @@ func createNewDB() error {
 
 	CREATE INDEX IF NOT EXISTS idx_recipe_images_recipe ON recipe_images(recipe_id);
 
+	-- Make logs table (tracks when recipes were made)
+	CREATE TABLE IF NOT EXISTS make_logs (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		recipe_id TEXT NOT NULL,
+		made_at DATE NOT NULL,
+		notes TEXT,
+		created_by_user_id TEXT,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+		FOREIGN KEY (created_by_user_id) REFERENCES users(firebase_uid)
+	);
+
+	CREATE INDEX IF NOT EXISTS idx_make_logs_recipe ON make_logs(recipe_id);
+	CREATE INDEX IF NOT EXISTS idx_make_logs_made_at ON make_logs(made_at);
+
 	-- Full-text search table (now includes description, cuisine, and sources)
 	-- Note: We include recipe_id as an unindexed column to enable joining back to recipes table
 	CREATE VIRTUAL TABLE IF NOT EXISTS recipes_fts USING fts5(
@@ -260,6 +286,34 @@ func runMigrations(ctx context.Context) error {
 			return fmt.Errorf("failed to create users table: %w", err)
 		}
 		log.Println("Migration completed: Users table created")
+	}
+
+	// Migration 3: Add make_logs table
+	err = db.QueryRow("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='make_logs'").Scan(&tableExists)
+	if err != nil {
+		return fmt.Errorf("failed to check for make_logs table existence: %w", err)
+	}
+
+	if tableExists == 0 {
+		log.Println("Running migration: Creating make_logs table")
+		makeLogsTableSQL := `
+			CREATE TABLE make_logs (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				recipe_id TEXT NOT NULL,
+				made_at DATE NOT NULL,
+				notes TEXT,
+				created_by_user_id TEXT,
+				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+				FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+				FOREIGN KEY (created_by_user_id) REFERENCES users(firebase_uid)
+			);
+			CREATE INDEX idx_make_logs_recipe ON make_logs(recipe_id);
+			CREATE INDEX idx_make_logs_made_at ON make_logs(made_at);
+		`
+		if _, err := db.ExecContext(ctx, makeLogsTableSQL); err != nil {
+			return fmt.Errorf("failed to create make_logs table: %w", err)
+		}
+		log.Println("Migration completed: make_logs table created")
 	}
 
 	return nil
@@ -372,6 +426,13 @@ func GetRecipes(ctx context.Context) ([]Recipe, error) {
 		}
 		r.Images = images
 
+		// Load make count for this recipe
+		makeCount, err := GetMakeCountByRecipe(ctx, r.ID)
+		if err != nil {
+			return nil, err
+		}
+		r.MakeCount = makeCount
+
 		recipes = append(recipes, r)
 	}
 
@@ -422,6 +483,13 @@ func GetRecipeByID(ctx context.Context, recipeID string) (*Recipe, error) {
 		return nil, err
 	}
 	r.Images = images
+
+	// Load make count for this recipe
+	makeCount, err := GetMakeCountByRecipe(ctx, r.ID)
+	if err != nil {
+		return nil, err
+	}
+	r.MakeCount = makeCount
 
 	return &r, nil
 }
@@ -506,18 +574,26 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 		}
 		r.Images = images
 
+		// Load make count for this recipe
+		makeCount, err := GetMakeCountByRecipe(ctx, r.ID)
+		if err != nil {
+			return nil, err
+		}
+		r.MakeCount = makeCount
+
 		recipes = append(recipes, r)
 	}
 
 	return recipes, rows.Err()
 }
 
-// FilterRecipes performs filtering based on search text, tags, cuisine, and recipe type
+// FilterRecipes performs filtering and sorting based on search text, tags, cuisine, recipe type, and sort order
 // If searchQuery is provided, it uses FTS5 for text search
 // If tags are provided, filters recipes that have ALL specified tags
 // If cuisine is provided, filters by exact cuisine match
 // If recipeType is provided, filters by recipe type (food, drink, etc.)
-func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisine string, recipeType string) ([]Recipe, error) {
+// If sortBy is provided, sorts results accordingly
+func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisine string, recipeType string, sortBy string) ([]Recipe, error) {
 	dbMutex.RLock()
 	defer dbMutex.RUnlock()
 
@@ -580,10 +656,29 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 	}
 
 	// Order by
-	if searchQuery != "" {
+	if searchQuery != "" && sortBy == "" {
+		// Default to rank sorting when searching
 		queryBuilder.WriteString(` ORDER BY rank`)
 	} else {
-		queryBuilder.WriteString(` ORDER BY r.updated_at DESC`)
+		// Apply sorting based on sortBy parameter
+		switch sortBy {
+		case "created_desc":
+			queryBuilder.WriteString(` ORDER BY r.created_at DESC`)
+		case "created_asc":
+			queryBuilder.WriteString(` ORDER BY r.created_at ASC`)
+		case "name_asc":
+			queryBuilder.WriteString(` ORDER BY r.title COLLATE NOCASE ASC`)
+		case "name_desc":
+			queryBuilder.WriteString(` ORDER BY r.title COLLATE NOCASE DESC`)
+		case "made_desc":
+			queryBuilder.WriteString(` ORDER BY (SELECT COUNT(*) FROM make_logs WHERE recipe_id = r.id) DESC`)
+		case "made_asc":
+			queryBuilder.WriteString(` ORDER BY (SELECT COUNT(*) FROM make_logs WHERE recipe_id = r.id) ASC`)
+		case "updated_desc":
+			fallthrough
+		default:
+			queryBuilder.WriteString(` ORDER BY r.updated_at DESC`)
+		}
 	}
 
 	rows, err := db.QueryContext(ctx, queryBuilder.String(), args...)
@@ -621,6 +716,13 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 			return nil, err
 		}
 		r.Images = images
+
+		// Load make count for this recipe
+		makeCount, err := GetMakeCountByRecipe(ctx, r.ID)
+		if err != nil {
+			return nil, err
+		}
+		r.MakeCount = makeCount
 
 		recipes = append(recipes, r)
 	}
@@ -1132,6 +1234,121 @@ func UpdateUserRole(ctx context.Context, firebaseUID, role string) error {
 	_, err := db.ExecContext(ctx, query, role, firebaseUID)
 	if err != nil {
 		return err
+	}
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return nil
+}
+
+// Make log management functions
+
+// GetMakeLogsByRecipe returns all make logs for a given recipe
+func GetMakeLogsByRecipe(ctx context.Context, recipeID string) ([]MakeLog, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	query := `
+		SELECT id, recipe_id, made_at, notes, created_by_user_id, created_at
+		FROM make_logs
+		WHERE recipe_id = ?
+		ORDER BY made_at DESC, created_at DESC
+	`
+
+	rows, err := db.QueryContext(ctx, query, recipeID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var logs []MakeLog
+	for rows.Next() {
+		var log MakeLog
+		var notes sql.NullString
+		var createdByUserID sql.NullString
+
+		if err := rows.Scan(&log.ID, &log.RecipeID, &log.MadeAt, &notes, &createdByUserID, &log.CreatedAt); err != nil {
+			return nil, err
+		}
+
+		if notes.Valid {
+			log.Notes = notes.String
+		}
+		if createdByUserID.Valid {
+			uid := createdByUserID.String
+			log.CreatedByUserID = &uid
+		}
+
+		logs = append(logs, log)
+	}
+
+	return logs, rows.Err()
+}
+
+// GetMakeCountByRecipe returns the count of make logs for a given recipe
+func GetMakeCountByRecipe(ctx context.Context, recipeID string) (int, error) {
+	query := `SELECT COUNT(*) FROM make_logs WHERE recipe_id = ?`
+	var count int
+	err := db.QueryRowContext(ctx, query, recipeID).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+// CreateMakeLog creates a new make log entry
+func CreateMakeLog(ctx context.Context, makeLog *MakeLog) error {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	query := `
+		INSERT INTO make_logs (recipe_id, made_at, notes, created_by_user_id)
+		VALUES (?, ?, ?, ?)
+	`
+
+	result, err := db.ExecContext(ctx, query, makeLog.RecipeID, makeLog.MadeAt, makeLog.Notes, makeLog.CreatedByUserID)
+	if err != nil {
+		return err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+	makeLog.ID = id
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return nil
+}
+
+// DeleteMakeLog deletes a make log entry
+func DeleteMakeLog(ctx context.Context, logID int64) error {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	query := `DELETE FROM make_logs WHERE id = ?`
+	result, err := db.ExecContext(ctx, query, logID)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("make log not found")
 	}
 
 	// Upload to Cloud Storage (async)
