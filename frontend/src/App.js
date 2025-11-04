@@ -16,6 +16,7 @@ function App() {
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [filters, setFilters] = useState({});
   const [showProfile, setShowProfile] = useState(false);
+  const [recipeType, setRecipeType] = useState('food');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -36,6 +37,11 @@ function App() {
   const handleFilterChange = useCallback((newFilters) => {
     setFilters(newFilters);
   }, []);
+
+  const handleRecipeTypeChange = (type) => {
+    setRecipeType(type);
+    setFilters({}); // Reset filters when changing type
+  };
 
   if (loading) {
     return <div style={{ padding: '20px' }}>Loading...</div>;
@@ -79,35 +85,76 @@ function App() {
             />
           ) : (
             <>
-              <button
-                onClick={() => setShowForm(!showForm)}
-                style={{
-                  padding: '12px 24px',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  color: '#fff',
-                  backgroundColor: showForm ? '#6c757d' : '#28a745',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  marginBottom: '20px'
-                }}
-              >
-                {showForm ? 'Cancel' : '+ New Recipe'}
-              </button>
+              {/* Recipe Type Toggle */}
+              <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button
+                  onClick={() => handleRecipeTypeChange('food')}
+                  style={{
+                    padding: '12px 24px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: recipeType === 'food' ? '#fff' : '#007bff',
+                    backgroundColor: recipeType === 'food' ? '#007bff' : '#fff',
+                    border: '2px solid #007bff',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Food
+                </button>
+                <button
+                  onClick={() => handleRecipeTypeChange('drink')}
+                  style={{
+                    padding: '12px 24px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: recipeType === 'drink' ? '#fff' : '#007bff',
+                    backgroundColor: recipeType === 'drink' ? '#007bff' : '#fff',
+                    border: '2px solid #007bff',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Drinks
+                </button>
+                <button
+                  onClick={() => setShowForm(!showForm)}
+                  style={{
+                    padding: '12px 24px',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                    color: '#fff',
+                    backgroundColor: showForm ? '#6c757d' : '#28a745',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginLeft: 'auto'
+                  }}
+                >
+                  {showForm ? 'Cancel' : '+ New Recipe'}
+                </button>
+              </div>
 
               {showForm && (
                 <div style={{ marginBottom: '40px' }}>
-                  <RecipeForm onRecipeCreated={handleRecipeCreated} />
+                  <RecipeForm
+                    onRecipeCreated={handleRecipeCreated}
+                    defaultRecipeType={recipeType}
+                  />
                 </div>
               )}
 
-              <RecipeFilters onFilterChange={handleFilterChange} />
+              <RecipeFilters
+                onFilterChange={handleFilterChange}
+                recipeType={recipeType}
+              />
 
               <RecipeList
-                key={refreshTrigger}
+                key={`${refreshTrigger}-${recipeType}`}
                 onRecipeClick={(recipeId) => setSelectedRecipeId(recipeId)}
-                filters={filters}
+                filters={{ ...filters, type: recipeType }}
               />
             </>
           )}

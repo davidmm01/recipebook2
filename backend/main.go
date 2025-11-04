@@ -68,14 +68,15 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 		// Check for filter parameters
 		searchQuery := r.URL.Query().Get("search")
 		cuisine := r.URL.Query().Get("cuisine")
+		recipeType := r.URL.Query().Get("type")
 		tagsParam := r.URL.Query()["tags"] // Get all tags parameters (can be multiple)
 
 		var recipes []Recipe
 		var err error
 
 		// If any filters are provided, use FilterRecipes
-		if searchQuery != "" || cuisine != "" || len(tagsParam) > 0 {
-			recipes, err = FilterRecipes(r.Context(), searchQuery, tagsParam, cuisine)
+		if searchQuery != "" || cuisine != "" || recipeType != "" || len(tagsParam) > 0 {
+			recipes, err = FilterRecipes(r.Context(), searchQuery, tagsParam, cuisine, recipeType)
 		} else {
 			// No filters, get all recipes
 			recipes, err = GetRecipes(r.Context())
@@ -231,7 +232,8 @@ func tagsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Public read - no auth required
-	tags, err := GetAllTags(r.Context())
+	recipeType := r.URL.Query().Get("type")
+	tags, err := GetAllTags(r.Context(), recipeType)
 	if err != nil {
 		log.Printf("Error getting tags: %v", err)
 		http.Error(w, "Failed to get tags", http.StatusInternalServerError)
@@ -250,7 +252,8 @@ func cuisinesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Public read - no auth required
-	cuisines, err := GetAllCuisines(r.Context())
+	recipeType := r.URL.Query().Get("type")
+	cuisines, err := GetAllCuisines(r.Context(), recipeType)
 	if err != nil {
 		log.Printf("Error getting cuisines: %v", err)
 		http.Error(w, "Failed to get cuisines", http.StatusInternalServerError)

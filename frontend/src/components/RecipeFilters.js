@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAllTags, getAllCuisines } from '../utils/api';
 
-function RecipeFilters({ onFilterChange }) {
+function RecipeFilters({ onFilterChange, recipeType }) {
   const [search, setSearch] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCuisine, setSelectedCuisine] = useState('');
@@ -9,13 +9,14 @@ function RecipeFilters({ onFilterChange }) {
   const [availableCuisines, setAvailableCuisines] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load available tags and cuisines on mount
+  // Load available tags and cuisines when recipeType changes
   useEffect(() => {
     const loadFilterOptions = async () => {
       try {
+        setLoading(true);
         const [tags, cuisines] = await Promise.all([
-          getAllTags(),
-          getAllCuisines()
+          getAllTags(recipeType),
+          getAllCuisines(recipeType)
         ]);
         setAvailableTags(tags || []);
         setAvailableCuisines(cuisines || []);
@@ -27,7 +28,11 @@ function RecipeFilters({ onFilterChange }) {
     };
 
     loadFilterOptions();
-  }, []);
+    // Reset filters when recipe type changes
+    setSearch('');
+    setSelectedTags([]);
+    setSelectedCuisine('');
+  }, [recipeType]);
 
   // Notify parent component whenever filters change
   useEffect(() => {

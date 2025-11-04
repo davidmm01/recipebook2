@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { createRecipe, updateRecipe } from '../utils/api';
 import IconManager from './IconManager';
 
-function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
+function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRecipeType = 'food' }) {
   const isEditing = !!initialRecipe;
 
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    type: 'food',
+    type: defaultRecipeType,
     cuisine: '',
     tags: '',
     ingredients: '',
@@ -20,13 +20,13 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Load initial data when editing
+  // Load initial data when editing or update type when defaultRecipeType changes
   useEffect(() => {
     if (initialRecipe) {
       setFormData({
         title: initialRecipe.title || '',
         description: initialRecipe.description || '',
-        type: initialRecipe.type || 'food',
+        type: initialRecipe.type || defaultRecipeType,
         cuisine: initialRecipe.cuisine || '',
         tags: initialRecipe.tags ? initialRecipe.tags.join(', ') : '',
         ingredients: initialRecipe.ingredients || '',
@@ -35,8 +35,11 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
         sources: initialRecipe.sources || '',
         iconId: initialRecipe.iconId || null
       });
+    } else {
+      // Update type when defaultRecipeType changes for new recipes
+      setFormData(prev => ({ ...prev, type: defaultRecipeType }));
     }
-  }, [initialRecipe]);
+  }, [initialRecipe, defaultRecipeType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +69,7 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated }) {
         setFormData({
           title: '',
           description: '',
-          type: 'food',
+          type: defaultRecipeType,
           cuisine: '',
           tags: '',
           ingredients: '',

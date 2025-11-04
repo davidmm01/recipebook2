@@ -481,11 +481,12 @@ func SearchRecipes(ctx context.Context, query string) ([]Recipe, error) {
 	return recipes, rows.Err()
 }
 
-// FilterRecipes performs filtering based on search text, tags, and cuisine
+// FilterRecipes performs filtering based on search text, tags, cuisine, and recipe type
 // If searchQuery is provided, it uses FTS5 for text search
 // If tags are provided, filters recipes that have ALL specified tags
 // If cuisine is provided, filters by exact cuisine match
-func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisine string) ([]Recipe, error) {
+// If recipeType is provided, filters by recipe type (food, drink, etc.)
+func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisine string, recipeType string) ([]Recipe, error) {
 	dbMutex.RLock()
 	defer dbMutex.RUnlock()
 
@@ -511,13 +512,15 @@ func FilterRecipes(ctx context.Context, searchQuery string, tags []string, cuisi
 		`)
 	}
 
+	// Add recipe type filter
+	if recipeType != "" {
+		queryBuilder.WriteString(` AND r.recipe_type = ?`)
+		args = append(args, recipeType)
+	}
+
 	// Add cuisine filter
 	if cuisine != "" {
-		if searchQuery != "" {
-			queryBuilder.WriteString(` AND r.cuisine = ?`)
-		} else {
-			queryBuilder.WriteString(` AND r.cuisine = ?`)
-		}
+		queryBuilder.WriteString(` AND r.cuisine = ?`)
 		args = append(args, cuisine)
 	}
 
@@ -765,13 +768,31 @@ func createIcon(ctx context.Context, filename, iconURL string) (int64, error) {
 	return result.LastInsertId()
 }
 
-// GetAllTags returns all unique tags in the database
-func GetAllTags(ctx context.Context) ([]string, error) {
+// GetAllTags returns all unique tags in the database, optionally filtered by recipe type
+func GetAllTags(ctx context.Context, recipeType string) ([]string, error) {
 	dbMutex.RLock()
 	defer dbMutex.RUnlock()
 
-	query := `SELECT name FROM tags ORDER BY name`
-	rows, err := db.QueryContext(ctx, query)
+	var query string
+	var args []interface{}
+
+	if recipeType != "" {
+		// Filter tags by recipe type
+		query = `
+			SELECT DISTINCT t.name
+			FROM tags t
+			JOIN recipe_tags rt ON t.id = rt.tag_id
+			JOIN recipes r ON rt.recipe_id = r.id
+			WHERE r.recipe_type = ?
+			ORDER BY t.name
+		`
+		args = append(args, recipeType)
+	} else {
+		// Get all tags
+		query = `SELECT name FROM tags ORDER BY name`
+	}
+
+	rows, err := db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -789,13 +810,29 @@ func GetAllTags(ctx context.Context) ([]string, error) {
 	return tags, rows.Err()
 }
 
-// GetAllCuisines returns all unique cuisines in the database
-func GetAllCuisines(ctx context.Context) ([]string, error) {
+// GetAllCuisines returns all unique cuisines in the database, optionally filtered by recipe type
+func GetAllCuisines(ctx context.Context, recipeType string) ([]string, error) {
 	dbMutex.RLock()
 	defer dbMutex.RUnlock()
 
-	query := `SELECT DISTINCT cuisine FROM recipes WHERE cuisine IS NOT NULL AND cuisine != '' ORDER BY cuisine`
-	rows, err := db.QueryContext(ctx, query)
+	var query string
+	var args []interface{}
+
+	if recipeType != "" {
+		// Filter cuisines by recipe type
+		query = `
+			SELECT DISTINCT cuisine
+			FROM recipes
+			WHERE cuisine IS NOT NULL AND cuisine != '' AND recipe_type = ?
+			ORDER BY cuisine
+		`
+		args = append(args, recipeType)
+	} else {
+		// Get all cuisines
+		query = `SELECT DISTINCT cuisine FROM recipes WHERE cuisine IS NOT NULL AND cuisine != '' ORDER BY cuisine`
+	}
+
+	rows, err := db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}

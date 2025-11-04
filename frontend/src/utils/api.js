@@ -79,6 +79,10 @@ export async function getRecipes(filters = {}) {
     params.append('cuisine', filters.cuisine);
   }
 
+  if (filters.type) {
+    params.append('type', filters.type);
+  }
+
   if (filters.tags && filters.tags.length > 0) {
     filters.tags.forEach(tag => {
       params.append('tags', tag);
@@ -121,12 +125,14 @@ export async function searchRecipes(query) {
 
 // Filter metadata functions
 
-export async function getAllTags() {
-  return await publicFetch('/tags');
+export async function getAllTags(recipeType = null) {
+  const url = recipeType ? `/tags?type=${encodeURIComponent(recipeType)}` : '/tags';
+  return await publicFetch(url);
 }
 
-export async function getAllCuisines() {
-  return await publicFetch('/cuisines');
+export async function getAllCuisines(recipeType = null) {
+  const url = recipeType ? `/cuisines?type=${encodeURIComponent(recipeType)}` : '/cuisines';
+  return await publicFetch(url);
 }
 
 // Icon API functions
