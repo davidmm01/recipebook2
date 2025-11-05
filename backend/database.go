@@ -1332,6 +1332,40 @@ func CreateMakeLog(ctx context.Context, makeLog *MakeLog) error {
 	return nil
 }
 
+// UpdateMakeLog updates a make log entry
+func UpdateMakeLog(ctx context.Context, makeLog *MakeLog) error {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
+	query := `
+		UPDATE make_logs
+		SET made_at = ?, notes = ?
+		WHERE id = ?
+	`
+
+	result, err := db.ExecContext(ctx, query, makeLog.MadeAt, makeLog.Notes, makeLog.ID)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("make log not found")
+	}
+
+	// Upload to Cloud Storage (async)
+	go func() {
+		if err := uploadDBToGCS(context.Background()); err != nil {
+			log.Printf("Failed to upload database to Cloud Storage: %v", err)
+		}
+	}()
+
+	return nil
+}
+
 // DeleteMakeLog deletes a make log entry
 func DeleteMakeLog(ctx context.Context, logID int64) error {
 	dbMutex.Lock()

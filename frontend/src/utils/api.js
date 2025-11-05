@@ -193,3 +193,16 @@ export async function createMakeLog(recipeId, makeLog) {
     body: JSON.stringify(makeLog),
   });
 }
+
+export async function updateMakeLog(logId, makeLog) {
+  return await authenticatedFetch(`/make-log/${logId}`, {
+    method: 'PUT',
+    body: JSON.stringify(makeLog),
+  });
+}
+
+export async function deleteMakeLog(logId) {
+  return await authenticatedFetch(`/make-log/${logId}`, {
+    method: 'DELETE',
+  });
+}

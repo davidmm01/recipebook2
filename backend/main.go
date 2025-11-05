@@ -49,6 +49,7 @@ func main() {
 	http.HandleFunc("/user/profile", corsMiddleware(userProfileHandler))
 	// Make log endpoints
 	http.HandleFunc("/make-logs/", corsMiddleware(makeLogsHandler))
+	http.HandleFunc("/make-log/", corsMiddleware(makeLogByIDHandler))
 
 	log.Printf("Server starting on port %s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
@@ -459,6 +460,71 @@ func makeLogsHandler(w http.ResponseWriter, r *http.Request) {
 
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(makeLog)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func makeLogByIDHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	// Extract log ID from URL path: /make-log/{logId}
+	logIDStr := strings.TrimPrefix(r.URL.Path, "/make-log/")
+	if logIDStr == "" {
+		http.Error(w, "Invalid log ID", http.StatusBadRequest)
+		return
+	}
+
+	var logID int64
+	if _, err := fmt.Sscanf(logIDStr, "%d", &logID); err != nil {
+		http.Error(w, "Invalid log ID format", http.StatusBadRequest)
+		return
+	}
+
+	switch r.Method {
+	case http.MethodPut:
+		// Auth required for updating make logs
+		userID, err := authenticateRequest(r)
+		if err != nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		log.Printf("Updating make log - authenticated user: %s", userID)
+
+		var makeLog MakeLog
+		if err := json.NewDecoder(r.Body).Decode(&makeLog); err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		// Set log ID from URL
+		makeLog.ID = logID
+
+		if err := UpdateMakeLog(r.Context(), &makeLog); err != nil {
+			log.Printf("Error updating make log: %v", err)
+			http.Error(w, "Failed to update make log", http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(makeLog)
+
+	case http.MethodDelete:
+		// Auth required for deleting make logs
+		userID, err := authenticateRequest(r)
+		if err != nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		log.Printf("Deleting make log - authenticated user: %s", userID)
+
+		if err := DeleteMakeLog(r.Context(), logID); err != nil {
+			log.Printf("Error deleting make log: %v", err)
+			http.Error(w, "Failed to delete make log", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
 
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)

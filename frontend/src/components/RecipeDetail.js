@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getRecipeById, deleteRecipe, getMakeLogs, createMakeLog } from '../utils/api';
+import { getRecipeById, deleteRecipe, getMakeLogs, createMakeLog, updateMakeLog, deleteMakeLog } from '../utils/api';
 import { useUserRole } from '../hooks/useUserRole';
 import RecipeForm from './RecipeForm';
 import { auth } from '../firebase';
@@ -17,6 +17,10 @@ function RecipeDetail({ recipeId, onBack }) {
     notes: ''
   });
   const [submittingMakeLog, setSubmittingMakeLog] = useState(false);
+  const [editingLogId, setEditingLogId] = useState(null);
+  const [editFormData, setEditFormData] = useState({ madeAt: '', notes: '' });
+  const [cookingMode, setCookingMode] = useState(false);
+  const [wakeLock, setWakeLock] = useState(null);
   const user = auth.currentUser;
   const { canEdit, isAdmin } = useUserRole(user);
 
@@ -44,6 +48,15 @@ function RecipeDetail({ recipeId, onBack }) {
     fetchRecipe();
     fetchMakeLogs();
   }, [recipeId]);
+
+  // Cleanup wake lock on unmount or when cooking mode is disabled
+  useEffect(() => {
+    return () => {
+      if (wakeLock) {
+        wakeLock.release().catch(() => {});
+      }
+    };
+  }, [wakeLock]);
 
   if (loading) {
     return <div style={styles.container}>Loading recipe...</div>;
@@ -110,6 +123,83 @@ function RecipeDetail({ recipeId, onBack }) {
       setError(err.message || 'Failed to log make');
     } finally {
       setSubmittingMakeLog(false);
+    }
+  };
+
+  const handleEditLog = (log) => {
+    setEditingLogId(log.id);
+    setEditFormData({
+      madeAt: log.madeAt,
+      notes: log.notes || ''
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingLogId(null);
+    setEditFormData({ madeAt: '', notes: '' });
+  };
+
+  const handleUpdateLog = async (logId) => {
+    try {
+      await updateMakeLog(logId, editFormData);
+      // Refresh make logs
+      const logs = await getMakeLogs(recipeId);
+      setMakeLogs(logs || []);
+      setEditingLogId(null);
+      setEditFormData({ madeAt: '', notes: '' });
+    } catch (err) {
+      setError(err.message || 'Failed to update log');
+    }
+  };
+
+  const handleDeleteLog = async (logId) => {
+    if (!window.confirm('Are you sure you want to delete this entry?')) {
+      return;
+    }
+
+    try {
+      await deleteMakeLog(logId);
+      // Refresh make logs and recipe
+      const [logs, updatedRecipe] = await Promise.all([
+        getMakeLogs(recipeId),
+        getRecipeById(recipeId)
+      ]);
+      setMakeLogs(logs || []);
+      setRecipe(updatedRecipe);
+    } catch (err) {
+      setError(err.message || 'Failed to delete log');
+    }
+  };
+
+  const toggleCookingMode = async () => {
+    if (!cookingMode) {
+      // Enable cooking mode
+      try {
+        if ('wakeLock' in navigator) {
+          const lock = await navigator.wakeLock.request('screen');
+          setWakeLock(lock);
+          setCookingMode(true);
+
+          // Handle wake lock release (e.g., when tab becomes inactive)
+          lock.addEventListener('release', () => {
+            console.log('Wake lock released');
+          });
+        } else {
+          // Wake Lock API not supported
+          alert('Wake Lock is not supported on this device/browser. Your screen may still dim.');
+          setCookingMode(true);
+        }
+      } catch (err) {
+        console.error('Failed to acquire wake lock:', err);
+        setError('Failed to enable cooking mode');
+      }
+    } else {
+      // Disable cooking mode
+      if (wakeLock) {
+        await wakeLock.release();
+        setWakeLock(null);
+      }
+      setCookingMode(false);
     }
   };
 
@@ -205,38 +295,128 @@ function RecipeDetail({ recipeId, onBack }) {
       {user && (
         <div style={styles.makeLogSection}>
           <div style={styles.makeActions}>
-            <button
-              onClick={() => setShowMakeForm(true)}
-              style={styles.madeThisButton}
-            >
-              ✨ I made this
-            </button>
-
-            {makeLogs.length > 0 && (
+            <div style={styles.makeActionsLeft}>
               <button
-                onClick={() => setShowMakeLogs(!showMakeLogs)}
-                style={styles.viewHistoryButton}
+                onClick={() => setShowMakeForm(true)}
+                style={styles.madeThisButton}
               >
-                {showMakeLogs ? 'Hide History' : '📜 View History'}
+                ✨ I made this
               </button>
-            )}
+
+              {makeLogs.length > 0 && (
+                <button
+                  onClick={() => setShowMakeLogs(!showMakeLogs)}
+                  style={{
+                    ...styles.viewHistoryButton,
+                    ...(showMakeLogs ? styles.viewHistoryActive : {})
+                  }}
+                  title={showMakeLogs ? 'Hide History' : 'View History'}
+                >
+                  📜
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={toggleCookingMode}
+              style={{
+                ...styles.cookingModeButtonFull,
+                ...(cookingMode ? styles.cookingModeActive : {})
+              }}
+            >
+              👨‍🍳 {cookingMode ? 'Screen Staying Awake' : 'Keep Screen Awake'}
+            </button>
           </div>
 
           {/* Show history inline when toggled */}
           {showMakeLogs && (
             <div style={styles.makeHistory}>
-              <h3 style={styles.historyTitle}>Make History</h3>
+              <div style={styles.historyHeader}>
+                <h3 style={styles.historyTitle}>Make History</h3>
+                {user && (
+                  <button
+                    onClick={() => setShowMakeForm(true)}
+                    style={styles.addLogButtonHeader}
+                    title="Add new entry"
+                  >
+                    ➕
+                  </button>
+                )}
+              </div>
               {makeLogs.map((log) => (
                 <div key={log.id} style={styles.logEntry}>
-                  <div style={styles.logDate}>
-                    {new Date(log.madeAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </div>
-                  {log.notes && (
-                    <div style={styles.logNotes}>{log.notes}</div>
+                  {editingLogId === log.id ? (
+                    // Edit mode
+                    <div style={styles.editLogForm}>
+                      <div style={styles.formField}>
+                        <label style={styles.formLabel}>Date</label>
+                        <input
+                          type="date"
+                          value={editFormData.madeAt}
+                          onChange={(e) => setEditFormData({...editFormData, madeAt: e.target.value})}
+                          required
+                          style={styles.dateInput}
+                        />
+                      </div>
+                      <div style={styles.formField}>
+                        <label style={styles.formLabel}>Notes</label>
+                        <textarea
+                          value={editFormData.notes}
+                          onChange={(e) => setEditFormData({...editFormData, notes: e.target.value})}
+                          rows="3"
+                          placeholder="How did it turn out? Any modifications?"
+                          style={styles.notesInput}
+                        />
+                      </div>
+                      <div style={styles.logActions}>
+                        <button
+                          onClick={() => handleUpdateLog(log.id)}
+                          style={styles.saveButton}
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          style={styles.cancelEditButton}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    // View mode
+                    <>
+                      <div style={styles.logContent}>
+                        <div style={styles.logDate}>
+                          {new Date(log.madeAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                        {log.notes && (
+                          <div style={styles.logNotes}>{log.notes}</div>
+                        )}
+                      </div>
+                      {user && (
+                        <div style={styles.logActions}>
+                          <button
+                            onClick={() => handleEditLog(log)}
+                            style={styles.editLogButton}
+                            title="Edit"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            onClick={() => handleDeleteLog(log.id)}
+                            style={styles.deleteLogButton}
+                            title="Delete"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               ))}
@@ -376,6 +556,28 @@ const styles = {
     cursor: 'pointer',
     marginBottom: '20px'
   },
+  cookingModeButtonFull: {
+    padding: '10px 20px',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#ff8c00',
+    backgroundColor: 'transparent',
+    border: '1px solid #ff8c00',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    whiteSpace: 'nowrap'
+  },
+  cookingModeButton: {
+    color: '#ff8c00',
+    borderColor: '#ff8c00',
+    backgroundColor: 'transparent'
+  },
+  cookingModeActive: {
+    color: '#fff',
+    backgroundColor: '#ff8c00',
+    borderColor: '#ff8c00'
+  },
   editButton: {
     color: '#28a745',
     borderColor: '#28a745'
@@ -502,8 +704,15 @@ const styles = {
   },
   makeActions: {
     display: 'flex',
+    justifyContent: 'space-between',
     gap: '10px',
     marginBottom: '16px',
+    flexWrap: 'wrap',
+    alignItems: 'center'
+  },
+  makeActionsLeft: {
+    display: 'flex',
+    gap: '10px',
     flexWrap: 'wrap'
   },
   madeThisButton: {
@@ -519,13 +728,17 @@ const styles = {
   },
   viewHistoryButton: {
     padding: '10px 20px',
-    fontSize: '16px',
-    fontWeight: '500',
+    fontSize: '20px',
     color: '#007bff',
     backgroundColor: 'transparent',
     border: '1px solid #007bff',
     borderRadius: '4px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    transition: 'all 0.2s'
+  },
+  viewHistoryActive: {
+    backgroundColor: '#007bff',
+    color: '#fff'
   },
   makeForm: {
     padding: '0'
@@ -579,14 +792,40 @@ const styles = {
     marginTop: '16px',
     border: '1px solid #ddd'
   },
+  historyHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '16px'
+  },
   historyTitle: {
-    margin: '0 0 16px 0',
+    margin: '0',
     fontSize: '18px',
     color: '#333'
   },
+  addLogButtonHeader: {
+    background: 'none',
+    border: '1px solid #28a745',
+    fontSize: '18px',
+    cursor: 'pointer',
+    padding: '6px 10px',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s',
+    color: '#28a745',
+    ':hover': {
+      backgroundColor: '#e7f8ed'
+    }
+  },
   logEntry: {
     padding: '12px 0',
-    borderBottom: '1px solid #eee'
+    borderBottom: '1px solid #eee',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: '12px'
+  },
+  logContent: {
+    flex: 1
   },
   logDate: {
     fontSize: '15px',
@@ -598,6 +837,58 @@ const styles = {
     fontSize: '14px',
     color: '#666',
     fontStyle: 'italic'
+  },
+  logActions: {
+    display: 'flex',
+    gap: '8px',
+    flexShrink: 0
+  },
+  editLogButton: {
+    background: 'none',
+    border: 'none',
+    fontSize: '18px',
+    cursor: 'pointer',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s',
+    ':hover': {
+      backgroundColor: '#f0f0f0'
+    }
+  },
+  deleteLogButton: {
+    background: 'none',
+    border: 'none',
+    fontSize: '18px',
+    cursor: 'pointer',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s',
+    ':hover': {
+      backgroundColor: '#ffe0e0'
+    }
+  },
+  editLogForm: {
+    width: '100%'
+  },
+  saveButton: {
+    padding: '8px 16px',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#fff',
+    backgroundColor: '#28a745',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer'
+  },
+  cancelEditButton: {
+    padding: '8px 16px',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#666',
+    backgroundColor: 'transparent',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    cursor: 'pointer'
   },
   modalOverlay: {
     position: 'fixed',
