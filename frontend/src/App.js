@@ -50,7 +50,7 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px', boxSizing: 'border-box', maxWidth: '100%', overflowX: 'hidden' }}>
+    <div style={{ padding: '20px', boxSizing: 'border-box', maxWidth: '1400px', margin: '0 auto', overflowX: 'hidden' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '10px' }}>
         <div style={{ flex: 1 }}></div>
         <h1 style={{ margin: 0, flex: 1, textAlign: 'center' }}>recipebook2</h1>
