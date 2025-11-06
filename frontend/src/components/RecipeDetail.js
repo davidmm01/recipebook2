@@ -292,7 +292,7 @@ function RecipeDetail({ recipeId, onBack }) {
       </div>
 
       {/* Make Log Button - At top */}
-      {user && (
+      {canEdit && (
         <div style={styles.makeLogSection}>
           <div style={styles.makeActions}>
             <div style={styles.makeActionsLeft}>

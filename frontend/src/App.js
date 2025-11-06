@@ -7,6 +7,7 @@ import RecipeForm from './components/RecipeForm';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeFilters from './components/RecipeFilters';
 import UserProfile from './components/UserProfile';
+import { useUserRole } from './hooks/useUserRole';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -17,6 +18,7 @@ function App() {
   const [filters, setFilters] = useState({});
   const [showProfile, setShowProfile] = useState(false);
   const [recipeType, setRecipeType] = useState('food');
+  const { canEdit } = useUserRole(user);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -119,23 +121,25 @@ function App() {
                 >
                   Drinks
                 </button>
-                <button
-                  onClick={() => setShowForm(!showForm)}
-                  style={{
-                    padding: '12px 24px',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    color: '#fff',
-                    backgroundColor: showForm ? '#6c757d' : '#28a745',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginLeft: 'auto',
-                    flexShrink: 0
-                  }}
-                >
-                  {showForm ? 'Cancel' : '+ New Recipe'}
-                </button>
+                {canEdit && (
+                  <button
+                    onClick={() => setShowForm(!showForm)}
+                    style={{
+                      padding: '12px 24px',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      color: '#fff',
+                      backgroundColor: showForm ? '#6c757d' : '#28a745',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginLeft: 'auto',
+                      flexShrink: 0
+                    }}
+                  >
+                    {showForm ? 'Cancel' : '+ New Recipe'}
+                  </button>
+                )}
               </div>
 
               {showForm && (
