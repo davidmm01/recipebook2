@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRecipe, updateRecipe } from '../utils/api';
 import IconManager from './IconManager';
+import MDEditor from '@uiw/react-md-editor';
 
 function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRecipeType = 'food' }) {
   const isEditing = !!initialRecipe;
@@ -182,51 +183,41 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
 
         <div style={styles.field}>
           <label style={styles.label}>Ingredients *</label>
-          <textarea
-            name="ingredients"
+          <MDEditor
             value={formData.ingredients}
-            onChange={handleChange}
-            required
-            rows="6"
-            style={{...styles.input, ...styles.textarea}}
-            placeholder="- 400g spaghetti&#10;- 200g pancetta&#10;- 4 eggs"
+            onChange={(value) => setFormData(prev => ({ ...prev, ingredients: value || '' }))}
+            preview="edit"
+            height={200}
           />
         </div>
 
         <div style={styles.field}>
           <label style={styles.label}>Method *</label>
-          <textarea
-            name="method"
+          <MDEditor
             value={formData.method}
-            onChange={handleChange}
-            required
-            rows="8"
-            style={{...styles.input, ...styles.textarea}}
-            placeholder="1. Boil pasta&#10;2. Fry pancetta&#10;3. Mix eggs and cheese"
+            onChange={(value) => setFormData(prev => ({ ...prev, method: value || '' }))}
+            preview="edit"
+            height={300}
           />
         </div>
 
         <div style={styles.field}>
           <label style={styles.label}>Notes</label>
-          <textarea
-            name="notes"
+          <MDEditor
             value={formData.notes}
-            onChange={handleChange}
-            rows="3"
-            style={{...styles.input, ...styles.textarea}}
-            placeholder="Optional notes, tips, or variations"
+            onChange={(value) => setFormData(prev => ({ ...prev, notes: value || '' }))}
+            preview="edit"
+            height={150}
           />
         </div>
 
         <div style={styles.field}>
           <label style={styles.label}>Sources</label>
-          <textarea
-            name="sources"
+          <MDEditor
             value={formData.sources}
-            onChange={handleChange}
-            rows="3"
-            style={{...styles.input, ...styles.textarea}}
-            placeholder="Recipe sources, references, or attribution (e.g., cookbook name, website URL)"
+            onChange={(value) => setFormData(prev => ({ ...prev, sources: value || '' }))}
+            preview="edit"
+            height={150}
           />
         </div>
 

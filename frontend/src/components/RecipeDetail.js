@@ -3,6 +3,7 @@ import { getRecipeById, deleteRecipe, getMakeLogs, createMakeLog, updateMakeLog,
 import { useUserRole } from '../hooks/useUserRole';
 import RecipeForm from './RecipeForm';
 import { auth } from '../firebase';
+import ReactMarkdown from 'react-markdown';
 
 function RecipeDetail({ recipeId, onBack }) {
   const [recipe, setRecipe] = useState(null);
@@ -499,25 +500,33 @@ function RecipeDetail({ recipeId, onBack }) {
 
       <div style={styles.section}>
         <h2 style={styles.sectionTitle}>Ingredients</h2>
-        <pre style={styles.content}>{recipe.ingredients}</pre>
+        <div style={styles.content}>
+          <ReactMarkdown>{recipe.ingredients}</ReactMarkdown>
+        </div>
       </div>
 
       <div style={styles.section}>
         <h2 style={styles.sectionTitle}>Method</h2>
-        <pre style={styles.content}>{recipe.method}</pre>
+        <div style={styles.content}>
+          <ReactMarkdown>{recipe.method}</ReactMarkdown>
+        </div>
       </div>
 
       {recipe.notes && (
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}>Notes</h2>
-          <pre style={styles.content}>{recipe.notes}</pre>
+          <div style={styles.content}>
+            <ReactMarkdown>{recipe.notes}</ReactMarkdown>
+          </div>
         </div>
       )}
 
       {recipe.sources && (
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}>Sources</h2>
-          <pre style={styles.content}>{recipe.sources}</pre>
+          <div style={styles.content}>
+            <ReactMarkdown>{recipe.sources}</ReactMarkdown>
+          </div>
         </div>
       )}
 
@@ -678,7 +687,6 @@ const styles = {
     lineHeight: '1.6',
     backgroundColor: '#f8f9fa',
     borderRadius: '4px',
-    whiteSpace: 'pre-wrap',
     fontFamily: 'inherit'
   },
   footer: {
