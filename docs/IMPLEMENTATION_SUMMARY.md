@@ -73,8 +73,7 @@ recipebook2/
 │   ├── go.mod               # Go dependencies
 │   ├── Dockerfile           # Container build
 │   ├── .dockerignore        # Docker ignore rules
-│   ├── README.md            # Backend setup guide
-│   └── RECIPE_API.md        # Complete API documentation
+│   └── README.md            # Backend setup guide
 │
 ├── frontend/
 │   ├── package.json         # React dependencies
@@ -180,8 +179,8 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for complete instructions.
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide
 - **[DATABASE_ARCHITECTURE.md](DATABASE_ARCHITECTURE.md)** - Database design and costs
 - **[CLOUD_RUN_DATABASE_BEHAVIOR.md](CLOUD_RUN_DATABASE_BEHAVIOR.md)** - How containers work
-- **[backend/RECIPE_API.md](backend/RECIPE_API.md)** - API documentation
-- **[infra/README.md](infra/README.md)** - Terraform guide
+- **[API.md](API.md)** - API documentation
+- **[infra/README.md](../infra/README.md)** - Terraform guide
 
 ## 🧪 Testing the Backend
 

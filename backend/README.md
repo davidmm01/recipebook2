@@ -42,7 +42,7 @@ make all            # Run lint, test, and build
 
 ## API Documentation
 
-See [RECIPE_API.md](RECIPE_API.md) for complete API documentation.
+See [../docs/API.md](../docs/API.md) for complete API documentation.
 
 **Quick Overview:**
 - `GET /health` - Health check (no auth)

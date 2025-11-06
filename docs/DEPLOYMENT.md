@@ -309,4 +309,4 @@ Never commit these to git:
 See documentation:
 - [DATABASE_ARCHITECTURE.md](DATABASE_ARCHITECTURE.md) - Database details
 - [CLOUD_RUN_DATABASE_BEHAVIOR.md](CLOUD_RUN_DATABASE_BEHAVIOR.md) - How it works
-- [backend/RECIPE_API.md](backend/RECIPE_API.md) - API documentation
+- [API.md](API.md) - API documentation

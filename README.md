@@ -129,17 +129,4 @@ See [docs/DATABASE_ARCHITECTURE.md](docs/DATABASE_ARCHITECTURE.md) for detailed 
 4. Backend validates token with Firebase Admin SDK
 5. If valid, request proceeds; otherwise returns 401
 
-## API Endpoints
-
-### Public (No Auth Required)
-- `GET /health` - Health check
-- `GET /recipes` - List all recipes
-- `GET /recipes/{id}` - Get single recipe
-- `GET /recipes/search?q=query` - Full-text search
-
-### Authenticated Only
-- `POST /recipes` - Create recipe
-- `PUT /recipes/{id}` - Update recipe
-- `DELETE /recipes/{id}` - Delete recipe
-
-**Note:** Recipes are publicly viewable but only authenticated users can create/edit/delete. Perfect for sharing your favorite recipes with friends and family!
+For detailed API documentation, see **[docs/API.md](docs/API.md)**.

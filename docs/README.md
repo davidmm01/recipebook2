@@ -4,6 +4,7 @@ Complete documentation for the RecipeBook application.
 
 ## Quick Links
 
+- **[API.md](API.md)** - Complete API reference and endpoints
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Step-by-step deployment guide
 - **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - What's built and next steps
 - **[DATABASE_ARCHITECTURE.md](DATABASE_ARCHITECTURE.md)** - SQLite + Cloud Storage design
@@ -33,7 +34,7 @@ Complete documentation for the RecipeBook application.
 
 ## API Documentation
 
-See [../backend/RECIPE_API.md](../backend/RECIPE_API.md) for complete API reference.
+See [API.md](API.md) for complete API reference including all endpoints, request/response formats, and authentication details.
 
 ## Infrastructure
 
