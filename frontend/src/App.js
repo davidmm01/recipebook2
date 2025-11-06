@@ -51,26 +51,11 @@ function App() {
 
   return (
     <div style={{ padding: '20px', boxSizing: 'border-box', maxWidth: '100%', overflowX: 'hidden' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <h1 style={{ margin: 0 }}>RecipeBook</h1>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {user && (
-            <button
-              onClick={() => setShowProfile(true)}
-              style={{
-                padding: '8px 16px',
-                fontSize: '14px',
-                color: '#007bff',
-                backgroundColor: 'white',
-                border: '1px solid #007bff',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-            >
-              Profile
-            </button>
-          )}
-          <Login user={user} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '10px' }}>
+        <div style={{ flex: 1 }}></div>
+        <h1 style={{ margin: 0, flex: 1, textAlign: 'center' }}>recipebook2</h1>
+        <div style={{ flex: 1, display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <Login user={user} onProfileClick={() => setShowProfile(true)} />
         </div>
       </div>
 
@@ -121,25 +106,6 @@ function App() {
                 >
                   Drinks
                 </button>
-                {canEdit && (
-                  <button
-                    onClick={() => setShowForm(!showForm)}
-                    style={{
-                      padding: '12px 24px',
-                      fontSize: '16px',
-                      fontWeight: '500',
-                      color: '#fff',
-                      backgroundColor: showForm ? '#6c757d' : '#28a745',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      marginLeft: 'auto',
-                      flexShrink: 0
-                    }}
-                  >
-                    {showForm ? 'Cancel' : '+ New Recipe'}
-                  </button>
-                )}
               </div>
 
               {showForm && (
@@ -155,6 +121,26 @@ function App() {
                 onFilterChange={handleFilterChange}
                 recipeType={recipeType}
               />
+
+              {canEdit && (
+                <div style={{ marginBottom: '20px' }}>
+                  <button
+                    onClick={() => setShowForm(!showForm)}
+                    style={{
+                      padding: '12px 24px',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      color: '#fff',
+                      backgroundColor: showForm ? '#6c757d' : '#28a745',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {showForm ? 'Cancel' : '+ New Recipe'}
+                  </button>
+                </div>
+              )}
 
               <RecipeList
                 key={`${refreshTrigger}-${recipeType}`}

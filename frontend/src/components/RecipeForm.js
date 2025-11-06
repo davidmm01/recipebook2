@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRecipe, updateRecipe } from '../utils/api';
 import IconManager from './IconManager';
+import ImageManager from './ImageManager';
 import MDEditor from '@uiw/react-md-editor';
 
 function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRecipeType = 'food' }) {
@@ -20,6 +21,7 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageUploadSuccess, setImageUploadSuccess] = useState(false);
 
   // Load initial data when editing or update type when defaultRecipeType changes
   useEffect(() => {
@@ -181,6 +183,21 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
           onIconSelect={(iconId) => setFormData(prev => ({ ...prev, iconId }))}
         />
 
+        <ImageManager
+          recipeId={initialRecipe?.id}
+          existingImages={initialRecipe?.images || []}
+          onImageUploaded={() => {
+            setImageUploadSuccess(true);
+            setTimeout(() => setImageUploadSuccess(false), 3000);
+          }}
+        />
+
+        {imageUploadSuccess && (
+          <div style={styles.success}>
+            Image uploaded successfully! The page will refresh when you save.
+          </div>
+        )}
+
         <div style={styles.field}>
           <label style={styles.label}>Ingredients *</label>
           <MDEditor
@@ -305,6 +322,13 @@ const styles = {
     padding: '12px',
     backgroundColor: '#f8d7da',
     color: '#721c24',
+    borderRadius: '4px',
+    marginBottom: '16px'
+  },
+  success: {
+    padding: '12px',
+    backgroundColor: '#d4edda',
+    color: '#155724',
     borderRadius: '4px',
     marginBottom: '16px'
   }

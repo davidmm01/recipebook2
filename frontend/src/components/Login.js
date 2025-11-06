@@ -3,7 +3,7 @@ import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import RoleDisplay from './RoleDisplay';
 
-function Login({ user }) {
+function Login({ user, onProfileClick }) {
   const [error, setError] = useState('');
 
   const handleGoogleSignIn = async () => {
@@ -33,9 +33,34 @@ function Login({ user }) {
           Logged in as: {user.email}
           <RoleDisplay />
         </p>
-        <button onClick={handleSignOut} style={{ padding: '10px 20px', cursor: 'pointer' }}>
-          Sign Out
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            onClick={onProfileClick}
+            style={{
+              padding: '10px 20px',
+              cursor: 'pointer',
+              backgroundColor: 'white',
+              border: '1px solid #007bff',
+              color: '#007bff',
+              borderRadius: '4px'
+            }}
+          >
+            Profile
+          </button>
+          <button
+            onClick={handleSignOut}
+            style={{
+              padding: '10px 20px',
+              cursor: 'pointer',
+              backgroundColor: '#dc3545',
+              border: 'none',
+              color: 'white',
+              borderRadius: '4px'
+            }}
+          >
+            Sign Out
+          </button>
+        </div>
       </div>
     );
   }

@@ -168,6 +168,32 @@ export async function uploadIcon(file) {
   return await response.json();
 }
 
+// Image API functions
+
+export async function uploadImage(file, recipeId) {
+  const token = await getAuthToken();
+
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('recipeId', recipeId);
+
+  const response = await fetch(`${API_BASE_URL}/recipes/images`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      // Don't set Content-Type for FormData - browser sets it with boundary
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`API Error: ${response.status} - ${error}`);
+  }
+
+  return await response.json();
+}
+
 // User Profile API functions
 
 export async function getUserProfile() {
