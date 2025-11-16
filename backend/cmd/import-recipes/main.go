@@ -328,6 +328,28 @@ func outputSQL(ctx context.Context, recipes []Recipe) {
 	sqlFile.WriteString("-- Generated at: " + time.Now().Format(time.RFC3339) + "\n\n")
 	sqlFile.WriteString("BEGIN TRANSACTION;\n\n")
 
+	// Collect all unique tags and generate UUIDs for them
+	tagUUIDs := make(map[string]string)
+	for _, recipe := range recipes {
+		for _, tag := range recipe.Tags {
+			tag = strings.TrimSpace(strings.ToLower(tag))
+			if tag == "" {
+				continue
+			}
+			if _, exists := tagUUIDs[tag]; !exists {
+				tagUUIDs[tag] = uuid.New().String()
+			}
+		}
+	}
+
+	// Insert all unique tags first
+	sqlFile.WriteString("-- Insert tags\n")
+	for tag, tagID := range tagUUIDs {
+		tagEscaped := escapeSQLString(tag)
+		sqlFile.WriteString(fmt.Sprintf("INSERT OR IGNORE INTO tags (id, name) VALUES ('%s', '%s');\n", tagID, tagEscaped))
+	}
+	sqlFile.WriteString("\n")
+
 	for _, recipe := range recipes {
 		// Insert recipe
 		sqlFile.WriteString(fmt.Sprintf("-- Recipe: %s\n", recipe.Title))
@@ -359,21 +381,17 @@ func outputSQL(ctx context.Context, recipes []Recipe) {
 			recipe.UpdatedAt.Format("2006-01-02 15:04:05"),
 		))
 
-		// Insert tags
+		// Link tags to recipe
 		for _, tag := range recipe.Tags {
 			tag = strings.TrimSpace(strings.ToLower(tag))
 			if tag == "" {
 				continue
 			}
-			tagEscaped := escapeSQLString(tag)
 
-			// Insert tag if it doesn't exist
-			sqlFile.WriteString(fmt.Sprintf("INSERT OR IGNORE INTO tags (name) VALUES ('%s');\n", tagEscaped))
-
-			// Link tag to recipe
+			tagID := tagUUIDs[tag]
 			sqlFile.WriteString(fmt.Sprintf(
-				"INSERT INTO recipe_tags (recipe_id, tag_id) SELECT '%s', id FROM tags WHERE name = '%s';\n",
-				recipe.ID, tagEscaped,
+				"INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('%s', '%s');\n",
+				recipe.ID, tagID,
 			))
 		}
 

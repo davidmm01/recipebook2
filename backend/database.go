@@ -29,7 +29,7 @@ var (
 
 // Icon represents a recipe icon
 type Icon struct {
-	ID         int64     `json:"id"`
+	ID         string    `json:"id"`
 	Filename   string    `json:"filename"`
 	IconURL    string    `json:"iconUrl"`
 	UploadedAt time.Time `json:"uploadedAt"`
@@ -46,7 +46,7 @@ type Recipe struct {
 	Method          string        `json:"method"`          // markdown
 	Notes           string        `json:"notes"`           // markdown
 	Sources         string        `json:"sources"`         // markdown
-	IconID          *int64        `json:"iconId"`          // Nullable icon ID
+	IconID          *string       `json:"iconId"`          // Nullable icon ID
 	Icon            *Icon         `json:"icon"`            // Icon details (loaded separately)
 	Tags            []string      `json:"tags"`            // Array of tag names
 	Images          []RecipeImage `json:"images"`          // Array of image URLs
@@ -59,7 +59,7 @@ type Recipe struct {
 
 // RecipeImage represents an image associated with a recipe
 type RecipeImage struct {
-	ID           int64     `json:"id"`
+	ID           string    `json:"id"`
 	RecipeID     string    `json:"recipeId"`
 	ImageURL     string    `json:"imageUrl"`
 	DisplayOrder int       `json:"displayOrder"`
@@ -68,7 +68,7 @@ type RecipeImage struct {
 
 // MakeLog represents a record of when a recipe was made
 type MakeLog struct {
-	ID              int64     `json:"id"`
+	ID              string    `json:"id"`
 	RecipeID        string    `json:"recipeId"`
 	MadeAt          string    `json:"madeAt"` // Date in YYYY-MM-DD format
 	Notes           string    `json:"notes"`
@@ -132,7 +132,7 @@ func createNewDB() error {
 
 	-- Icons table (shared collection of recipe icons)
 	CREATE TABLE IF NOT EXISTS icons (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id TEXT PRIMARY KEY,
 		filename TEXT NOT NULL,
 		icon_url TEXT NOT NULL,
 		uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -148,7 +148,7 @@ func createNewDB() error {
 		method TEXT,
 		notes TEXT,
 		sources TEXT,
-		icon_id INTEGER,
+		icon_id TEXT,
 		created_by_user_id TEXT,
 		created_by_name TEXT,
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -162,14 +162,14 @@ func createNewDB() error {
 
 	-- Tags table
 	CREATE TABLE IF NOT EXISTS tags (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id TEXT PRIMARY KEY,
 		name TEXT UNIQUE NOT NULL
 	);
 
 	-- Many-to-many relationship between recipes and tags
 	CREATE TABLE IF NOT EXISTS recipe_tags (
 		recipe_id TEXT NOT NULL,
-		tag_id INTEGER NOT NULL,
+		tag_id TEXT NOT NULL,
 		PRIMARY KEY (recipe_id, tag_id),
 		FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
 		FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
@@ -180,7 +180,7 @@ func createNewDB() error {
 
 	-- Recipe images table
 	CREATE TABLE IF NOT EXISTS recipe_images (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id TEXT PRIMARY KEY,
 		recipe_id TEXT NOT NULL,
 		image_url TEXT NOT NULL,
 		display_order INTEGER DEFAULT 0,
@@ -192,7 +192,7 @@ func createNewDB() error {
 
 	-- Make logs table (tracks when recipes were made)
 	CREATE TABLE IF NOT EXISTS make_logs (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id TEXT PRIMARY KEY,
 		recipe_id TEXT NOT NULL,
 		made_at DATE NOT NULL,
 		notes TEXT,
@@ -298,7 +298,7 @@ func runMigrations(ctx context.Context) error {
 		log.Println("Running migration: Creating make_logs table")
 		makeLogsTableSQL := `
 			CREATE TABLE make_logs (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				id TEXT PRIMARY KEY,
 				recipe_id TEXT NOT NULL,
 				made_at DATE NOT NULL,
 				notes TEXT,
@@ -316,6 +316,414 @@ func runMigrations(ctx context.Context) error {
 		log.Println("Migration completed: make_logs table created")
 	}
 
+	// Migration 4: Convert integer IDs to UUID strings
+	if err := migrateIntegerIDsToUUIDs(ctx); err != nil {
+		return fmt.Errorf("failed to migrate integer IDs to UUIDs: %w", err)
+	}
+
+	return nil
+}
+
+// migrateIntegerIDsToUUIDs migrates all integer primary keys to UUID strings
+func migrateIntegerIDsToUUIDs(ctx context.Context) error {
+	// Check if icons table uses INTEGER ID (if so, migration needed)
+	var iconIDType string
+	err := db.QueryRow(`SELECT type FROM pragma_table_info('icons') WHERE name='id'`).Scan(&iconIDType)
+	if err != nil {
+		// Table might not exist yet
+		return nil
+	}
+
+	// If id is already TEXT, migration already completed
+	if iconIDType == "TEXT" {
+		return nil
+	}
+
+	log.Println("Running migration: Converting integer IDs to UUIDs")
+
+	// Start a transaction for the migration
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// 1. Migrate icons table
+	log.Println("  - Migrating icons table")
+	iconIDMap := make(map[int64]string)
+
+	// Get all existing icons
+	rows, err := tx.QueryContext(ctx, "SELECT id, filename, icon_url, uploaded_at FROM icons")
+	if err != nil && err != sql.ErrNoRows {
+		return fmt.Errorf("failed to query icons: %w", err)
+	}
+	if rows != nil {
+		defer rows.Close()
+		for rows.Next() {
+			var oldID int64
+			var filename, iconURL string
+			var uploadedAt time.Time
+			if err := rows.Scan(&oldID, &filename, &iconURL, &uploadedAt); err != nil {
+				return fmt.Errorf("failed to scan icon: %w", err)
+			}
+			iconIDMap[oldID] = uuid.New().String()
+		}
+		rows.Close()
+	}
+
+	// Create new icons table with UUID
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TABLE icons_new (
+			id TEXT PRIMARY KEY,
+			filename TEXT NOT NULL,
+			icon_url TEXT NOT NULL,
+			uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		)
+	`); err != nil {
+		return fmt.Errorf("failed to create icons_new table: %w", err)
+	}
+
+	// Copy data with new UUIDs
+	for oldID, newID := range iconIDMap {
+		_, err := tx.ExecContext(ctx, `
+			INSERT INTO icons_new (id, filename, icon_url, uploaded_at)
+			SELECT ?, filename, icon_url, uploaded_at FROM icons WHERE id = ?
+		`, newID, oldID)
+		if err != nil {
+			return fmt.Errorf("failed to copy icon data: %w", err)
+		}
+	}
+
+	// 2. Migrate tags table
+	log.Println("  - Migrating tags table")
+	tagIDMap := make(map[int64]string)
+
+	rows, err = tx.QueryContext(ctx, "SELECT id, name FROM tags")
+	if err != nil && err != sql.ErrNoRows {
+		return fmt.Errorf("failed to query tags: %w", err)
+	}
+	if rows != nil {
+		defer rows.Close()
+		for rows.Next() {
+			var oldID int64
+			var name string
+			if err := rows.Scan(&oldID, &name); err != nil {
+				return fmt.Errorf("failed to scan tag: %w", err)
+			}
+			tagIDMap[oldID] = uuid.New().String()
+		}
+		rows.Close()
+	}
+
+	// Create new tags table
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TABLE tags_new (
+			id TEXT PRIMARY KEY,
+			name TEXT UNIQUE NOT NULL
+		)
+	`); err != nil {
+		return fmt.Errorf("failed to create tags_new table: %w", err)
+	}
+
+	// Copy data with new UUIDs
+	for oldID, newID := range tagIDMap {
+		_, err := tx.ExecContext(ctx, `
+			INSERT INTO tags_new (id, name)
+			SELECT ?, name FROM tags WHERE id = ?
+		`, newID, oldID)
+		if err != nil {
+			return fmt.Errorf("failed to copy tag data: %w", err)
+		}
+	}
+
+	// 3. Update recipes table to use TEXT for icon_id
+	log.Println("  - Migrating recipes.icon_id")
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TABLE recipes_new (
+			id TEXT PRIMARY KEY,
+			title TEXT NOT NULL,
+			description TEXT,
+			recipe_type TEXT,
+			cuisine TEXT,
+			ingredients TEXT,
+			method TEXT,
+			notes TEXT,
+			sources TEXT,
+			icon_id TEXT,
+			created_by_user_id TEXT,
+			created_by_name TEXT,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (icon_id) REFERENCES icons(id)
+		)
+	`); err != nil {
+		return fmt.Errorf("failed to create recipes_new table: %w", err)
+	}
+
+	// Copy recipes and update icon_id references
+	recipeRows, err := tx.QueryContext(ctx, "SELECT id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_by_user_id, created_by_name, created_at, updated_at FROM recipes")
+	if err != nil {
+		return fmt.Errorf("failed to query recipes: %w", err)
+	}
+	defer recipeRows.Close()
+
+	for recipeRows.Next() {
+		var id, title, description, recipeType, cuisine, ingredients, method, notes, sources string
+		var iconID sql.NullInt64
+		var createdByUserID, createdByName sql.NullString
+		var createdAt, updatedAt time.Time
+
+		if err := recipeRows.Scan(&id, &title, &description, &recipeType, &cuisine, &ingredients, &method, &notes, &sources, &iconID, &createdByUserID, &createdByName, &createdAt, &updatedAt); err != nil {
+			return fmt.Errorf("failed to scan recipe: %w", err)
+		}
+
+		var newIconID sql.NullString
+		if iconID.Valid {
+			if mappedID, ok := iconIDMap[iconID.Int64]; ok {
+				newIconID = sql.NullString{String: mappedID, Valid: true}
+			}
+		}
+
+		_, err := tx.ExecContext(ctx, `
+			INSERT INTO recipes_new (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, icon_id, created_by_user_id, created_by_name, created_at, updated_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		`, id, title, description, recipeType, cuisine, ingredients, method, notes, sources, newIconID, createdByUserID, createdByName, createdAt, updatedAt)
+		if err != nil {
+			return fmt.Errorf("failed to copy recipe: %w", err)
+		}
+	}
+
+	// 4. Migrate recipe_tags table
+	log.Println("  - Migrating recipe_tags table")
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TABLE recipe_tags_new (
+			recipe_id TEXT NOT NULL,
+			tag_id TEXT NOT NULL,
+			PRIMARY KEY (recipe_id, tag_id),
+			FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+			FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+		)
+	`); err != nil {
+		return fmt.Errorf("failed to create recipe_tags_new table: %w", err)
+	}
+
+	// Copy recipe_tags with updated tag IDs
+	rtRows, err := tx.QueryContext(ctx, "SELECT recipe_id, tag_id FROM recipe_tags")
+	if err != nil && err != sql.ErrNoRows {
+		return fmt.Errorf("failed to query recipe_tags: %w", err)
+	}
+	if rtRows != nil {
+		defer rtRows.Close()
+		for rtRows.Next() {
+			var recipeID string
+			var oldTagID int64
+			if err := rtRows.Scan(&recipeID, &oldTagID); err != nil {
+				return fmt.Errorf("failed to scan recipe_tag: %w", err)
+			}
+
+			if newTagID, ok := tagIDMap[oldTagID]; ok {
+				_, err := tx.ExecContext(ctx, `
+					INSERT INTO recipe_tags_new (recipe_id, tag_id) VALUES (?, ?)
+				`, recipeID, newTagID)
+				if err != nil {
+					return fmt.Errorf("failed to copy recipe_tag: %w", err)
+				}
+			}
+		}
+	}
+
+	// 5. Migrate recipe_images table
+	log.Println("  - Migrating recipe_images table")
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TABLE recipe_images_new (
+			id TEXT PRIMARY KEY,
+			recipe_id TEXT NOT NULL,
+			image_url TEXT NOT NULL,
+			display_order INTEGER DEFAULT 0,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE
+		)
+	`); err != nil {
+		return fmt.Errorf("failed to create recipe_images_new table: %w", err)
+	}
+
+	riRows, err := tx.QueryContext(ctx, "SELECT id, recipe_id, image_url, display_order, created_at FROM recipe_images")
+	if err != nil && err != sql.ErrNoRows {
+		return fmt.Errorf("failed to query recipe_images: %w", err)
+	}
+	if riRows != nil {
+		defer riRows.Close()
+		for riRows.Next() {
+			var oldID int64
+			var recipeID, imageURL string
+			var displayOrder int
+			var createdAt time.Time
+			if err := riRows.Scan(&oldID, &recipeID, &imageURL, &displayOrder, &createdAt); err != nil {
+				return fmt.Errorf("failed to scan recipe_image: %w", err)
+			}
+
+			newID := uuid.New().String()
+			_, err := tx.ExecContext(ctx, `
+				INSERT INTO recipe_images_new (id, recipe_id, image_url, display_order, created_at)
+				VALUES (?, ?, ?, ?, ?)
+			`, newID, recipeID, imageURL, displayOrder, createdAt)
+			if err != nil {
+				return fmt.Errorf("failed to copy recipe_image: %w", err)
+			}
+		}
+	}
+
+	// 6. Migrate make_logs table
+	log.Println("  - Migrating make_logs table")
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TABLE make_logs_new (
+			id TEXT PRIMARY KEY,
+			recipe_id TEXT NOT NULL,
+			made_at DATE NOT NULL,
+			notes TEXT,
+			created_by_user_id TEXT,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+			FOREIGN KEY (created_by_user_id) REFERENCES users(firebase_uid)
+		)
+	`); err != nil {
+		return fmt.Errorf("failed to create make_logs_new table: %w", err)
+	}
+
+	mlRows, err := tx.QueryContext(ctx, "SELECT id, recipe_id, made_at, notes, created_by_user_id, created_at FROM make_logs")
+	if err != nil && err != sql.ErrNoRows {
+		return fmt.Errorf("failed to query make_logs: %w", err)
+	}
+	if mlRows != nil {
+		defer mlRows.Close()
+		for mlRows.Next() {
+			var oldID int64
+			var recipeID, madeAt string
+			var notes, createdByUserID sql.NullString
+			var createdAt time.Time
+			if err := mlRows.Scan(&oldID, &recipeID, &madeAt, &notes, &createdByUserID, &createdAt); err != nil {
+				return fmt.Errorf("failed to scan make_log: %w", err)
+			}
+
+			newID := uuid.New().String()
+			_, err := tx.ExecContext(ctx, `
+				INSERT INTO make_logs_new (id, recipe_id, made_at, notes, created_by_user_id, created_at)
+				VALUES (?, ?, ?, ?, ?, ?)
+			`, newID, recipeID, madeAt, notes, createdByUserID, createdAt)
+			if err != nil {
+				return fmt.Errorf("failed to copy make_log: %w", err)
+			}
+		}
+	}
+
+	// Drop old tables and rename new ones
+	log.Println("  - Swapping tables")
+
+	// Drop FTS triggers first
+	if _, err := tx.ExecContext(ctx, "DROP TRIGGER IF EXISTS recipes_fts_insert"); err != nil {
+		return fmt.Errorf("failed to drop trigger: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TRIGGER IF EXISTS recipes_fts_update"); err != nil {
+		return fmt.Errorf("failed to drop trigger: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TRIGGER IF EXISTS recipes_fts_delete"); err != nil {
+		return fmt.Errorf("failed to drop trigger: %w", err)
+	}
+
+	// Drop old tables
+	if _, err := tx.ExecContext(ctx, "DROP TABLE IF EXISTS recipe_tags"); err != nil {
+		return fmt.Errorf("failed to drop recipe_tags: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TABLE IF EXISTS recipe_images"); err != nil {
+		return fmt.Errorf("failed to drop recipe_images: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TABLE IF EXISTS make_logs"); err != nil {
+		return fmt.Errorf("failed to drop make_logs: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TABLE IF EXISTS recipes"); err != nil {
+		return fmt.Errorf("failed to drop recipes: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TABLE IF EXISTS tags"); err != nil {
+		return fmt.Errorf("failed to drop tags: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "DROP TABLE IF EXISTS icons"); err != nil {
+		return fmt.Errorf("failed to drop icons: %w", err)
+	}
+
+	// Rename new tables
+	if _, err := tx.ExecContext(ctx, "ALTER TABLE icons_new RENAME TO icons"); err != nil {
+		return fmt.Errorf("failed to rename icons_new: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "ALTER TABLE tags_new RENAME TO tags"); err != nil {
+		return fmt.Errorf("failed to rename tags_new: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "ALTER TABLE recipes_new RENAME TO recipes"); err != nil {
+		return fmt.Errorf("failed to rename recipes_new: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "ALTER TABLE recipe_tags_new RENAME TO recipe_tags"); err != nil {
+		return fmt.Errorf("failed to rename recipe_tags_new: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "ALTER TABLE recipe_images_new RENAME TO recipe_images"); err != nil {
+		return fmt.Errorf("failed to rename recipe_images_new: %w", err)
+	}
+	if _, err := tx.ExecContext(ctx, "ALTER TABLE make_logs_new RENAME TO make_logs"); err != nil {
+		return fmt.Errorf("failed to rename make_logs_new: %w", err)
+	}
+
+	// Recreate indexes
+	log.Println("  - Recreating indexes")
+	indexes := []string{
+		"CREATE INDEX IF NOT EXISTS idx_recipes_type ON recipes(recipe_type)",
+		"CREATE INDEX IF NOT EXISTS idx_recipes_cuisine ON recipes(cuisine)",
+		"CREATE INDEX IF NOT EXISTS idx_recipes_icon ON recipes(icon_id)",
+		"CREATE INDEX IF NOT EXISTS idx_recipe_tags_recipe ON recipe_tags(recipe_id)",
+		"CREATE INDEX IF NOT EXISTS idx_recipe_tags_tag ON recipe_tags(tag_id)",
+		"CREATE INDEX IF NOT EXISTS idx_recipe_images_recipe ON recipe_images(recipe_id)",
+		"CREATE INDEX IF NOT EXISTS idx_make_logs_recipe ON make_logs(recipe_id)",
+		"CREATE INDEX IF NOT EXISTS idx_make_logs_made_at ON make_logs(made_at)",
+	}
+	for _, idx := range indexes {
+		if _, err := tx.ExecContext(ctx, idx); err != nil {
+			return fmt.Errorf("failed to create index: %w", err)
+		}
+	}
+
+	// Recreate FTS triggers
+	log.Println("  - Recreating FTS triggers")
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TRIGGER recipes_fts_insert AFTER INSERT ON recipes BEGIN
+			INSERT INTO recipes_fts(recipe_id, title, description, cuisine, ingredients, method, notes, sources)
+			VALUES (new.id, new.title, new.description, new.cuisine, new.ingredients, new.method, new.notes, new.sources);
+		END
+	`); err != nil {
+		return fmt.Errorf("failed to create insert trigger: %w", err)
+	}
+
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TRIGGER recipes_fts_update AFTER UPDATE ON recipes BEGIN
+			UPDATE recipes_fts
+			SET title=new.title, description=new.description, cuisine=new.cuisine,
+				ingredients=new.ingredients, method=new.method, notes=new.notes, sources=new.sources
+			WHERE recipe_id=new.id;
+		END
+	`); err != nil {
+		return fmt.Errorf("failed to create update trigger: %w", err)
+	}
+
+	if _, err := tx.ExecContext(ctx, `
+		CREATE TRIGGER recipes_fts_delete AFTER DELETE ON recipes BEGIN
+			DELETE FROM recipes_fts WHERE recipe_id=old.id;
+		END
+	`); err != nil {
+		return fmt.Errorf("failed to create delete trigger: %w", err)
+	}
+
+	// Commit the transaction
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("failed to commit migration transaction: %w", err)
+	}
+
+	log.Println("Migration completed: Converted all integer IDs to UUIDs")
 	return nil
 }
 
@@ -854,7 +1262,7 @@ func DeleteRecipe(ctx context.Context, recipeID string) error {
 // Helper functions for icon management
 
 // getIconByID returns an icon by ID
-func getIconByID(ctx context.Context, iconID int64) (*Icon, error) {
+func getIconByID(ctx context.Context, iconID string) (*Icon, error) {
 	query := `SELECT id, filename, icon_url, uploaded_at FROM icons WHERE id = ?`
 	var icon Icon
 	err := db.QueryRowContext(ctx, query, iconID).Scan(&icon.ID, &icon.Filename, &icon.IconURL, &icon.UploadedAt)
@@ -892,13 +1300,14 @@ func GetAllIcons(ctx context.Context) ([]Icon, error) {
 }
 
 // createIcon creates a new icon record
-func createIcon(ctx context.Context, filename, iconURL string) (int64, error) {
-	query := `INSERT INTO icons (filename, icon_url) VALUES (?, ?)`
-	result, err := db.ExecContext(ctx, query, filename, iconURL)
+func createIcon(ctx context.Context, filename, iconURL string) (string, error) {
+	id := uuid.New().String()
+	query := `INSERT INTO icons (id, filename, icon_url) VALUES (?, ?, ?)`
+	_, err := db.ExecContext(ctx, query, id, filename, iconURL)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
-	return result.LastInsertId()
+	return id, nil
 }
 
 // GetAllTags returns all unique tags in the database, optionally filtered by recipe type
@@ -1045,24 +1454,25 @@ func setRecipeTags(ctx context.Context, recipeID string, tagNames []string) erro
 }
 
 // getOrCreateTag gets a tag ID by name, creating it if it doesn't exist
-func getOrCreateTag(ctx context.Context, tagName string) (int64, error) {
+func getOrCreateTag(ctx context.Context, tagName string) (string, error) {
 	// Try to get existing tag
-	var tagID int64
+	var tagID string
 	query := `SELECT id FROM tags WHERE name = ?`
 	err := db.QueryRowContext(ctx, query, tagName).Scan(&tagID)
 
 	if err == sql.ErrNoRows {
 		// Tag doesn't exist, create it
-		insertQuery := `INSERT INTO tags (name) VALUES (?)`
-		result, err := db.ExecContext(ctx, insertQuery, tagName)
+		tagID = uuid.New().String()
+		insertQuery := `INSERT INTO tags (id, name) VALUES (?, ?)`
+		_, err := db.ExecContext(ctx, insertQuery, tagID, tagName)
 		if err != nil {
-			return 0, err
+			return "", err
 		}
-		return result.LastInsertId()
+		return tagID, nil
 	}
 
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	return tagID, nil
@@ -1099,13 +1509,14 @@ func getRecipeImages(ctx context.Context, recipeID string) ([]RecipeImage, error
 
 // addRecipeImage adds an image to a recipe
 func addRecipeImage(ctx context.Context, recipeID, imageURL string, displayOrder int) error {
-	query := `INSERT INTO recipe_images (recipe_id, image_url, display_order) VALUES (?, ?, ?)`
-	_, err := db.ExecContext(ctx, query, recipeID, imageURL, displayOrder)
+	id := uuid.New().String()
+	query := `INSERT INTO recipe_images (id, recipe_id, image_url, display_order) VALUES (?, ?, ?, ?)`
+	_, err := db.ExecContext(ctx, query, id, recipeID, imageURL, displayOrder)
 	return err
 }
 
 // deleteRecipeImage deletes an image by ID
-func deleteRecipeImage(ctx context.Context, imageID int64) error {
+func deleteRecipeImage(ctx context.Context, imageID string) error {
 	query := `DELETE FROM recipe_images WHERE id = ?`
 	_, err := db.ExecContext(ctx, query, imageID)
 	return err
@@ -1306,21 +1717,20 @@ func CreateMakeLog(ctx context.Context, makeLog *MakeLog) error {
 	dbMutex.Lock()
 	defer dbMutex.Unlock()
 
+	// Generate UUID if not provided
+	if makeLog.ID == "" {
+		makeLog.ID = uuid.New().String()
+	}
+
 	query := `
-		INSERT INTO make_logs (recipe_id, made_at, notes, created_by_user_id)
-		VALUES (?, ?, ?, ?)
+		INSERT INTO make_logs (id, recipe_id, made_at, notes, created_by_user_id)
+		VALUES (?, ?, ?, ?, ?)
 	`
 
-	result, err := db.ExecContext(ctx, query, makeLog.RecipeID, makeLog.MadeAt, makeLog.Notes, makeLog.CreatedByUserID)
+	_, err := db.ExecContext(ctx, query, makeLog.ID, makeLog.RecipeID, makeLog.MadeAt, makeLog.Notes, makeLog.CreatedByUserID)
 	if err != nil {
 		return err
 	}
-
-	id, err := result.LastInsertId()
-	if err != nil {
-		return err
-	}
-	makeLog.ID = id
 
 	// Upload to Cloud Storage (async)
 	go func() {
@@ -1367,7 +1777,7 @@ func UpdateMakeLog(ctx context.Context, makeLog *MakeLog) error {
 }
 
 // DeleteMakeLog deletes a make log entry
-func DeleteMakeLog(ctx context.Context, logID int64) error {
+func DeleteMakeLog(ctx context.Context, logID string) error {
 	dbMutex.Lock()
 	defer dbMutex.Unlock()
 

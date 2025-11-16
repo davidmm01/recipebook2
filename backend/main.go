@@ -470,15 +470,9 @@ func makeLogByIDHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Extract log ID from URL path: /make-log/{logId}
-	logIDStr := strings.TrimPrefix(r.URL.Path, "/make-log/")
-	if logIDStr == "" {
+	logID := strings.TrimPrefix(r.URL.Path, "/make-log/")
+	if logID == "" {
 		http.Error(w, "Invalid log ID", http.StatusBadRequest)
-		return
-	}
-
-	var logID int64
-	if _, err := fmt.Sscanf(logIDStr, "%d", &logID); err != nil {
-		http.Error(w, "Invalid log ID format", http.StatusBadRequest)
 		return
 	}
 
@@ -536,13 +530,18 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Allow requests from frontend (localhost:3000 for local dev)
 		origin := r.Header.Get("Origin")
-		if origin != "" {
-			w.Header().Set("Access-Control-Allow-Origin", origin)
-		} else {
-			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+
+		// Default to localhost:3000 if no origin header
+		if origin == "" {
+			origin = "http://localhost:3000"
 		}
+
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept")
+		w.Header().Set("Access-Control-Expose-Headers", "Content-Type")
 		w.Header().Set("Access-Control-Max-Age", "3600")
 
 		// Handle preflight OPTIONS request

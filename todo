@@ -1,3 +1,7 @@
+Task: improve make target
+- i want the make dev command to be called make devstack (and related commands be the same)
+- i want there to be a make devstack that also deletes the old db and recreates a new one populated with data
+
 Task: Make Tags Clearer
 - adding of tags to be more clear
 - we should be able to see other tags when adding a new tag, so that we can know suitable things to include this as
