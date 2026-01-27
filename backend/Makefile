@@ -22,6 +22,7 @@ run: ## Run the application locally
 run-local: ## Run the application locally with dev environment variables
 	# -tags fts5: Enables FTS5 (Full-Text Search) support in SQLite driver for recipe search functionality
 	DB_BUCKET_NAME=recipebook2-local-dev \
+	IMAGES_BUCKET_NAME=recipebook2-local-dev \
 	GOOGLE_APPLICATION_CREDENTIALS=./service-account.json \
 	PORT=8080 \
 	go run -tags fts5 .
@@ -54,6 +55,7 @@ docker-build: ## Build Docker image
 docker-run: ## Run Docker container
 	docker run -p $(PORT):8080 \
 		-e DB_BUCKET_NAME=$(DB_BUCKET_NAME) \
+		-e IMAGES_BUCKET_NAME=$(IMAGES_BUCKET_NAME) \
 		-e PORT=8080 \
 		--name $(APP_NAME) \
 		$(DOCKER_IMAGE):$(DOCKER_TAG)

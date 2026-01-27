@@ -28,6 +28,9 @@ func main() {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
 
+	// Initialize images bucket (uses IMAGES_BUCKET_NAME or falls back to DB_BUCKET_NAME)
+	InitImages()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

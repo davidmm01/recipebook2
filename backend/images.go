@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -21,6 +22,18 @@ const (
 	iconPathPrefix  = "recipe-icons"
 	allowedIconExts = ".jpg,.jpeg,.png,.svg,.webp"
 )
+
+var imagesBucketName string
+
+// InitImages initializes the images bucket configuration
+// If IMAGES_BUCKET_NAME is not set, falls back to DB_BUCKET_NAME for backwards compatibility
+func InitImages() {
+	imagesBucketName = os.Getenv("IMAGES_BUCKET_NAME")
+	if imagesBucketName == "" {
+		// Fallback to DB bucket for backwards compatibility
+		imagesBucketName = os.Getenv("DB_BUCKET_NAME")
+	}
+}
 
 // UploadImageToGCS uploads an image file to Google Cloud Storage
 func UploadImageToGCS(ctx context.Context, file multipart.File, fileHeader *multipart.FileHeader, recipeID string) (string, error) {
@@ -46,7 +59,7 @@ func UploadImageToGCS(ctx context.Context, file multipart.File, fileHeader *mult
 	defer client.Close()
 
 	// Create GCS writer
-	wc := client.Bucket(bucketName).Object(filename).NewWriter(ctx)
+	wc := client.Bucket(imagesBucketName).Object(filename).NewWriter(ctx)
 	wc.ContentType = getContentType(ext)
 
 	// Copy file to GCS
@@ -62,7 +75,7 @@ func UploadImageToGCS(ctx context.Context, file multipart.File, fileHeader *mult
 
 	// Return public URL
 	// Format: https://storage.googleapis.com/{bucket}/{object}
-	imageURL := fmt.Sprintf("https://storage.googleapis.com/%s/%s", bucketName, filename)
+	imageURL := fmt.Sprintf("https://storage.googleapis.com/%s/%s", imagesBucketName, filename)
 	return imageURL, nil
 }
 
@@ -91,7 +104,7 @@ func UploadIconToGCS(ctx context.Context, file multipart.File, fileHeader *multi
 	defer client.Close()
 
 	// Create GCS writer
-	wc := client.Bucket(bucketName).Object(objectPath).NewWriter(ctx)
+	wc := client.Bucket(imagesBucketName).Object(objectPath).NewWriter(ctx)
 	wc.ContentType = getContentType(ext)
 
 	// Copy file to GCS
@@ -106,7 +119,7 @@ func UploadIconToGCS(ctx context.Context, file multipart.File, fileHeader *multi
 	}
 
 	// Return both the filename and public URL
-	iconURL := fmt.Sprintf("https://storage.googleapis.com/%s/%s", bucketName, objectPath)
+	iconURL := fmt.Sprintf("https://storage.googleapis.com/%s/%s", imagesBucketName, objectPath)
 	return uniqueFilename, iconURL, nil
 }
 
@@ -129,7 +142,7 @@ func DeleteImageFromGCS(ctx context.Context, imageURL string) error {
 	defer client.Close()
 
 	// Delete object
-	if err := client.Bucket(bucketName).Object(objectPath).Delete(ctx); err != nil {
+	if err := client.Bucket(imagesBucketName).Object(objectPath).Delete(ctx); err != nil {
 		return fmt.Errorf("failed to delete image from storage: %w", err)
 	}
 

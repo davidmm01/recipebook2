@@ -37,6 +37,7 @@ make all            # Run lint, test, and build
 ## Environment Variables
 
 - `DB_BUCKET_NAME` - Cloud Storage bucket name for SQLite database (required)
+- `IMAGES_BUCKET_NAME` - Cloud Storage bucket name for images (optional, falls back to DB_BUCKET_NAME)
 - `GOOGLE_APPLICATION_CREDENTIALS` - Path to service account JSON (for local dev)
 - `PORT` - Server port (defaults to 8080)
 

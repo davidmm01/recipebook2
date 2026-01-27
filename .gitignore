@@ -97,3 +97,12 @@ backend/coverage.html
 # OS files
 .DS_Store
 Thumbs.db
+
+# Terraform
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/terraform.tfvars
+*.tfvars
+!*.tfvars.example
