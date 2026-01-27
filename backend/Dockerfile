@@ -14,8 +14,8 @@ RUN go mod download
 COPY *.go ./
 COPY config.prod.json ./
 
-# Build the binary
-RUN CGO_ENABLED=1 GOOS=linux go build -o server .
+# Build the binary with FTS5 support for full-text search
+RUN CGO_ENABLED=1 GOOS=linux go build -tags fts5 -o server .
 
 # Runtime stage
 FROM alpine:latest
