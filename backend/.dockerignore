@@ -1,6 +1,9 @@
 # Ignore service account files
-*.json
 service-account.json
+*-service-account.json
+
+# But allow config files
+!config.*.json
 
 # Ignore local database
 *.db
