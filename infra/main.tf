@@ -383,10 +383,25 @@ resource "google_project_iam_member" "cloudbuild_sa_builder" {
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
+# Grant Cloud Build SA service usage consumer permission
+# Required for gcloud run deploy --source to work
+resource "google_project_iam_member" "cloudbuild_sa_serviceusage" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
 # Grant Compute Engine default service account the builder role too
 resource "google_project_iam_member" "compute_sa_builder" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.builder"
+  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+}
+
+# Grant Compute Engine SA service usage consumer permission
+resource "google_project_iam_member" "compute_sa_serviceusage" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
   member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
 }
 
