@@ -401,6 +401,19 @@ resource "google_project_iam_member" "cloudbuild_sa_artifactregistry" {
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
+# Also grant permissions to Compute Engine default service account (used by Cloud Build)
+resource "google_project_iam_member" "compute_sa_serviceusage" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "compute_sa_logs" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+}
+
 # Data source to get project number
 data "google_project" "project" {
   project_id = var.project_id
