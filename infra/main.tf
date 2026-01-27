@@ -34,6 +34,7 @@ resource "google_project_service" "required_apis" {
     "firebase.googleapis.com",
     "firebasehosting.googleapis.com",
     "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
   ])
 
   service            = each.value
@@ -407,6 +408,13 @@ resource "google_project_iam_member" "github_actions_storage_admin" {
 resource "google_project_iam_member" "github_actions_artifact_registry" {
   project = var.project_id
   role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Grant Cloud Build Editor for building containers from source
+resource "google_project_iam_member" "github_actions_cloud_build" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.editor"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
