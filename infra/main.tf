@@ -375,42 +375,18 @@ resource "google_monitoring_alert_policy" "cloud_run_scaling" {
 # CLOUD BUILD SERVICE ACCOUNT PERMISSIONS
 # =============================================================================
 
-# Grant Cloud Build service account necessary permissions
-# Cloud Build uses this service account to build containers
-resource "google_project_iam_member" "cloudbuild_sa_serviceusage" {
+# Grant Cloud Build service account the comprehensive builder role
+# This role includes all permissions needed for Cloud Build operations
+resource "google_project_iam_member" "cloudbuild_sa_builder" {
   project = var.project_id
-  role    = "roles/serviceusage.serviceUsageConsumer"
+  role    = "roles/cloudbuild.builds.builder"
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
-resource "google_project_iam_member" "cloudbuild_sa_logs" {
+# Grant Compute Engine default service account the builder role too
+resource "google_project_iam_member" "compute_sa_builder" {
   project = var.project_id
-  role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
-
-resource "google_project_iam_member" "cloudbuild_sa_storage" {
-  project = var.project_id
-  role    = "roles/storage.admin"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
-
-resource "google_project_iam_member" "cloudbuild_sa_artifactregistry" {
-  project = var.project_id
-  role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
-
-# Also grant permissions to Compute Engine default service account (used by Cloud Build)
-resource "google_project_iam_member" "compute_sa_serviceusage" {
-  project = var.project_id
-  role    = "roles/serviceusage.serviceUsageConsumer"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-}
-
-resource "google_project_iam_member" "compute_sa_logs" {
-  project = var.project_id
-  role    = "roles/logging.logWriter"
+  role    = "roles/cloudbuild.builds.builder"
   member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
 }
 
