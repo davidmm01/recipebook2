@@ -372,6 +372,25 @@ resource "google_monitoring_alert_policy" "cloud_run_scaling" {
 }
 
 # =============================================================================
+# ARTIFACT REGISTRY REPOSITORY
+# =============================================================================
+
+# Docker repository for Cloud Run source deployments
+resource "google_artifact_registry_repository" "cloud_run_source" {
+  repository_id = "cloud-run-source-deploy"
+  location      = var.region
+  description   = "Docker repository for Cloud Run deployments from source"
+  format        = "DOCKER"
+
+  labels = {
+    app         = "recipebook"
+    environment = var.environment
+  }
+
+  depends_on = [google_project_service.required_apis]
+}
+
+# =============================================================================
 # GITHUB ACTIONS SERVICE ACCOUNT
 # =============================================================================
 
