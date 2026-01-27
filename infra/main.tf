@@ -372,6 +372,41 @@ resource "google_monitoring_alert_policy" "cloud_run_scaling" {
 }
 
 # =============================================================================
+# CLOUD BUILD SERVICE ACCOUNT PERMISSIONS
+# =============================================================================
+
+# Grant Cloud Build service account necessary permissions
+# Cloud Build uses this service account to build containers
+resource "google_project_iam_member" "cloudbuild_sa_serviceusage" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "cloudbuild_sa_logs" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "cloudbuild_sa_storage" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "cloudbuild_sa_artifactregistry" {
+  project = var.project_id
+  role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+# Data source to get project number
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+# =============================================================================
 # ARTIFACT REGISTRY REPOSITORY
 # =============================================================================
 
