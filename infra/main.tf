@@ -34,7 +34,6 @@ resource "google_project_service" "required_apis" {
     "firebase.googleapis.com",
     "firebasehosting.googleapis.com",
     "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
   ])
 
   service            = each.value
@@ -372,45 +371,6 @@ resource "google_monitoring_alert_policy" "cloud_run_scaling" {
 }
 
 # =============================================================================
-# CLOUD BUILD SERVICE ACCOUNT PERMISSIONS
-# =============================================================================
-
-# Grant Cloud Build service account the comprehensive builder role
-# This role includes all permissions needed for Cloud Build operations
-resource "google_project_iam_member" "cloudbuild_sa_builder" {
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
-
-# Grant Cloud Build SA service usage consumer permission
-# Required for gcloud run deploy --source to work
-resource "google_project_iam_member" "cloudbuild_sa_serviceusage" {
-  project = var.project_id
-  role    = "roles/serviceusage.serviceUsageConsumer"
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
-}
-
-# Grant Compute Engine default service account the builder role too
-resource "google_project_iam_member" "compute_sa_builder" {
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-}
-
-# Grant Compute Engine SA service usage consumer permission
-resource "google_project_iam_member" "compute_sa_serviceusage" {
-  project = var.project_id
-  role    = "roles/serviceusage.serviceUsageConsumer"
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-}
-
-# Data source to get project number
-data "google_project" "project" {
-  project_id = var.project_id
-}
-
-# =============================================================================
 # ARTIFACT REGISTRY REPOSITORY
 # =============================================================================
 
@@ -466,13 +426,6 @@ resource "google_project_iam_member" "github_actions_storage_admin" {
 resource "google_project_iam_member" "github_actions_artifact_registry" {
   project = var.project_id
   role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
-}
-
-# Grant Cloud Build Editor for building containers from source
-resource "google_project_iam_member" "github_actions_cloud_build" {
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.editor"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
