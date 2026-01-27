@@ -33,6 +33,7 @@ resource "google_project_service" "required_apis" {
     "monitoring.googleapis.com",
     "firebase.googleapis.com",
     "firebasehosting.googleapis.com",
+    "artifactregistry.googleapis.com",
   ])
 
   service            = each.value
@@ -399,6 +400,13 @@ resource "google_project_iam_member" "github_actions_sa_user" {
 resource "google_project_iam_member" "github_actions_storage_admin" {
   project = var.project_id
   role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Grant Artifact Registry Writer for container images
+resource "google_project_iam_member" "github_actions_artifact_registry" {
+  project = var.project_id
+  role    = "roles/artifactregistry.writer"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
