@@ -46,4 +46,5 @@ jobs:
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
-            --service-account recipebook-backend@recipebook2-d0440.iam.gserviceaccount.com
+            --service-account recipebook-backend@recipebook2-d0440.iam.gserviceaccount.com \
+            --set-env-vars CONFIG_PATH=config.prod.json

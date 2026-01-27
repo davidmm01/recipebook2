@@ -13,28 +13,28 @@ import (
 func main() {
 	ctx := context.Background()
 
+	// Load configuration
+	config, err := LoadConfig()
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+
+	log.Printf("Starting RecipeBook backend in %s mode on port %s", config.Environment, config.Port)
+
 	// Initialize Firebase Admin SDK for authentication
 	if err := InitFirebase(ctx); err != nil {
 		log.Fatalf("Failed to initialize Firebase: %v", err)
 	}
 
 	// Initialize SQLite database
-	bucketName := os.Getenv("DB_BUCKET_NAME")
-	if bucketName == "" {
-		log.Fatal("DB_BUCKET_NAME environment variable is required")
-	}
-
-	if err := InitDatabase(ctx, bucketName); err != nil {
+	if err := InitDatabase(ctx, config.DBBucketName); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
 
-	// Initialize images bucket (uses IMAGES_BUCKET_NAME or falls back to DB_BUCKET_NAME)
+	// Initialize images bucket
 	InitImages()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	port := config.Port
 
 	http.HandleFunc("/health", corsMiddleware(healthHandler))
 	// Public read, auth required for writes

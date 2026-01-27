@@ -12,6 +12,7 @@ RUN go mod download
 
 # Copy source code
 COPY *.go ./
+COPY config.prod.json ./
 
 # Build the binary
 RUN CGO_ENABLED=1 GOOS=linux go build -o server .
@@ -24,8 +25,9 @@ RUN apk add --no-cache ca-certificates sqlite-libs
 
 WORKDIR /app
 
-# Copy the binary from builder
+# Copy the binary and prod config from builder
 COPY --from=builder /app/server .
+COPY --from=builder /app/config.prod.json ./
 
 # Create /tmp directory (for SQLite database)
 RUN mkdir -p /tmp

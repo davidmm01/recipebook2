@@ -1,6 +1,10 @@
 # Service account keys
 service-account.json
-*.json
+
+# Config files (except templates)
+config.json
+!config.local.json
+!config.prod.json
 
 # Environment files
 .env
