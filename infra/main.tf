@@ -94,6 +94,45 @@ resource "google_storage_bucket_iam_member" "backend_database_access" {
 }
 
 # =============================================================================
+# CLOUD STORAGE - BACKUPS BUCKET (PRIVATE)
+# =============================================================================
+
+resource "google_storage_bucket" "backups" {
+  name          = "${var.project_id}-recipebook-backups"
+  location      = var.region
+  force_destroy = false
+
+  # Keep bucket private
+  uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
+
+  # Keep backups for 90 days, then delete
+  lifecycle_rule {
+    condition {
+      age = 90
+    }
+    action {
+      type = "Delete"
+    }
+  }
+
+  labels = {
+    app         = "recipebook"
+    environment = var.environment
+    purpose     = "backups"
+  }
+
+  depends_on = [google_project_service.required_apis]
+}
+
+# Grant service account access to backups bucket
+resource "google_storage_bucket_iam_member" "backend_backups_access" {
+  bucket = google_storage_bucket.backups.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.backend.email}"
+}
+
+# =============================================================================
 # CLOUD STORAGE - IMAGES BUCKET (PUBLIC READ)
 # =============================================================================
 
@@ -441,6 +480,11 @@ output "database_bucket_name" {
 output "images_bucket_name" {
   value       = google_storage_bucket.images.name
   description = "Name of the Cloud Storage bucket storing recipe images"
+}
+
+output "backups_bucket_name" {
+  value       = google_storage_bucket.backups.name
+  description = "Name of the Cloud Storage bucket storing database backups"
 }
 
 output "backend_service_account_email" {
