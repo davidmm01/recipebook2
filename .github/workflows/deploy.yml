@@ -1,0 +1,106 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_backend:
+        description: 'Deploy backend to Cloud Run'
+        type: boolean
+        default: true
+      deploy_frontend:
+        description: 'Deploy frontend to Firebase Hosting'
+        type: boolean
+        default: true
+
+env:
+  PROJECT_ID: recipebook2-d0440
+  REGION: australia-southeast2
+
+jobs:
+  backend:
+    if: ${{ inputs.deploy_backend }}
+    runs-on: ubuntu-latest
+    env:
+      SERVICE_NAME: recipebook-backend
+      IMAGE_NAME: australia-southeast2-docker.pkg.dev/recipebook2-d0440/cloud-run-source-deploy/recipebook-backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker australia-southeast2-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+                       -t ${{ env.IMAGE_NAME }}:latest \
+                       ./backend
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ env.IMAGE_NAME }}:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --allow-unauthenticated \
+            --service-account recipebook-backend@recipebook2-d0440.iam.gserviceaccount.com \
+            --set-env-vars CONFIG_PATH=config.prod.json \
+            --update-secrets /secrets/firebase/service-account.json=firebase-service-account:latest
+
+  frontend:
+    if: ${{ inputs.deploy_frontend }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
+        env:
+          REACT_APP_API_URL: https://recipebook-backend-764030971451.australia-southeast2.run.app
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: recipebook2-d0440.firebaseapp.com
+          REACT_APP_FIREBASE_PROJECT_ID: recipebook2-d0440
+          REACT_APP_FIREBASE_STORAGE_BUCKET: recipebook2-d0440.firebasestorage.app
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.GCP_SA_KEY }}
+          projectId: ${{ env.PROJECT_ID }}
+          channelId: live

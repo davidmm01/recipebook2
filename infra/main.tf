@@ -468,6 +468,13 @@ resource "google_project_iam_member" "github_actions_artifact_registry" {
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
+# Grant Firebase Hosting Admin for frontend deployments
+resource "google_project_iam_member" "github_actions_firebase_hosting" {
+  project = var.project_id
+  role    = "roles/firebasehosting.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
 # =============================================================================
 # OUTPUTS
 # =============================================================================
