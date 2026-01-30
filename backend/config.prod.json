@@ -3,6 +3,5 @@
   "port": "8080",
   "db_bucket_name": "recipebook2-d0440-recipebook-db",
   "images_bucket_name": "recipebook2-d0440-recipebook-images",
-  "backups_bucket_name": "recipebook2-d0440-recipebook-backups",
   "firebase_service_account_path": "/secrets/firebase/service-account.json"
 }

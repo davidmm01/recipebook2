@@ -11,7 +11,6 @@ type Config struct {
 	Port                    string `json:"port"`
 	DBBucketName            string `json:"db_bucket_name"`
 	ImagesBucketName        string `json:"images_bucket_name"`
-	BackupsBucketName       string `json:"backups_bucket_name"`
 	FirebaseServiceAcctPath string `json:"firebase_service_account_path"`
 }
 
@@ -44,9 +43,6 @@ func LoadConfig() (*Config, error) {
 	}
 	if bucket := os.Getenv("IMAGES_BUCKET_NAME"); bucket != "" {
 		config.ImagesBucketName = bucket
-	}
-	if bucket := os.Getenv("BACKUPS_BUCKET_NAME"); bucket != "" {
-		config.BackupsBucketName = bucket
 	}
 	if path := os.Getenv("FIREBASE_SERVICE_ACCOUNT_PATH"); path != "" {
 		config.FirebaseServiceAcctPath = path

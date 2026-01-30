@@ -154,6 +154,50 @@ npm install
 npm start
 ```
 
+## Backup Job
+
+The database is backed up by a standalone Cloud Run Job triggered by Cloud Scheduler every 6 hours. The job downloads `recipes.db`, compares its hash against the latest backup, and uploads a new backup only if the database has changed.
+
+### Deploy the Backup Job
+
+The backup job is deployed automatically via the GitHub Actions `Deploy` workflow (with `deploy_backup` enabled). To deploy manually:
+
+```bash
+cd backup
+
+# Build and push
+IMAGE=australia-southeast2-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/recipebook-backup
+docker build -t $IMAGE:latest .
+docker push $IMAGE:latest
+
+# Deploy
+gcloud run jobs deploy recipebook-backup \
+  --image $IMAGE:latest \
+  --region australia-southeast2 \
+  --service-account recipebook-backend@$PROJECT_ID.iam.gserviceaccount.com
+```
+
+### Manually Trigger a Backup
+
+```bash
+gcloud run jobs execute recipebook-backup --region australia-southeast2
+```
+
+### Check Backup Status
+
+```bash
+# View recent executions
+gcloud run jobs executions list --job recipebook-backup --region australia-southeast2
+
+# View logs from the latest execution
+gcloud run jobs executions logs read \
+  $(gcloud run jobs executions list --job recipebook-backup --region australia-southeast2 --format='value(name)' --limit=1) \
+  --region australia-southeast2
+
+# List backups in the bucket
+gsutil ls -l gs://$PROJECT_ID-recipebook-backups/
+```
+
 ## Updating the Backend
 
 After making code changes:

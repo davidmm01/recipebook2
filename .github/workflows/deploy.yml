@@ -11,6 +11,10 @@ on:
         description: 'Deploy frontend to Firebase Hosting'
         type: boolean
         default: true
+      deploy_backup:
+        description: 'Deploy backup job to Cloud Run'
+        type: boolean
+        default: true
 
 env:
   PROJECT_ID: recipebook2-d0440
@@ -60,6 +64,47 @@ jobs:
             --service-account recipebook-backend@recipebook2-d0440.iam.gserviceaccount.com \
             --set-env-vars CONFIG_PATH=config.prod.json \
             --update-secrets /secrets/firebase/service-account.json=firebase-service-account:latest
+
+  backup:
+    if: ${{ inputs.deploy_backup }}
+    runs-on: ubuntu-latest
+    env:
+      JOB_NAME: recipebook-backup
+      IMAGE_NAME: australia-southeast2-docker.pkg.dev/recipebook2-d0440/cloud-run-source-deploy/recipebook-backup
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker australia-southeast2-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+                       -t ${{ env.IMAGE_NAME }}:latest \
+                       ./backup
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ env.IMAGE_NAME }}:latest
+
+      - name: Deploy Cloud Run Job
+        run: |
+          gcloud run jobs deploy ${{ env.JOB_NAME }} \
+            --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --service-account recipebook-backend@recipebook2-d0440.iam.gserviceaccount.com
 
   frontend:
     if: ${{ inputs.deploy_frontend }}

@@ -357,21 +357,42 @@ Total: ~$0.001/month (essentially free)
 ## Backup & Recovery
 
 ### Automatic Backups
-Cloud Storage versioning keeps the last 5 versions of the database automatically.
+Backups are handled by a standalone Cloud Run Job triggered by Cloud Scheduler every 6 hours (`0 */6 * * *`). The job:
 
-### Restore Previous Version
+1. Downloads `recipes.db` from the database bucket
+2. Calculates a SHA256 hash of the file
+3. Compares it against the latest backup's hash (stored in object metadata)
+4. If the hash has changed (or no previous backup exists), uploads a new backup as `recipes-backup-YYYY-MM-DD-HH-MM-SS.db`
+5. If unchanged, skips the upload and exits
+
+Backups are stored in a dedicated backups bucket with a 90-day lifecycle policy, after which they are automatically deleted.
+
+Additionally, Cloud Storage versioning on the database bucket keeps the last 5 versions of `recipes.db` for immediate rollback.
+
+### Restore from Backup
 ```bash
-# List versions
-gsutil ls -a gs://{bucket-name}/recipes.db
+# List backups
+gsutil ls gs://{backups-bucket-name}/
 
-# Download specific version
-gsutil cp gs://{bucket-name}/recipes.db#1234567890 ./recipes-backup.db
+# Download a specific backup
+gsutil cp gs://{backups-bucket-name}/recipes-backup-2025-01-15-06-00-00.db ./recipes-restore.db
+
+# Restore by uploading to the database bucket
+gsutil cp ./recipes-restore.db gs://{db-bucket-name}/recipes.db
 ```
 
-### Manual Backup
+### Restore from GCS Versioning
 ```bash
-# Download current database
-gsutil cp gs://{bucket-name}/recipes.db ./backup-$(date +%Y%m%d).db
+# List versions
+gsutil ls -a gs://{db-bucket-name}/recipes.db
+
+# Download specific version
+gsutil cp gs://{db-bucket-name}/recipes.db#1234567890 ./recipes-backup.db
+```
+
+### Manually Trigger Backup
+```bash
+gcloud run jobs execute recipebook-backup --region australia-southeast2
 ```
 
 ## Monitoring

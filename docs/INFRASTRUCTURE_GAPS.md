@@ -35,6 +35,9 @@ Based on a comprehensive review of the backend requirements and current infrastr
 
 ### 6. **Backup & Disaster Recovery**
 - ✓ Database versioning enabled (5 versions)
+- ✓ Automated backups via Cloud Run Job + Cloud Scheduler (every 6 hours)
+- ✓ Hash-based deduplication (skips backup if database unchanged)
+- ✓ 90-day backup retention via GCS lifecycle policy
 - ❌ No automated backup export to another region
 - ❌ No restore testing automation
 - ❌ No disaster recovery runbook

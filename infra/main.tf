@@ -34,6 +34,7 @@ resource "google_project_service" "required_apis" {
     "firebase.googleapis.com",
     "firebasehosting.googleapis.com",
     "artifactregistry.googleapis.com",
+    "cloudscheduler.googleapis.com",
   ])
 
   service            = each.value
@@ -473,6 +474,89 @@ resource "google_project_iam_member" "github_actions_firebase_hosting" {
   project = var.project_id
   role    = "roles/firebasehosting.admin"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# =============================================================================
+# CLOUD RUN JOB - DATABASE BACKUP
+# =============================================================================
+
+resource "google_cloud_run_v2_job" "backup" {
+  name     = "recipebook-backup"
+  location = var.region
+
+  template {
+    template {
+      service_account = google_service_account.backend.email
+
+      containers {
+        # Image will be set during deployment via gcloud
+        image = "us-docker.pkg.dev/cloudrun/container/hello"
+
+        env {
+          name  = "DB_BUCKET_NAME"
+          value = google_storage_bucket.database.name
+        }
+
+        env {
+          name  = "BACKUPS_BUCKET_NAME"
+          value = google_storage_bucket.backups.name
+        }
+
+        resources {
+          limits = {
+            cpu    = "1"
+            memory = "512Mi"
+          }
+        }
+      }
+
+      max_retries = 1
+      timeout     = "300s"
+    }
+  }
+
+  depends_on = [google_project_service.required_apis]
+}
+
+# Service account for Cloud Scheduler to invoke the backup job
+resource "google_service_account" "backup_scheduler" {
+  account_id   = "backup-scheduler"
+  display_name = "Backup Scheduler Service Account"
+
+  depends_on = [google_project_service.required_apis]
+}
+
+# Grant the scheduler SA permission to invoke the backup job
+resource "google_cloud_run_v2_job_iam_member" "scheduler_invoker" {
+  name     = google_cloud_run_v2_job.backup.name
+  location = google_cloud_run_v2_job.backup.location
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.backup_scheduler.email}"
+}
+
+# Cloud Scheduler job to trigger backups every 6 hours
+resource "google_cloud_scheduler_job" "backup_trigger" {
+  name        = "recipebook-backup-trigger"
+  description = "Triggers the recipebook database backup job every 6 hours"
+  schedule    = "0 */6 * * *"
+  time_zone   = "UTC"
+  # Cloud Scheduler is not available in australia-southeast2; sydney is the closest supported region
+  region      = "australia-southeast1"
+
+  http_target {
+    http_method = "POST"
+    uri         = "https://${var.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.project_id}/jobs/${google_cloud_run_v2_job.backup.name}:run"
+
+    oauth_token {
+      service_account_email = google_service_account.backup_scheduler.email
+      scope                 = "https://www.googleapis.com/auth/cloud-platform"
+    }
+  }
+
+  depends_on = [
+    google_project_service.required_apis,
+    google_cloud_run_v2_job.backup,
+  ]
 }
 
 # =============================================================================

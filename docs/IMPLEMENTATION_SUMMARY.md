@@ -61,6 +61,7 @@ Recipes use markdown for rich text formatting:
 - ✅ **Single instance** - No consistency issues
 - ✅ **Auto-scaling** - Scales to zero when idle
 - ✅ **Versioned backups** - Last 5 database versions kept
+- ✅ **Automated backups** - Cloud Run Job + Cloud Scheduler every 6 hours with hash-based deduplication
 
 ## 📁 Project Structure
 
@@ -75,12 +76,17 @@ recipebook2/
 │   ├── .dockerignore        # Docker ignore rules
 │   └── README.md            # Backend setup guide
 │
+├── backup/
+│   ├── main.go              # Standalone backup binary
+│   ├── go.mod               # Minimal Go dependencies (no SQLite/Firebase)
+│   └── Dockerfile           # Multi-stage build (no CGO)
+│
 ├── frontend/
 │   ├── package.json         # React dependencies
 │   └── (React app to be built)
 │
 ├── infra/
-│   ├── main.tf              # Terraform resources
+│   ├── main.tf              # Terraform resources (includes backup job + scheduler)
 │   ├── variables.tf         # Terraform variables
 │   └── README.md            # Infrastructure guide
 │

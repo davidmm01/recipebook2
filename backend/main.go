@@ -33,9 +33,6 @@ func main() {
 	// Initialize images bucket
 	InitImages()
 
-	// Start background backup process
-	InitBackups(config.BackupsBucketName)
-
 	port := config.Port
 
 	http.HandleFunc("/health", corsMiddleware(healthHandler))
