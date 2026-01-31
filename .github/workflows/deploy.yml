@@ -130,7 +130,7 @@ jobs:
         working-directory: frontend
         env:
           CI: false
-          REACT_APP_API_URL: https://recipebook-backend-764030971451.australia-southeast2.run.app
+          REACT_APP_API_URL: https://recipebook-backend-n3takkzy2q-km.a.run.app
           REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_AUTH_DOMAIN: recipebook2-d0440.firebaseapp.com
           REACT_APP_FIREBASE_PROJECT_ID: recipebook2-d0440
