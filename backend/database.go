@@ -771,6 +771,13 @@ func downloadDBFromGCS(ctx context.Context) error {
 // increases the bill since you pay for CPU even between requests. Not worth it
 // at this stage.
 func uploadDBToGCS(ctx context.Context) error {
+	// Force WAL checkpoint so all writes are flushed to the main .db file.
+	// Without this, recent writes may only exist in the -wal file and won't
+	// be included when we read/upload the main database file.
+	if _, err := db.ExecContext(ctx, "PRAGMA wal_checkpoint(TRUNCATE)"); err != nil {
+		return fmt.Errorf("failed to checkpoint WAL: %w", err)
+	}
+
 	client, err := storage.NewClient(ctx)
 	if err != nil {
 		return err
@@ -931,9 +938,9 @@ func prepareFTS5Query(query string) string {
 		}
 		// Don't add * if the word already has FTS5 operators like *, OR, AND, NOT
 		if !strings.Contains(word, "*") &&
-		   !strings.EqualFold(word, "OR") &&
-		   !strings.EqualFold(word, "AND") &&
-		   !strings.EqualFold(word, "NOT") {
+			!strings.EqualFold(word, "OR") &&
+			!strings.EqualFold(word, "AND") &&
+			!strings.EqualFold(word, "NOT") {
 			word = word + "*"
 		}
 		prepared = append(prepared, word)
