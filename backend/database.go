@@ -755,11 +755,22 @@ func downloadDBFromGCS(ctx context.Context) error {
 	return nil
 }
 
-// uploadDBToGCS uploads the SQLite database to Cloud Storage
+// uploadDBToGCS uploads the SQLite database to Cloud Storage.
+// Callers must hold dbMutex.
+//
+// This is called synchronously during write operations, which adds latency to
+// every mutation request. We can't do this asynchronously in a goroutine because
+// Cloud Run throttles CPU when there are no active requests (default behaviour),
+// so background goroutines get frozen before the upload completes. The local
+// SQLite file lives in /tmp and is lost when the instance is recycled, meaning
+// any writes that weren't uploaded to GCS are silently dropped. Synchronous
+// uploads avoid this at the cost of slower write responses.
+//
+// The alternative is setting Cloud Run to "CPU always allocated"
+// (--no-cpu-throttling), which would let async goroutines finish, but that
+// increases the bill since you pay for CPU even between requests. Not worth it
+// at this stage.
 func uploadDBToGCS(ctx context.Context) error {
-	dbMutex.RLock()
-	defer dbMutex.RUnlock()
-
 	client, err := storage.NewClient(ctx)
 	if err != nil {
 		return err
@@ -1172,12 +1183,10 @@ func CreateRecipe(ctx context.Context, recipe *Recipe) error {
 		}
 	}
 
-	// Upload to Cloud Storage (async to not block response)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1218,12 +1227,10 @@ func UpdateRecipe(ctx context.Context, recipe *Recipe) error {
 		return err
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1249,12 +1256,10 @@ func DeleteRecipe(ctx context.Context, recipeID string) error {
 
 	// Tags will be automatically deleted via ON DELETE CASCADE
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1577,12 +1582,10 @@ func CreateUser(ctx context.Context, firebaseUID, email, role string) (*DBUser, 
 		return nil, err
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return &DBUser{
 		FirebaseUID: firebaseUID,
@@ -1605,12 +1608,10 @@ func UpdateUserDisplayName(ctx context.Context, firebaseUID, displayName string)
 		return err
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1626,12 +1627,10 @@ func UpdateUserLastLogin(ctx context.Context, firebaseUID string) error {
 		return err
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1647,12 +1646,10 @@ func UpdateUserRole(ctx context.Context, firebaseUID, role string) error {
 		return err
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1732,12 +1729,10 @@ func CreateMakeLog(ctx context.Context, makeLog *MakeLog) error {
 		return err
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1766,12 +1761,10 @@ func UpdateMakeLog(ctx context.Context, makeLog *MakeLog) error {
 		return fmt.Errorf("make log not found")
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
@@ -1795,12 +1788,10 @@ func DeleteMakeLog(ctx context.Context, logID string) error {
 		return fmt.Errorf("make log not found")
 	}
 
-	// Upload to Cloud Storage (async)
-	go func() {
-		if err := uploadDBToGCS(context.Background()); err != nil {
-			log.Printf("Failed to upload database to Cloud Storage: %v", err)
-		}
-	}()
+	// Upload to Cloud Storage
+	if err := uploadDBToGCS(context.Background()); err != nil {
+		log.Printf("Failed to upload database to Cloud Storage: %v", err)
+	}
 
 	return nil
 }
