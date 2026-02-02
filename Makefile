@@ -1,4 +1,4 @@
-.PHONY: help dev devstack backend frontend db-setup db-reset install clean test
+.PHONY: help dev devstack backend frontend db-setup db-reset install clean test auto-promote-admin
 
 # Default target
 help: ## Show this help message
@@ -14,14 +14,24 @@ dev: ## Start both backend and frontend in parallel
 	@echo ""
 	@$(MAKE) -j2 backend frontend
 
-devstack: db-reset dev ## Reset database and start development environment
-	@echo "Development stack started with fresh database!"
+devstack: db-reset ## Reset database and start development environment
+	@echo "Starting RecipeBook development environment..."
+	@echo "Backend will run on http://localhost:8080"
+	@echo "Frontend will run on http://localhost:3000"
+	@echo ""
+	@$(MAKE) -j3 backend frontend auto-promote-admin
 
 backend: ## Start backend server
 	@cd backend && make run-local
 
 frontend: ## Start frontend dev server
 	@cd frontend && npm start
+
+auto-promote-admin: ## Background: auto-promote all local dev users to admin
+	@while true; do \
+		sqlite3 /tmp/recipes.db "PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000; UPDATE users SET role = 'admin' WHERE role != 'admin';" 2>/dev/null; \
+		sleep 2; \
+	done
 
 db-setup: ## Setup database with recipes
 	@cd backend && make import-and-load

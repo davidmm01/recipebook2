@@ -10,6 +10,7 @@ type Config struct {
 	Environment             string `json:"environment"`
 	Port                    string `json:"port"`
 	DBBucketName            string `json:"db_bucket_name"`
+	DBSyncDisabled          bool   `json:"db_sync_disabled"`
 	ImagesBucketName        string `json:"images_bucket_name"`
 	FirebaseServiceAcctPath string `json:"firebase_service_account_path"`
 }
@@ -54,11 +55,6 @@ func LoadConfig() (*Config, error) {
 	}
 	if config.Environment == "" {
 		config.Environment = "development"
-	}
-
-	// Validate required fields
-	if config.DBBucketName == "" {
-		return nil, fmt.Errorf("DB_BUCKET_NAME is required")
 	}
 
 	return config, nil

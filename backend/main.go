@@ -21,13 +21,18 @@ func main() {
 	log.Printf("Starting RecipeBook backend in %s mode on port %s", config.Environment, config.Port)
 
 	// Initialize Firebase Admin SDK for authentication
-	if err := InitFirebase(ctx); err != nil {
+	if err := InitFirebase(ctx, config.FirebaseServiceAcctPath); err != nil {
 		log.Fatalf("Failed to initialize Firebase: %v", err)
 	}
 
 	// Initialize SQLite database
 	if err := InitDatabase(ctx, config.DBBucketName); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
+	}
+
+	if config.DBSyncDisabled {
+		dbSyncDisabled = true
+		log.Println("DB sync to GCS disabled via config")
 	}
 
 	// Initialize images bucket
@@ -239,7 +244,7 @@ func tagsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Public read - no auth required
 	recipeType := r.URL.Query().Get("type")
-	tags, err := GetAllTags(r.Context(), recipeType)
+	tags, err := GetAllTagsWithCounts(r.Context(), recipeType)
 	if err != nil {
 		log.Printf("Error getting tags: %v", err)
 		http.Error(w, "Failed to get tags", http.StatusInternalServerError)

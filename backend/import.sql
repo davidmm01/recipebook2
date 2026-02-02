@@ -1,93 +1,93 @@
 -- Auto-generated SQL import script
--- Generated at: 2026-01-31T13:53:15+11:00
+-- Generated at: 2026-02-02T22:09:32+11:00
 
 BEGIN TRANSACTION;
 
 -- Insert tags
-INSERT OR IGNORE INTO tags (id, name) VALUES ('811171c0-b6bc-440a-8900-068ff5720535', 'meal prep');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('9e7a5aa7-99ec-4414-986e-9c0f41586b75', 'tofu');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('68a48e86-96e3-4cc8-b984-9e5596b47ed0', 'lamb shanks');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('2952c1e3-98c0-4633-ade0-83a6f76ce048', 'egg');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('7510f11e-05f7-43b9-8d9b-cb4ed8c88a0a', 'smoked salmon');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('6d310ae6-d8f4-49b0-a431-37799cf9f56a', 'with rice');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('380ae7f7-bb10-4dae-b21d-2528ab0517e5', 'salad');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('64f3e53f-948b-4b98-bb9e-9782d8cc9738', 'noodle');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('d81fd49d-5970-4b1a-9730-b414ca1a8392', 'campari');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('a2c87668-aab0-4e66-a9fc-6d1bd9d79e1f', 'noodles');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('066352c6-6c41-49b4-990c-8001422ad0ec', 'rice');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('8aea1b48-1db2-4957-8e1d-6a398b0d8fc5', 'easy');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('ea95b193-2e7f-4405-858e-79ddb37bede1', 'beans');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('0ed87602-186e-455b-8d4e-c3e84cd3af02', 'one pot');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('6612abb4-82b8-404d-9167-9a9175d223a9', 'burger');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('89e84d29-7287-4d41-af36-c12079e60dd0', 'lunch');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('c76e2ea0-a001-4fd3-84d4-4b4af7b22a0c', 'wonton');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('620f2eae-eb5f-45aa-a6be-d09ca407258f', 'vermouth');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('453caa98-2f1e-4339-a72f-35356bcb5e2c', 'mince');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('7c97d74c-b82a-4780-b8e0-d0451415ad26', 'spicy');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('6b6ec484-3616-4ecf-b5ee-39747932ef23', 'freeze');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('b20a086f-5c94-405c-8337-cb41f1ba1e4b', 'creamy');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('4a00be0a-344d-49ed-b317-c637b15296d7', 'beef');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('15c3d6b7-d766-4bd1-b3fc-3516efc12743', 'sauce');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('5271c4c1-4cb5-4178-9c25-88fbcc969d47', 'gin');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('e7d6fcaf-67e6-43fc-b27a-df109bf1f48f', 'fish');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('ca9519dd-ba41-4790-a39e-0fd42b62e17f', 'dutch oven');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('8e1fab76-3337-4e96-9c7e-7086abf443c4', 'frozen fish');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('b329e38e-997a-442f-a741-70b8d9d62f32', 'tequila');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('3bcffc3d-df27-4520-a47c-1852df69f1da', 'lemon');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('84054a02-7265-438d-9c91-59bb82eac5bb', 'pasta');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('e2758055-704f-4964-af5b-85e4362785b7', 'tomato');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9', 'chicken');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('58b4758e-c51a-4520-9957-8a44692f5c6f', 'with recipe');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('dad2a6d6-de32-456c-9ff6-9a5f0034566e', 'dumpling');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('f93c2705-7c2a-4733-861c-c5836c7f16ea', 'lime');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('10c704d4-698d-4832-9ae1-120f77c575ae', 'jar');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('5a6a699f-b45c-4033-8972-41eb0b524782', 'pepper');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('e365c73d-d7a5-42dd-8c90-0f2238d717a6', 'garlic');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('c975b4ff-632c-4260-8d66-7f8bc6175585', 'fried');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('c09aa1f2-1457-42ac-8db4-eb62fa0c0cde', 'eel');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('3254aff4-9f88-40ae-821b-91a63c69896e', 'fibre');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('dd1a7236-745c-4c05-8ca7-e2bad2439e69', 'stirfry');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('0ae5027a-eb68-49d3-85a6-da40cce25a90', 'soup');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('3b1f3935-8260-466b-85c8-06667a5fd8bc', 'stew');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('4cb610da-b106-4600-bb48-834518e7df76', 'healthy');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('f3e8bc0b-57e9-46a0-9f47-b5b24c167de3', 'chinese');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('84790351-169b-4a31-a160-ef5427f81762', 'bourbon');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('ec7be182-0d53-409f-b44f-6f6a7ee3d2cb', 'mushroom');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('ea3e989f-c008-4dda-932c-41ddb6518ade', 'curry');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('c001a9da-943b-4d9f-9b8b-5d57ffc8331f', 'pork');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('e9f0fbdb-3f9b-4304-a9e5-5376566a4851', 'gyoza');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('f183c0d5-e626-4a0b-81b1-8d0fa1edd525', 'pineapple');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('aa4fae34-ebb3-40d3-a4b3-dbca1d160f3a', 'prawn');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('1b583dc5-4ad4-41ae-9c9c-afb87c9435d8', 'lamb');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('c6873dca-0b7e-4665-818b-a4ef65c5e4f9', 'asian');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('d9881f05-6670-450d-8ead-dcfa7c55b68c', 'mealprep');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('01318191-8c9d-4d53-98e7-809076a12324', 'rice bowl');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('cf2bb0c4-e6f1-4200-9d25-595cc494a7e2', 'salt');
-INSERT OR IGNORE INTO tags (id, name) VALUES ('eea27b73-fc53-4550-ac0b-86d9a49c96b5', 'honey');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('96b7a72c-5508-498a-90d7-ca692cea5064', 'tequila');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('e7c3939f-e679-4565-815a-df2b627a5975', 'pasta');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('ab0af9c6-f50b-40c7-9bfa-ed67440897cd', 'stirfry');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('17350f9f-f2dd-4d3d-a77d-cdad7ea7fb02', 'noodle');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('39b3c042-6998-4d8c-9547-9256b47e5db2', 'easy');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('84225441-9774-4ad8-a3e9-8ddd5e46e432', 'lunch');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('47220da5-2b53-4b33-8f30-b737ab025985', 'vermouth');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('ded8b91c-1339-4cc9-b4bc-3d27a7e54425', 'rice');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('5d58ef6c-e276-4216-8998-6e525fc7db1d', 'lamb shanks');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('9f967f58-882b-44bb-8a0e-37a749d07be2', 'smoked salmon');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d', 'with rice');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('7661c5f6-88cf-4d61-94f0-49e627e08492', 'one pot');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('a6e4ea6c-82bb-4fad-8d8a-b7a92899a593', 'meal prep');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('63403ed9-6757-44b9-84c9-0110c58c5a2e', 'dutch oven');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('3f493d37-1f96-4fb9-8516-93d89331c26d', 'spicy');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('199f9fe4-931a-4a3d-9997-5a0da0fc08e8', 'pineapple');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('59baced6-f928-4c73-9025-1e637edce320', 'chinese');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('688c3927-f029-4fee-9a6a-117d7eff5b32', 'frozen fish');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('2a0a36d6-6f1b-47a1-aac1-241eceeb4d47', 'fish');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('54b98854-328d-42d4-921e-2b03b1c26427', 'mushroom');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('14ef4958-5d9f-491b-9d3f-5f2a2606d941', 'honey');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('fda7d1dc-6d26-4328-88b4-0f7276789ad3', 'stew');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('6dc458db-e420-467e-aa8a-f2192120d2d1', 'dumpling');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('d9dafe3a-82b5-466b-92ee-6b201b338b71', 'garlic');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('662b325f-010a-4436-9b45-c8c4c93148ee', 'jar');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('caada606-f332-49e6-bf24-c364275e4255', 'rice bowl');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('72ef1e8b-a167-4a48-a797-d3cca5e3b3fc', 'lime');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('eebdd37c-3133-46ce-8935-62b18fa4c159', 'beef');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('4eeaa8c2-2c13-4890-ac1d-1fd6e62b78d2', 'sauce');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('689bc136-2227-4477-bd92-884d86c6fb3f', 'pepper');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('e1cb4ded-e291-4eeb-a38b-1e98c79eb320', 'wonton');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('8af1e681-8d31-487d-a75f-1fb88a1b2e62', 'gin');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('af440871-7796-4636-959d-9efddcd87e8f', 'tofu');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('0b0b0f04-44bc-4690-8456-2789a3ff23d0', 'lamb');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('bfe517d9-7d27-4d3c-b898-7281001afc3f', 'freeze');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('fd9aea94-7f1b-4469-8261-8a3540298f12', 'fried');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('5efc65e4-56ff-4d6f-9f72-31b8bca15982', 'prawn');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('bb9f0fbc-1f34-482e-9f46-43deaa1b1ae8', 'asian');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('8b6b1c24-e64f-4ce0-9aa8-08c1d6e3feac', 'salad');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('ed31294f-1400-4c71-8674-a94280f1eab9', 'chicken');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('c095707d-8015-4ec2-82b0-4be3d7c32656', 'fibre');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('5f0fd7be-d727-47ef-9b34-4d8aef6477c6', 'gyoza');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('24b3e2a5-551c-494f-99bf-633365171c1e', 'noodles');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('4d35ba6d-8646-47c9-a1e1-759d79cb0453', 'tomato');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('e8c5b879-af46-47f0-a592-53db389b92ba', 'curry');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('47affdf1-3a8c-4141-abd4-57f2df036197', 'creamy');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('080ba760-30d6-4dea-bb6b-d48583d7ef31', 'lemon');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('b713e021-4da9-4e25-9433-0c791ddf7526', 'beans');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('5c894fc8-60a2-45dd-91b1-9f79dff4e0ba', 'mince');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('2299bbde-76b4-4796-a774-1ae7d284b3d6', 'with recipe');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('cfa02e5f-1f96-434f-89a4-6512beae1380', 'healthy');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('527542a5-8bee-4a78-a989-7f3a7524f5b7', 'bourbon');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('e60ebe98-1ab3-4823-80b4-6c5c0c4a9a78', 'campari');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('413e3889-86a5-4376-be1c-1860d457261a', 'burger');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('dad6b78e-d9c6-4ac7-8703-a609b1fefddc', 'eel');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('90970cd4-6730-45d1-8604-a2518bc9e1a7', 'salt');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('e81e2816-31bb-491c-8489-a5cce0765762', 'pork');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('5ad286fa-1ad2-44f5-a037-c46ffe4a367f', 'mealprep');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('67d74ab9-721f-44f3-8069-101e1eee3ca4', 'soup');
+INSERT OR IGNORE INTO tags (id, name) VALUES ('76e8e1d6-c97a-44d4-9635-02a82a9c9f68', 'egg');
 
 -- Recipe: Boulevardier
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('989c8aaf-32a2-442c-adcb-c77c59cdfdb2', 'Boulevardier', '', 'drink', 'string', '- 1 part bourbon
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b38f54df-c6f4-462f-a163-b9c7d01c7780', 'Boulevardier', '', 'drink', 'string', '- 1 part bourbon
 - 1 part campari
 - 1 part vermouth rosso
 - orange slice or peel for garnish', '- Combine.
 - Garnish with orange slice.
-- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('989c8aaf-32a2-442c-adcb-c77c59cdfdb2', '84790351-169b-4a31-a160-ef5427f81762');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('989c8aaf-32a2-442c-adcb-c77c59cdfdb2', 'd81fd49d-5970-4b1a-9730-b414ca1a8392');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('989c8aaf-32a2-442c-adcb-c77c59cdfdb2', '620f2eae-eb5f-45aa-a6be-d09ca407258f');
+- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b38f54df-c6f4-462f-a163-b9c7d01c7780', '527542a5-8bee-4a78-a989-7f3a7524f5b7');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b38f54df-c6f4-462f-a163-b9c7d01c7780', 'e60ebe98-1ab3-4823-80b4-6c5c0c4a9a78');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b38f54df-c6f4-462f-a163-b9c7d01c7780', '47220da5-2b53-4b33-8f30-b737ab025985');
 
 -- Recipe: Gin Jam Fizz
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1cf9031e-bcd0-49ee-8023-a956034f7110', 'Gin Jam Fizz', '', 'drink', 'string', '- 45ml pink gin
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('cb9748d6-4e12-4ade-862f-99e88cb865bf', 'Gin Jam Fizz', '', 'drink', 'string', '- 45ml pink gin
 - 2 tsp raspberry jam
 - 1/2 cup ice
 - 15ml lemon juice', '- Shake
 - Top up the (wine) glass with soda water to liking.', '### Notes
 - Could easily add 1 tsp of jam or sugar syrup for more sweetness
-- could use 60ml gin if you want it strong', '', 'megasaur', '2023-12-27 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1cf9031e-bcd0-49ee-8023-a956034f7110', '5271c4c1-4cb5-4178-9c25-88fbcc969d47');
+- could use 60ml gin if you want it strong', '', 'megasaur', '2023-12-27 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('cb9748d6-4e12-4ade-862f-99e88cb865bf', '8af1e681-8d31-487d-a75f-1fb88a1b2e62');
 
 -- Recipe: Margarita
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b9928d3b-e1c0-4dec-a420-920aa2ec2c90', 'Margarita', '', 'drink', 'string', '- juice of 1 lime
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('81923cfe-df7c-4de2-bb8a-2ada05d491b6', 'Margarita', '', 'drink', 'string', '- juice of 1 lime
 - 45ml tequila (blanco or reposado)
 - 15ml cointreu
 - 15ml agave syrup
@@ -95,24 +95,24 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Shake
 - Strain and serve.
 - Optionally serve ice and or a splash of soda water.', '### Notes
-- Make no more than 2 margaritas into a standard shaker at a time, else you will not be able to add enough ice to the shaker.', '', 'dave', '2025-09-28 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b9928d3b-e1c0-4dec-a420-920aa2ec2c90', 'b329e38e-997a-442f-a741-70b8d9d62f32');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b9928d3b-e1c0-4dec-a420-920aa2ec2c90', 'f93c2705-7c2a-4733-861c-c5836c7f16ea');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b9928d3b-e1c0-4dec-a420-920aa2ec2c90', 'cf2bb0c4-e6f1-4200-9d25-595cc494a7e2');
+- Make no more than 2 margaritas into a standard shaker at a time, else you will not be able to add enough ice to the shaker.', '', 'dave', '2025-09-28 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('81923cfe-df7c-4de2-bb8a-2ada05d491b6', '96b7a72c-5508-498a-90d7-ca692cea5064');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('81923cfe-df7c-4de2-bb8a-2ada05d491b6', '72ef1e8b-a167-4a48-a797-d3cca5e3b3fc');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('81923cfe-df7c-4de2-bb8a-2ada05d491b6', '90970cd4-6730-45d1-8604-a2518bc9e1a7');
 
 -- Recipe: Negroni
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('695cc10e-0599-46fd-81e0-9d713283113f', 'Negroni', '', 'drink', 'string', '- 1 part gin
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('cba76154-673d-4f2b-a6a6-dc7ce595535c', 'Negroni', '', 'drink', 'string', '- 1 part gin
 - 1 part campari
 - 1 part vermouth rosso
 - orange slice for garnish', '- Combine.
 - Garnish with orange slice.
-- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('695cc10e-0599-46fd-81e0-9d713283113f', '5271c4c1-4cb5-4178-9c25-88fbcc969d47');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('695cc10e-0599-46fd-81e0-9d713283113f', 'd81fd49d-5970-4b1a-9730-b414ca1a8392');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('695cc10e-0599-46fd-81e0-9d713283113f', '620f2eae-eb5f-45aa-a6be-d09ca407258f');
+- Serve on the rocks.', '', '', 'dave', '2025-09-28 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('cba76154-673d-4f2b-a6a6-dc7ce595535c', '8af1e681-8d31-487d-a75f-1fb88a1b2e62');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('cba76154-673d-4f2b-a6a6-dc7ce595535c', 'e60ebe98-1ab3-4823-80b4-6c5c0c4a9a78');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('cba76154-673d-4f2b-a6a6-dc7ce595535c', '47220da5-2b53-4b33-8f30-b737ab025985');
 
 -- Recipe: Baked Lemon Cream Fish
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2891b234-a68e-455b-9981-db9f0499e8f1', 'Baked Lemon Cream Fish', '', 'food', 'western', '- 600g fish fillets
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2f66ff75-3b52-4d87-b488-6e414a8c68b4', 'Baked Lemon Cream Fish', '', 'food', 'western', '- 600g fish fillets
 - 60g unsalted butter
 - 1/2 cup cooking cream
 - 3 cloves garlic, minced
@@ -129,12 +129,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Used frozen whiting fillets from Aldi for this and it worked great, note this goes directly against the advise on recipetineats website, so YMMV.', '**Name:** recipe tin eats
 **URL:** https://www.recipetineats.com/baked-fish-with-lemon-cream-sauce/
 **Type:** copy
-**Modifications:** ratios, fish type', 'croach', '2023-11-22 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2891b234-a68e-455b-9981-db9f0499e8f1', 'e7d6fcaf-67e6-43fc-b27a-df109bf1f48f');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2891b234-a68e-455b-9981-db9f0499e8f1', '3bcffc3d-df27-4520-a47c-1852df69f1da');
+**Modifications:** ratios, fish type', 'croach', '2023-11-22 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2f66ff75-3b52-4d87-b488-6e414a8c68b4', '2a0a36d6-6f1b-47a1-aac1-241eceeb4d47');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2f66ff75-3b52-4d87-b488-6e414a8c68b4', '080ba760-30d6-4dea-bb6b-d48583d7ef31');
 
 -- Recipe: Bastard Beans
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('7929474a-787b-4f10-9d51-1c6843ebae79', 'Bastard Beans', '', 'food', 'mexican', '- 1 onion, grated (important)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1c6939ac-159a-4a64-a0ea-f893da30bc4a', 'Bastard Beans', '', 'food', 'mexican', '- 1 onion, grated (important)
 - 10g garlic, fincely minced
 - 2x400g beans
 - olive oil
@@ -157,12 +157,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - black beans i like as a mixer', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-07-27 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('7929474a-787b-4f10-9d51-1c6843ebae79', 'ea95b193-2e7f-4405-858e-79ddb37bede1');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('7929474a-787b-4f10-9d51-1c6843ebae79', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+**Modifications:** string', 'string', '2025-07-27 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1c6939ac-159a-4a64-a0ea-f893da30bc4a', 'b713e021-4da9-4e25-9433-0c791ddf7526');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1c6939ac-159a-4a64-a0ea-f893da30bc4a', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Beef And Broccoli Noodles
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a46ce2c0-aa2f-4016-a6ef-b158278fa2b3', 'Beef And Broccoli Noodles', '', 'food', 'chinese', '- 500g beef quick cooking beef, thinly sliced e.g. scotch, rump
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('89010d91-6029-4aef-a44f-8f8cbe524ce5', 'Beef And Broccoli Noodles', '', 'food', 'chinese', '- 500g beef quick cooking beef, thinly sliced e.g. scotch, rump
 - 1 1/2 tbsp peanut or vegetable oil
 - 2 garlic cloves, finely chopped
 - 1 onion, sliced
@@ -194,12 +194,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Add noodles, broccoli and sauce. Toss together for 1 1/2 - 2 minutes or until Sauce thickens and coats the noodles. Apply garnish.', '', '**Name:** recipe tin eats
 **URL:** https://www.recipetineats.com/chinese-beef-broccoli-noodles/
 **Type:** copy
-**Modifications:** a few', 'croach', '2023-10-20 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a46ce2c0-aa2f-4016-a6ef-b158278fa2b3', '4a00be0a-344d-49ed-b317-c637b15296d7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a46ce2c0-aa2f-4016-a6ef-b158278fa2b3', 'a2c87668-aab0-4e66-a9fc-6d1bd9d79e1f');
+**Modifications:** a few', 'croach', '2023-10-20 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('89010d91-6029-4aef-a44f-8f8cbe524ce5', 'eebdd37c-3133-46ce-8935-62b18fa4c159');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('89010d91-6029-4aef-a44f-8f8cbe524ce5', '24b3e2a5-551c-494f-99bf-633365171c1e');
 
 -- Recipe: Beef Mince Bulgogi
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('84f83b80-c447-4ece-a2a3-f09f3a443797', 'Beef Mince Bulgogi', '', 'food', 'korean', '### main part of recipe
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1cb43317-4d20-407d-8de4-e25f576f8c98', 'Beef Mince Bulgogi', '', 'food', 'korean', '### main part of recipe
 - 4 spring onions
 - 1 large brown onion
 - ~400g of mushrooms, whatever kind (shitake, button, oyster, dried, some mix of these)
@@ -237,12 +237,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve with rice, add an egg or some greens.', '**Name:** Aaron & Claire
 **URL:** https://aaronandclaire.com/ground-beef-bulgogi/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-24 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('84f83b80-c447-4ece-a2a3-f09f3a443797', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('84f83b80-c447-4ece-a2a3-f09f3a443797', '066352c6-6c41-49b4-990c-8001422ad0ec');
+**Modifications:** minimal', 'croach', '2023-09-24 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1cb43317-4d20-407d-8de4-e25f576f8c98', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1cb43317-4d20-407d-8de4-e25f576f8c98', 'ded8b91c-1339-4cc9-b4bc-3d27a7e54425');
 
 -- Recipe: Bolognese Sauce
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('5ee5f033-6209-4767-a93f-cdb65e9595ae', 'Bolognese Sauce', '', 'food', 'italian', '- 6 carrots (~640g) chopped
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('be804d1e-725d-4a91-8385-0c81ccf7b193', 'Bolognese Sauce', '', 'food', 'italian', '- 6 carrots (~640g) chopped
 - 6 celery (~690g) chopped
 - 3 medium onions (~280g) chopped
 - 80ml EVOO
@@ -274,14 +274,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Less tomato paste', '**Name:** Vincenzo''s plate
 **URL:** https://www.vincenzosplate.com/authentic-bolognese-sauce/
 **Type:** string
-**Modifications:** string', 'string', '2024-09-05 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('5ee5f033-6209-4767-a93f-cdb65e9595ae', '84054a02-7265-438d-9c91-59bb82eac5bb');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('5ee5f033-6209-4767-a93f-cdb65e9595ae', 'e2758055-704f-4964-af5b-85e4362785b7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('5ee5f033-6209-4767-a93f-cdb65e9595ae', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('5ee5f033-6209-4767-a93f-cdb65e9595ae', '15c3d6b7-d766-4bd1-b3fc-3516efc12743');
+**Modifications:** string', 'string', '2024-09-05 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('be804d1e-725d-4a91-8385-0c81ccf7b193', 'e7c3939f-e679-4565-815a-df2b627a5975');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('be804d1e-725d-4a91-8385-0c81ccf7b193', '4d35ba6d-8646-47c9-a1e1-759d79cb0453');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('be804d1e-725d-4a91-8385-0c81ccf7b193', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('be804d1e-725d-4a91-8385-0c81ccf7b193', '4eeaa8c2-2c13-4890-ac1d-1fd6e62b78d2');
 
 -- Recipe: Chef John's Meatballs
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('ba3d390c-b6d1-44f2-99c2-1bedbee69ad6', 'Chef John''s Meatballs', '', 'food', 'italian', '- ⅓ cup plain bread crumbs
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e94f1479-c6d1-4dd2-8de2-05ad236870e0', 'Chef John''s Meatballs', '', 'food', 'italian', '- ⅓ cup plain bread crumbs
 - ½ cup milk
 - 2 tablespoons olive oil
 - 1 onion, diced
@@ -303,11 +303,11 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Great to serve with a red sauce pasta, or as is.', '**Name:** Chef John
 **URL:** https://www.allrecipes.com/recipe/220854/chef-johns-italian-meatballs/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('ba3d390c-b6d1-44f2-99c2-1bedbee69ad6', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
+**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e94f1479-c6d1-4dd2-8de2-05ad236870e0', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
 
 -- Recipe: Chilli Wine Garlic Prawn Pasta
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('9c22afb0-3f82-43ac-a71e-a75fc97d1ea2', 'Chilli Wine Garlic Prawn Pasta', '', 'food', 'fusion', '- 1kg prawns
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1166d880-a707-4fa3-8a0f-8789c0379895', 'Chilli Wine Garlic Prawn Pasta', '', 'food', 'fusion', '- 1kg prawns
 - 360g linguine or similar
 - 3 shallot, diced or half a white onion
 - 2 red chilli, deseeded and diced
@@ -332,12 +332,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 
 ### Next
 - pasta quantity is a bit of a guess, measure and see what works', '**Name:** Carrie''s Kitchen
-**URL:** https://carriecarvalho.com/chilli-prawn-linguine/', '', '2023-12-19 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9c22afb0-3f82-43ac-a71e-a75fc97d1ea2', '84054a02-7265-438d-9c91-59bb82eac5bb');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9c22afb0-3f82-43ac-a71e-a75fc97d1ea2', 'aa4fae34-ebb3-40d3-a4b3-dbca1d160f3a');
+**URL:** https://carriecarvalho.com/chilli-prawn-linguine/', '', '2023-12-19 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1166d880-a707-4fa3-8a0f-8789c0379895', 'e7c3939f-e679-4565-815a-df2b627a5975');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1166d880-a707-4fa3-8a0f-8789c0379895', '5efc65e4-56ff-4d6f-9f72-31b8bca15982');
 
 -- Recipe: Creamy Chicken Mushroom Pasta
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('de294390-32ac-479c-8f8a-ffe559f80f4c', 'Creamy Chicken Mushroom Pasta', '', 'food', 'western', '- 1kg chicken breast, cubed
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b8b9d060-b6b1-4c63-ad28-96a1b7a44919', 'Creamy Chicken Mushroom Pasta', '', 'food', 'western', '- 1kg chicken breast, cubed
 - 500g mushrooms, sliced
 - 280g fresh spinach leaves
 - 1 340ml carnation creamy evaporated milk
@@ -360,15 +360,15 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Top off with extra parmesan and serve.', '', '**Name:** tasty
 **URL:** https://tasty.co/recipe/one-pot-chicken-and-mushroom-pasta
 **Type:** string
-**Modifications:** string', 'meggles', '2025-04-25 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('de294390-32ac-479c-8f8a-ffe559f80f4c', '933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('de294390-32ac-479c-8f8a-ffe559f80f4c', 'ec7be182-0d53-409f-b44f-6f6a7ee3d2cb');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('de294390-32ac-479c-8f8a-ffe559f80f4c', '84054a02-7265-438d-9c91-59bb82eac5bb');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('de294390-32ac-479c-8f8a-ffe559f80f4c', '0ed87602-186e-455b-8d4e-c3e84cd3af02');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('de294390-32ac-479c-8f8a-ffe559f80f4c', 'ca9519dd-ba41-4790-a39e-0fd42b62e17f');
+**Modifications:** string', 'meggles', '2025-04-25 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b8b9d060-b6b1-4c63-ad28-96a1b7a44919', 'ed31294f-1400-4c71-8674-a94280f1eab9');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b8b9d060-b6b1-4c63-ad28-96a1b7a44919', '54b98854-328d-42d4-921e-2b03b1c26427');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b8b9d060-b6b1-4c63-ad28-96a1b7a44919', 'e7c3939f-e679-4565-815a-df2b627a5975');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b8b9d060-b6b1-4c63-ad28-96a1b7a44919', '7661c5f6-88cf-4d61-94f0-49e627e08492');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b8b9d060-b6b1-4c63-ad28-96a1b7a44919', '63403ed9-6757-44b9-84c9-0110c58c5a2e');
 
 -- Recipe: Easy Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('68e7a104-a98a-448d-89fc-61dec3c2f083', 'Easy Chicken Curry', '', 'food', 'indian', '- 1kg chicken breast/thighs, cut into cubes
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('126ae862-aa91-4782-81cf-af3700954393', 'Easy Chicken Curry', '', 'food', 'indian', '- 1kg chicken breast/thighs, cut into cubes
 - 2 onions
 - 3 garlic cloves, grated
 - 1 knob ginger, grated
@@ -386,12 +386,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve with naan bread or rice.', '', '**Name:** The Cooking Foodie
 **URL:** https://www.thecookingfoodie.com/recipe/Quick-and-Easy-Chicken-Curry-Recipe
 **Type:** copy
-**Modifications:** minimal', 'snapper', '2023-09-24 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('68e7a104-a98a-448d-89fc-61dec3c2f083', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('68e7a104-a98a-448d-89fc-61dec3c2f083', '933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9');
+**Modifications:** minimal', 'snapper', '2023-09-24 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('126ae862-aa91-4782-81cf-af3700954393', 'e8c5b879-af46-47f0-a592-53db389b92ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('126ae862-aa91-4782-81cf-af3700954393', 'ed31294f-1400-4c71-8674-a94280f1eab9');
 
 -- Recipe: Ez Green Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('9a6ecd5c-78a5-4f7b-9a3d-75b824c9d5e0', 'Ez Green Chicken Curry', '', 'food', 'thai', '### vegetables
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b72b9cdd-f040-422a-832c-6e4422c4f3fe', 'Ez Green Chicken Curry', '', 'food', 'thai', '### vegetables
 - ~600g assorted chopped vegetables (think snow peas, eggplant, asparagus, carrot, green beans, zuchinni) etc
 - 150g onion
 - 20g garlic
@@ -409,14 +409,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - add lime, lemongrass paste or frozen lemongrass chopped up, and fakkir lime leaves?', '**Name:** recipetineats
 **URL:** https://www.recipetineats.com/thai-green-curry/#h-the-best-green-curry-paste
 **Type:** made simpler, changed ratios, specified brands, better macros
-**Modifications:** string', 'string', '2025-03-28 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9a6ecd5c-78a5-4f7b-9a3d-75b824c9d5e0', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9a6ecd5c-78a5-4f7b-9a3d-75b824c9d5e0', '933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9a6ecd5c-78a5-4f7b-9a3d-75b824c9d5e0', '10c704d4-698d-4832-9ae1-120f77c575ae');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9a6ecd5c-78a5-4f7b-9a3d-75b824c9d5e0', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+**Modifications:** string', 'string', '2025-03-28 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b72b9cdd-f040-422a-832c-6e4422c4f3fe', 'e8c5b879-af46-47f0-a592-53db389b92ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b72b9cdd-f040-422a-832c-6e4422c4f3fe', 'ed31294f-1400-4c71-8674-a94280f1eab9');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b72b9cdd-f040-422a-832c-6e4422c4f3fe', '662b325f-010a-4436-9b45-c8c4c93148ee');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b72b9cdd-f040-422a-832c-6e4422c4f3fe', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Ez Guilin Chicken
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('221f4fbc-07b2-4f38-b5c0-9352e777f661', 'Ez Guilin Chicken', '', 'food', 'chinese', '- 1 large onion
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a8fca373-4606-49d0-93f9-9e20589fd81e', 'Ez Guilin Chicken', '', 'food', 'chinese', '- 1 large onion
 - 4 cloves of garlic, minced or paste
 - knob of ginger, minced or paste
 - 1.2kg chicken thighs cut into bite sized pieces
@@ -429,14 +429,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - nice as meal prep served with rice and some veg', '', '**Name:** OG
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-09-10 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('221f4fbc-07b2-4f38-b5c0-9352e777f661', '933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('221f4fbc-07b2-4f38-b5c0-9352e777f661', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('221f4fbc-07b2-4f38-b5c0-9352e777f661', '8aea1b48-1db2-4957-8e1d-6a398b0d8fc5');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('221f4fbc-07b2-4f38-b5c0-9352e777f661', '7c97d74c-b82a-4780-b8e0-d0451415ad26');
+**Modifications:** string', 'string', '2025-09-10 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a8fca373-4606-49d0-93f9-9e20589fd81e', 'ed31294f-1400-4c71-8674-a94280f1eab9');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a8fca373-4606-49d0-93f9-9e20589fd81e', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a8fca373-4606-49d0-93f9-9e20589fd81e', '39b3c042-6998-4d8c-9547-9256b47e5db2');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a8fca373-4606-49d0-93f9-9e20589fd81e', '3f493d37-1f96-4fb9-8516-93d89331c26d');
 
 -- Recipe: Ez Mapo Tofu
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', 'Ez Mapo Tofu', '', 'food', 'chinese', '- neutral oil
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', 'Ez Mapo Tofu', '', 'food', 'chinese', '- neutral oil
 - 1 brown onion, sliced finely
 - 2 cloves garlic, grated/sliced/chopped
 - 1 knob of ginger, grated/sliced/chopped
@@ -456,16 +456,16 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve with rice
 
 ### Next
-- the added oyster sauce and soy sauce was a guess at what i did, validate this and iterate', '**Type:** pimping/original/research inspired', 'croach', '2023-11-25 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', '9e7a5aa7-99ec-4414-986e-9c0f41586b75');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', 'c001a9da-943b-4d9f-9b8b-5d57ffc8331f');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', '7c97d74c-b82a-4780-b8e0-d0451415ad26');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', '066352c6-6c41-49b4-990c-8001422ad0ec');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', '10c704d4-698d-4832-9ae1-120f77c575ae');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('16b994d6-293b-41b0-b636-d64ce1f938d4', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+- the added oyster sauce and soy sauce was a guess at what i did, validate this and iterate', '**Type:** pimping/original/research inspired', 'croach', '2023-11-25 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', 'af440871-7796-4636-959d-9efddcd87e8f');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', 'e81e2816-31bb-491c-8489-a5cce0765762');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', '3f493d37-1f96-4fb9-8516-93d89331c26d');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', 'ded8b91c-1339-4cc9-b4bc-3d27a7e54425');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', '662b325f-010a-4436-9b45-c8c4c93148ee');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a9335a38-006c-4571-bdc6-78e8e577b49d', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Firecracker Chicken
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('86f4107d-7115-4502-997a-faa5a672af80', 'Firecracker Chicken', '', 'food', 'fusion', '- 500g chicken mince
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('123e84f7-5da4-426b-aceb-23aafae173b0', 'Firecracker Chicken', '', 'food', 'fusion', '- 500g chicken mince
 - 10h chilli oil
 - 30g honey
 - 60g frank red hot buffalo sauce
@@ -483,14 +483,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - serve with rice, broccoli and a boiled egg', '**Name:** KindaHealthyRecipes
 **URL:** https://masonfit.com/low-carb-firecracker-ground-chicken/
 **Type:** string
-**Modifications:** string', 'string', '2024-06-08 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('86f4107d-7115-4502-997a-faa5a672af80', 'd9881f05-6670-450d-8ead-dcfa7c55b68c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('86f4107d-7115-4502-997a-faa5a672af80', '7c97d74c-b82a-4780-b8e0-d0451415ad26');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('86f4107d-7115-4502-997a-faa5a672af80', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('86f4107d-7115-4502-997a-faa5a672af80', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+**Modifications:** string', 'string', '2024-06-08 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('123e84f7-5da4-426b-aceb-23aafae173b0', '5ad286fa-1ad2-44f5-a037-c46ffe4a367f');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('123e84f7-5da4-426b-aceb-23aafae173b0', '3f493d37-1f96-4fb9-8516-93d89331c26d');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('123e84f7-5da4-426b-aceb-23aafae173b0', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('123e84f7-5da4-426b-aceb-23aafae173b0', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Gyudon
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('d1d3815e-31e4-4fa2-b475-e70169edfd93', 'Gyudon', '', 'food', 'japanese', '- 750g thinly sliced beef strips
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('75368a59-864c-4dcf-93db-17273df65042', 'Gyudon', '', 'food', 'japanese', '- 750g thinly sliced beef strips
 - 2 onions, thinly sliced into long strips
 - 3 cups boiling water
 - 2 teaspoons dashi powder
@@ -510,13 +510,13 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Serve over rice and eat immediately. Garnish with spring onion and/or pickled ginger.', '### Notes
 - You might choose to replace pouring the egg in, with instead serving the meal with a fried egg on top for each bowl.
 - I think this might be great with lamb slices too
-- For the sliced meat, easiest way is to buy the hot pot/sukiyaki/bulgogi meat from freezer section of asian grocer, but has higher fat content. Healthier to buy leaner meat and slice yourself.', '**Type:** research inspired/amalgamation', 'croach', '2023-11-29 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1d3815e-31e4-4fa2-b475-e70169edfd93', '4a00be0a-344d-49ed-b317-c637b15296d7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1d3815e-31e4-4fa2-b475-e70169edfd93', '066352c6-6c41-49b4-990c-8001422ad0ec');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1d3815e-31e4-4fa2-b475-e70169edfd93', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+- For the sliced meat, easiest way is to buy the hot pot/sukiyaki/bulgogi meat from freezer section of asian grocer, but has higher fat content. Healthier to buy leaner meat and slice yourself.', '**Type:** research inspired/amalgamation', 'croach', '2023-11-29 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('75368a59-864c-4dcf-93db-17273df65042', 'eebdd37c-3133-46ce-8935-62b18fa4c159');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('75368a59-864c-4dcf-93db-17273df65042', 'ded8b91c-1339-4cc9-b4bc-3d27a7e54425');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('75368a59-864c-4dcf-93db-17273df65042', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Healthy Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('41a34e20-9554-4728-9d19-1e6678b75da3', 'Healthy Curry', '', 'food', 'indian', '### Protein & marinade
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('9de4b721-e9d0-4cd9-8456-be07ce72c521', 'Healthy Curry', '', 'food', 'indian', '### Protein & marinade
 - 10g tbsp oil
 - 1.2kg chicken thighs, each cut into 6
 - 1 tsp tumeric powder
@@ -569,12 +569,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - put the powder additions earlier? so they get fried off too?', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-10-22 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('41a34e20-9554-4728-9d19-1e6678b75da3', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('41a34e20-9554-4728-9d19-1e6678b75da3', '58b4758e-c51a-4520-9957-8a44692f5c6f');
+**Modifications:** string', 'string', '2025-10-22 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9de4b721-e9d0-4cd9-8456-be07ce72c521', 'e8c5b879-af46-47f0-a592-53db389b92ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9de4b721-e9d0-4cd9-8456-be07ce72c521', '2299bbde-76b4-4796-a774-1ae7d284b3d6');
 
 -- Recipe: Honey Pepper Stirfry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a7777f58-7cf2-4c16-b0b1-b0e0012b1a00', 'Honey Pepper Stirfry', '', 'food', 'chinese', '### sauce
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a57ce09d-8b95-40a3-8613-9fea4a1d801b', 'Honey Pepper Stirfry', '', 'food', 'chinese', '### sauce
 - 100ml soy sauce
 - 60g honey
 - 70g tbsp Oyster sauce (sub Hoisin)
@@ -600,14 +600,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - would work with pork or chicken too', '**Name:** recipetineats
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2024-04-06 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a7777f58-7cf2-4c16-b0b1-b0e0012b1a00', '4a00be0a-344d-49ed-b317-c637b15296d7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a7777f58-7cf2-4c16-b0b1-b0e0012b1a00', 'dd1a7236-745c-4c05-8ca7-e2bad2439e69');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a7777f58-7cf2-4c16-b0b1-b0e0012b1a00', 'eea27b73-fc53-4550-ac0b-86d9a49c96b5');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a7777f58-7cf2-4c16-b0b1-b0e0012b1a00', '5a6a699f-b45c-4033-8972-41eb0b524782');
+**Modifications:** string', 'string', '2024-04-06 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a57ce09d-8b95-40a3-8613-9fea4a1d801b', 'eebdd37c-3133-46ce-8935-62b18fa4c159');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a57ce09d-8b95-40a3-8613-9fea4a1d801b', 'ab0af9c6-f50b-40c7-9bfa-ed67440897cd');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a57ce09d-8b95-40a3-8613-9fea4a1d801b', '14ef4958-5d9f-491b-9d3f-5f2a2606d941');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a57ce09d-8b95-40a3-8613-9fea4a1d801b', '689bc136-2227-4477-bd92-884d86c6fb3f');
 
 -- Recipe: Japanese Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2e9a2801-5e4b-4d8b-9383-6d90760715b6', 'Japanese Chicken Curry', '', 'food', 'string', '- 670g onions, sliced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('3884b007-7684-46f2-9080-07f8fa10d612', 'Japanese Chicken Curry', '', 'food', 'string', '- 670g onions, sliced
 - 2 carrots (6.7 oz, 190 g)
 - 3 Yukon gold potatoes (15 oz, 432 g)
 - 1 tsp ginger (grated)
@@ -641,12 +641,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - string', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2023-11-27 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2e9a2801-5e4b-4d8b-9383-6d90760715b6', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2e9a2801-5e4b-4d8b-9383-6d90760715b6', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
+**Modifications:** string', 'string', '2023-11-27 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('3884b007-7684-46f2-9080-07f8fa10d612', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('3884b007-7684-46f2-9080-07f8fa10d612', 'e8c5b879-af46-47f0-a592-53db389b92ba');
 
 -- Recipe: Kimchi Chikki Stew
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('6e38f9bb-1f10-41f6-a88c-a073c4404532', 'Kimchi Chikki Stew', '', 'food', 'korean', '### initial addition
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('f5ae4a9f-db76-4c1a-97b4-42a39de8e1f3', 'Kimchi Chikki Stew', '', 'food', 'korean', '### initial addition
 - 1 container kimchi (~700g), and don''t skimp on quality
 - 1.5kg chicken thighs
 - 3 green onions, sliced
@@ -670,14 +670,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - serve with rice', '', '**Name:** string
 **URL:** https://www.maangchi.com/recipe/kimchi-jjigae
 **Type:** string
-**Modifications:** based on but many changes', 'string', '2025-09-10 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('6e38f9bb-1f10-41f6-a88c-a073c4404532', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('6e38f9bb-1f10-41f6-a88c-a073c4404532', '7c97d74c-b82a-4780-b8e0-d0451415ad26');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('6e38f9bb-1f10-41f6-a88c-a073c4404532', '0ae5027a-eb68-49d3-85a6-da40cce25a90');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('6e38f9bb-1f10-41f6-a88c-a073c4404532', '3b1f3935-8260-466b-85c8-06667a5fd8bc');
+**Modifications:** based on but many changes', 'string', '2025-09-10 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f5ae4a9f-db76-4c1a-97b4-42a39de8e1f3', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f5ae4a9f-db76-4c1a-97b4-42a39de8e1f3', '3f493d37-1f96-4fb9-8516-93d89331c26d');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f5ae4a9f-db76-4c1a-97b4-42a39de8e1f3', '67d74ab9-721f-44f3-8069-101e1eee3ca4');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f5ae4a9f-db76-4c1a-97b4-42a39de8e1f3', 'fda7d1dc-6d26-4328-88b4-0f7276789ad3');
 
 -- Recipe: Lamb Burgers
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('59999e8c-38bf-4337-b1f6-74aaeb58d9c0', 'Lamb Burgers', '', 'food', 'continental', '- 500g lamb mince
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('fa1d396e-1e25-453f-a1f6-1be589661805', 'Lamb Burgers', '', 'food', 'continental', '- 500g lamb mince
 - 2 cloves garlic, minced
 - 1 large egg
 - 1/2 teaspoon cumin
@@ -691,12 +691,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Burger inclusion inspo - cheese, red onion, tomato, lettuce, sauce (tomato, hot english mustard, other mustards, kewpie mayo all work)
 - Also works as a greek flavours burger with tzatziki, feta etc...', '**Name:** The Big Man''s World
 **URL:** https://thebigmansworld.com/lamb-burgers/
-**Type:** copy', 'croach', '2023-12-26 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('59999e8c-38bf-4337-b1f6-74aaeb58d9c0', '1b583dc5-4ad4-41ae-9c9c-afb87c9435d8');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('59999e8c-38bf-4337-b1f6-74aaeb58d9c0', '6612abb4-82b8-404d-9167-9a9175d223a9');
+**Type:** copy', 'croach', '2023-12-26 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('fa1d396e-1e25-453f-a1f6-1be589661805', '0b0b0f04-44bc-4690-8456-2789a3ff23d0');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('fa1d396e-1e25-453f-a1f6-1be589661805', '413e3889-86a5-4376-be1c-1860d457261a');
 
 -- Recipe: Lamb Shanks Massaman Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e18dd8c8-b370-4637-a5d1-cdf2cabde4df', 'Lamb Shanks Massaman Curry', '', 'food', 'thai', '- 1.5kg lamb shanks (5 small, 4 medium, 2 - 3 large)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('90dad811-15c1-4e7c-86bb-d3421973775b', 'Lamb Shanks Massaman Curry', '', 'food', 'thai', '- 1.5kg lamb shanks (5 small, 4 medium, 2 - 3 large)
 - 114g/ 4oz Maesri Massaman curry paste (1 can), or other brand (Note 1)
 - 400ml coconut milk, full fat (Ayam brand is best, Note 3)
 - 2 cups chicken stock/broth
@@ -716,12 +716,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - 3. Coconut milk - the quality/flavour comes down to the % of the liquid that is actually coconut milk. Ayam is the highest at 89%, cheap ones can be as low as 45%.', '**Name:** recipe tin eats
 **URL:** https://www.recipetineats.com/lamb-shanks-in-massaman-curry/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e18dd8c8-b370-4637-a5d1-cdf2cabde4df', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e18dd8c8-b370-4637-a5d1-cdf2cabde4df', '68a48e86-96e3-4cc8-b984-9e5596b47ed0');
+**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('90dad811-15c1-4e7c-86bb-d3421973775b', 'e8c5b879-af46-47f0-a592-53db389b92ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('90dad811-15c1-4e7c-86bb-d3421973775b', '5d58ef6c-e276-4216-8998-6e525fc7db1d');
 
 -- Recipe: Mexican Meat Mix
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('63632260-b888-47f3-a2f1-87d302d7b3a5', 'Mexican Meat Mix', '', 'food', 'mexican', '- 1 large onion, diced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('658b9bca-45ab-4439-8c65-eb0eb2f20cd5', 'Mexican Meat Mix', '', 'food', 'mexican', '- 1 large onion, diced
 - 3 cloves garlic, finely diced
 - 500g extra lean beef mince
 - 1 can mexican bean mix, drained and lightly rinsed
@@ -749,15 +749,15 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - can add any kinds of fresh chillis when u add the garlic, or when u are adding veg towards the end
 
 ### Next
-- wrote this recipe a bit baked so check the accuracy', '**Name:** original by davo', 'croach', '2024-08-20 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('63632260-b888-47f3-a2f1-87d302d7b3a5', '4a00be0a-344d-49ed-b317-c637b15296d7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('63632260-b888-47f3-a2f1-87d302d7b3a5', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('63632260-b888-47f3-a2f1-87d302d7b3a5', 'ea95b193-2e7f-4405-858e-79ddb37bede1');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('63632260-b888-47f3-a2f1-87d302d7b3a5', '811171c0-b6bc-440a-8900-068ff5720535');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('63632260-b888-47f3-a2f1-87d302d7b3a5', '89e84d29-7287-4d41-af36-c12079e60dd0');
+- wrote this recipe a bit baked so check the accuracy', '**Name:** original by davo', 'croach', '2024-08-20 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('658b9bca-45ab-4439-8c65-eb0eb2f20cd5', 'eebdd37c-3133-46ce-8935-62b18fa4c159');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('658b9bca-45ab-4439-8c65-eb0eb2f20cd5', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('658b9bca-45ab-4439-8c65-eb0eb2f20cd5', 'b713e021-4da9-4e25-9433-0c791ddf7526');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('658b9bca-45ab-4439-8c65-eb0eb2f20cd5', 'a6e4ea6c-82bb-4fad-8d8a-b7a92899a593');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('658b9bca-45ab-4439-8c65-eb0eb2f20cd5', '84225441-9774-4ad8-a3e9-8ddd5e46e432');
 
 -- Recipe: Minestrone
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('d1c9203e-a7e6-4ebb-bc92-d711e3fea6f2', 'Minestrone', '', 'food', 'italian', '- 6 cups (1.5L) chicken stock
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('d7bc1a14-a262-4a01-9654-776b91b4d155', 'Minestrone', '', 'food', 'italian', '- 6 cups (1.5L) chicken stock
 - 250g celery, diced
 - 250g carrot, diced
 - 250g onion, diced
@@ -790,13 +790,13 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Garnish with parmesan, a squeeze of lemon, or red pepper flakes if desired.', '', '**Name:** string
 **URL:** https://nutritionistmom.com/blogs/blog/high-protein-minestrone-soup?srsltid=AfmBOooHIvu5diRZIYGwelSVvXfbRB5I7GiILuxsf1XyVWy-PzgQWr-R
 **Type:** string
-**Modifications:** string', 'string', '2025-08-14 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1c9203e-a7e6-4ebb-bc92-d711e3fea6f2', '0ae5027a-eb68-49d3-85a6-da40cce25a90');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1c9203e-a7e6-4ebb-bc92-d711e3fea6f2', '4cb610da-b106-4600-bb48-834518e7df76');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1c9203e-a7e6-4ebb-bc92-d711e3fea6f2', '3254aff4-9f88-40ae-821b-91a63c69896e');
+**Modifications:** string', 'string', '2025-08-14 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d7bc1a14-a262-4a01-9654-776b91b4d155', '67d74ab9-721f-44f3-8069-101e1eee3ca4');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d7bc1a14-a262-4a01-9654-776b91b4d155', 'cfa02e5f-1f96-434f-89a4-6512beae1380');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d7bc1a14-a262-4a01-9654-776b91b4d155', 'c095707d-8015-4ec2-82b0-4be3d7c32656');
 
 -- Recipe: Oyakodon
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('368fec39-f72e-4097-8e41-86e922a69aed', 'Oyakodon', '', 'food', 'japanese', '- 2 cups (500ml) dashi stock
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('17a6c565-7694-4953-a129-c19dda7e8666', 'Oyakodon', '', 'food', 'japanese', '- 2 cups (500ml) dashi stock
 - 60ml sake
 - 30ml soy sauce, plus more to taste
 - 30g sugar, plus more to taste
@@ -813,13 +813,13 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - consider adding mushrooms, experiment with this', '**Name:** Serious Eats
 **URL:** https://www.seriouseats.com/oyakodon-japanese-chicken-and-egg-rice-bowl-recipe
 **Type:** copy
-**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('368fec39-f72e-4097-8e41-86e922a69aed', '933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('368fec39-f72e-4097-8e41-86e922a69aed', '2952c1e3-98c0-4633-ade0-83a6f76ce048');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('368fec39-f72e-4097-8e41-86e922a69aed', '01318191-8c9d-4d53-98e7-809076a12324');
+**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('17a6c565-7694-4953-a129-c19dda7e8666', 'ed31294f-1400-4c71-8674-a94280f1eab9');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('17a6c565-7694-4953-a129-c19dda7e8666', '76e8e1d6-c97a-44d4-9635-02a82a9c9f68');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('17a6c565-7694-4953-a129-c19dda7e8666', 'caada606-f332-49e6-bf24-c364275e4255');
 
 -- Recipe: Palak Paneer
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1892aaff-932d-4947-9205-65d0c17680a3', 'Palak Paneer', '', 'food', 'indian', '- 3 medium onions, diced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('997d7f04-0778-40c2-b68b-85018824c61f', 'Palak Paneer', '', 'food', 'indian', '- 3 medium onions, diced
 - 30g garlic, minced
 - 30g ginger, minced
 - 450g paneer
@@ -858,12 +858,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Not all spices are absolutely mandatory. I''m really just chucking in whatever i have that smells good.', '**Name:** string
 **URL:** string
 **Type:** string
-**Modifications:** string', 'string', '2025-08-14 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1892aaff-932d-4947-9205-65d0c17680a3', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1892aaff-932d-4947-9205-65d0c17680a3', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+**Modifications:** string', 'string', '2025-08-14 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('997d7f04-0778-40c2-b68b-85018824c61f', 'e8c5b879-af46-47f0-a592-53db389b92ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('997d7f04-0778-40c2-b68b-85018824c61f', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Pork Dumplings
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', 'Pork Dumplings', '', 'food', 'chinese', '- 3 * 500g packs dumpling wrappers (gyoza, wonton etc...)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', 'Pork Dumplings', '', 'food', 'chinese', '- 3 * 500g packs dumpling wrappers (gyoza, wonton etc...)
 
 ### filling mixture
 - 1kg pork mince, 5% fat
@@ -894,17 +894,17 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - could do with a teeny bit more salt', '**Name:** string
 **URL:** https://www.maxiskitchen.com/blog/potstickers
 **Type:** string
-**Modifications:** string', 'string', '2024-09-29 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', 'c001a9da-943b-4d9f-9b8b-5d57ffc8331f');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', '6b6ec484-3616-4ecf-b5ee-39747932ef23');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', 'd9881f05-6670-450d-8ead-dcfa7c55b68c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', 'dad2a6d6-de32-456c-9ff6-9a5f0034566e');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', 'e9f0fbdb-3f9b-4304-a9e5-5376566a4851');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2533ae33-f691-4c4b-9567-02d75c8fb2fd', 'c76e2ea0-a001-4fd3-84d4-4b4af7b22a0c');
+**Modifications:** string', 'string', '2024-09-29 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', 'e81e2816-31bb-491c-8489-a5cce0765762');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', 'bfe517d9-7d27-4d3c-b898-7281001afc3f');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', '5ad286fa-1ad2-44f5-a037-c46ffe4a367f');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', '6dc458db-e420-467e-aa8a-f2192120d2d1');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', '5f0fd7be-d727-47ef-9b34-4d8aef6477c6');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('d1704a0f-6f88-430f-8519-daf6137b4554', 'e1cb4ded-e291-4eeb-a38b-1e98c79eb320');
 
 -- Recipe: Pork Tenderloin Honey Garlic
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('f1ac243b-bd73-43f5-b863-6f10bee6132a', 'Pork Tenderloin Honey Garlic', '', 'food', 'chinese', '- 2 pork tenderloin (pork fillet), 500g/1lb each (Note 1)
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('a5249f8a-824d-41d9-99de-e51cfb791e7b', 'Pork Tenderloin Honey Garlic', '', 'food', 'chinese', '- 2 pork tenderloin (pork fillet), 500g/1lb each (Note 1)
 - 1 1/2 tbsp olive oil (or butter)
 - 3 garlic cloves , very finely chopped
 
@@ -930,25 +930,25 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Cut pork into thick slices and serve with sauce!', '', '**Name:** Recipe Tin Eats
 **URL:** https://www.recipetineats.com/pork-tenderloin-with-honey-garlic-sauce/
 **Type:** string
-**Modifications:** string', 'string', '2024-06-08 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f1ac243b-bd73-43f5-b863-6f10bee6132a', 'c6873dca-0b7e-4665-818b-a4ef65c5e4f9');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f1ac243b-bd73-43f5-b863-6f10bee6132a', 'e365c73d-d7a5-42dd-8c90-0f2238d717a6');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f1ac243b-bd73-43f5-b863-6f10bee6132a', 'eea27b73-fc53-4550-ac0b-86d9a49c96b5');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('f1ac243b-bd73-43f5-b863-6f10bee6132a', 'c001a9da-943b-4d9f-9b8b-5d57ffc8331f');
+**Modifications:** string', 'string', '2024-06-08 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a5249f8a-824d-41d9-99de-e51cfb791e7b', 'bb9f0fbc-1f34-482e-9f46-43deaa1b1ae8');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a5249f8a-824d-41d9-99de-e51cfb791e7b', 'd9dafe3a-82b5-466b-92ee-6b201b338b71');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a5249f8a-824d-41d9-99de-e51cfb791e7b', '14ef4958-5d9f-491b-9d3f-5f2a2606d941');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('a5249f8a-824d-41d9-99de-e51cfb791e7b', 'e81e2816-31bb-491c-8489-a5cce0765762');
 
 -- Recipe: Punjabi Chicken Curry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('4479fa4e-aa84-4eeb-9c87-630102dfc07f', 'Punjabi Chicken Curry', '', 'food', 'indian', '### Chicken', '- Combine the yogurt with the salt, spices, garlic, and ginger in a bowl, and mix well. Add the chicken thighs and make sure that the chicken is coated well in the yogurt marinade. Let it rest overnight, or 1 hour at least, in the fridge.
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e5acd6e9-91b5-4e4a-8d63-a421236de311', 'Punjabi Chicken Curry', '', 'food', 'indian', '### Chicken', '- Combine the yogurt with the salt, spices, garlic, and ginger in a bowl, and mix well. Add the chicken thighs and make sure that the chicken is coated well in the yogurt marinade. Let it rest overnight, or 1 hour at least, in the fridge.
 - Heat the oil in a pan. Add the cumin seeds, mustard seeds and bay leaf. Once they start to sizzle, add the onions and cook for 15 minutes, until a lovely golden color. Now add the tomatoes and cook for 10 minutes, until softened. Add the spices and salt, and cook for 1 minute. Add the marinated chicken, mix well, and cover. Cook for 40 to 45 minutes over low heat until the chicken is cooked through.
 - Once you have cooked the curry, let it rest for 30 minutes to 1 hour. This makes the curry really intense and the chicken soaks up the flavors better. Sprinkle with some coriander and serve.', '', '**Name:** Food52
 **URL:** https://food52.com/recipes/83814-punjabi-style-chicken-curry-recipe
 **Type:** few changes
-**Modifications:** string', 'dave', '2025-02-20 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('4479fa4e-aa84-4eeb-9c87-630102dfc07f', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('4479fa4e-aa84-4eeb-9c87-630102dfc07f', '933b5f5e-935d-4295-ba8a-bf5fd9a0e6a9');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('4479fa4e-aa84-4eeb-9c87-630102dfc07f', '6d310ae6-d8f4-49b0-a431-37799cf9f56a');
+**Modifications:** string', 'dave', '2025-02-20 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e5acd6e9-91b5-4e4a-8d63-a421236de311', 'e8c5b879-af46-47f0-a592-53db389b92ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e5acd6e9-91b5-4e4a-8d63-a421236de311', 'ed31294f-1400-4c71-8674-a94280f1eab9');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e5acd6e9-91b5-4e4a-8d63-a421236de311', '5fc6ccff-91d5-44b6-9d5e-55a24cd32a8d');
 
 -- Recipe: Qeema Mince
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2bfec359-9c70-4f34-83bd-46142538781f', 'Qeema Mince', '', 'food', 'indian', '- 3 tbsp vegetable or canola oil, or other neutral oil
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('b9e4718c-179a-4d5c-b31b-74acda27b6b9', 'Qeema Mince', '', 'food', 'indian', '- 3 tbsp vegetable or canola oil, or other neutral oil
 - 18g ginger, finely minced or as paste
 - 15g garlic, finely minced or as paste
 - 1 large onion, finely diced
@@ -971,13 +971,13 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - I often do a 50/50 beef/pork mix. Literally any mince will work here.', '**Name:** recipetineats
 **URL:** https://www.recipetineats.com/qeema-indian-curried-beef/
 **Type:** copy
-**Modifications:** string', 'string', '2024-03-17 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2bfec359-9c70-4f34-83bd-46142538781f', '453caa98-2f1e-4339-a72f-35356bcb5e2c');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2bfec359-9c70-4f34-83bd-46142538781f', '4a00be0a-344d-49ed-b317-c637b15296d7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2bfec359-9c70-4f34-83bd-46142538781f', 'ea3e989f-c008-4dda-932c-41ddb6518ade');
+**Modifications:** string', 'string', '2024-03-17 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b9e4718c-179a-4d5c-b31b-74acda27b6b9', '5c894fc8-60a2-45dd-91b1-9f79dff4e0ba');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b9e4718c-179a-4d5c-b31b-74acda27b6b9', 'eebdd37c-3133-46ce-8935-62b18fa4c159');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('b9e4718c-179a-4d5c-b31b-74acda27b6b9', 'e8c5b879-af46-47f0-a592-53db389b92ba');
 
 -- Recipe: Sauce For Fried Rice
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('0d448243-216f-425b-b094-863c6269be81', 'Sauce For Fried Rice', '', 'food', 'chinese', '- 1/3 cup Soy sauce
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('8388ad9f-bfb5-4e91-9e07-b8d0e6a8ca3c', 'Sauce For Fried Rice', '', 'food', 'chinese', '- 1/3 cup Soy sauce
 - 1/3 cup Oyster sauce
 - 1/3 cup Mirin
 - 1/4 cup Sesame oil
@@ -985,12 +985,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Use approximately 1-1/2 to 2 tablespoons of sauce for every cup of rice in your fried rice recipe. Taste and add more if desired.', '', '**Name:** Savor The Best
 **URL:** https://savorthebest.com/sauce-for-fried-rice/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('0d448243-216f-425b-b094-863c6269be81', '15c3d6b7-d766-4bd1-b3fc-3516efc12743');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('0d448243-216f-425b-b094-863c6269be81', '066352c6-6c41-49b4-990c-8001422ad0ec');
+**Modifications:** minimal', 'croach', '2023-09-18 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('8388ad9f-bfb5-4e91-9e07-b8d0e6a8ca3c', '4eeaa8c2-2c13-4890-ac1d-1fd6e62b78d2');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('8388ad9f-bfb5-4e91-9e07-b8d0e6a8ca3c', 'ded8b91c-1339-4cc9-b4bc-3d27a7e54425');
 
 -- Recipe: Smoked Salmon Pasta
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('e0ab3900-b5ae-4e1b-8279-708b633c2ae3', 'Smoked Salmon Pasta', '', 'food', 'western', '- 1 large brown onion, thinly sliced
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('9cc35f38-72ca-44c7-9044-258ba62763d9', 'Smoked Salmon Pasta', '', 'food', 'western', '- 1 large brown onion, thinly sliced
 - 2 tablespoons olive oil
 - 500g button mushrooms, peeled and sliced
 - 600 grams smoked salmon, roughly sliced
@@ -1005,14 +1005,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - Cook the pasta and add the sauce', '', '**Name:** Gina
 **URL:** string
 **Type:** string
-**Modifications:** string', 'geenie', '2025-04-06 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e0ab3900-b5ae-4e1b-8279-708b633c2ae3', '84054a02-7265-438d-9c91-59bb82eac5bb');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e0ab3900-b5ae-4e1b-8279-708b633c2ae3', '7510f11e-05f7-43b9-8d9b-cb4ed8c88a0a');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e0ab3900-b5ae-4e1b-8279-708b633c2ae3', 'ec7be182-0d53-409f-b44f-6f6a7ee3d2cb');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('e0ab3900-b5ae-4e1b-8279-708b633c2ae3', 'b20a086f-5c94-405c-8337-cb41f1ba1e4b');
+**Modifications:** string', 'geenie', '2025-04-06 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9cc35f38-72ca-44c7-9044-258ba62763d9', 'e7c3939f-e679-4565-815a-df2b627a5975');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9cc35f38-72ca-44c7-9044-258ba62763d9', '9f967f58-882b-44bb-8a0e-37a749d07be2');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9cc35f38-72ca-44c7-9044-258ba62763d9', '54b98854-328d-42d4-921e-2b03b1c26427');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('9cc35f38-72ca-44c7-9044-258ba62763d9', '47affdf1-3a8c-4141-abd4-57f2df036197');
 
 -- Recipe: Sweet And Sour Fish
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('654d785e-ea68-44b6-aa68-a3087395fcb2', 'Sweet And Sour Fish', '', 'food', 'chinese', '### TODO: how to handle subheadings?
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('268f30a5-1faa-4791-bd46-ef88e60670e5', 'Sweet And Sour Fish', '', 'food', 'chinese', '### TODO: how to handle subheadings?
 
 ### For the fish:
 - 900g fish cut into small portions (i used frozen basa)
@@ -1053,14 +1053,14 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - try adding some msg in the sauce', '**Name:** The Woks of Life
 **URL:** https://thewoksoflife.com/sweet-sour-fish-fillet/
 **Type:** copy
-**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('654d785e-ea68-44b6-aa68-a3087395fcb2', 'f183c0d5-e626-4a0b-81b1-8d0fa1edd525');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('654d785e-ea68-44b6-aa68-a3087395fcb2', 'e7d6fcaf-67e6-43fc-b27a-df109bf1f48f');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('654d785e-ea68-44b6-aa68-a3087395fcb2', 'c975b4ff-632c-4260-8d66-7f8bc6175585');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('654d785e-ea68-44b6-aa68-a3087395fcb2', '8e1fab76-3337-4e96-9c7e-7086abf443c4');
+**Modifications:** some, quantities and ingredients', 'croach', '2023-11-18 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('268f30a5-1faa-4791-bd46-ef88e60670e5', '199f9fe4-931a-4a3d-9997-5a0da0fc08e8');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('268f30a5-1faa-4791-bd46-ef88e60670e5', '2a0a36d6-6f1b-47a1-aac1-241eceeb4d47');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('268f30a5-1faa-4791-bd46-ef88e60670e5', 'fd9aea94-7f1b-4469-8261-8a3540298f12');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('268f30a5-1faa-4791-bd46-ef88e60670e5', '688c3927-f029-4fee-9a6a-117d7eff5b32');
 
 -- Recipe: Tomato Egg Prawn Stirfry
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('dad2aa23-dc1d-4df3-a7a9-d2e5dba96804', 'Tomato Egg Prawn Stirfry', '', 'food', 'chinese', '- 3 very large tomatoes
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('1b9ae5af-5b30-4221-bd3d-ced8774f0070', 'Tomato Egg Prawn Stirfry', '', 'food', 'chinese', '- 3 very large tomatoes
 - 500g prawns
 - 6 eggs
 - 5 cloves of garlic, minced or chopped
@@ -1089,15 +1089,15 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - try adding 1 or 2tbsp of tomato sauce for more tomato richness', '**Name:** Genius Eats
 **URL:** https://www.therecipesource.com/the-recipe
 **Type:** copy
-**Modifications:** ratios, ingredients', 'croach', '2023-12-01 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('dad2aa23-dc1d-4df3-a7a9-d2e5dba96804', 'f3e8bc0b-57e9-46a0-9f47-b5b24c167de3');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('dad2aa23-dc1d-4df3-a7a9-d2e5dba96804', 'aa4fae34-ebb3-40d3-a4b3-dbca1d160f3a');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('dad2aa23-dc1d-4df3-a7a9-d2e5dba96804', '2952c1e3-98c0-4633-ade0-83a6f76ce048');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('dad2aa23-dc1d-4df3-a7a9-d2e5dba96804', 'e2758055-704f-4964-af5b-85e4362785b7');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('dad2aa23-dc1d-4df3-a7a9-d2e5dba96804', '066352c6-6c41-49b4-990c-8001422ad0ec');
+**Modifications:** ratios, ingredients', 'croach', '2023-12-01 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1b9ae5af-5b30-4221-bd3d-ced8774f0070', '59baced6-f928-4c73-9025-1e637edce320');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1b9ae5af-5b30-4221-bd3d-ced8774f0070', '5efc65e4-56ff-4d6f-9f72-31b8bca15982');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1b9ae5af-5b30-4221-bd3d-ced8774f0070', '76e8e1d6-c97a-44d4-9635-02a82a9c9f68');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1b9ae5af-5b30-4221-bd3d-ced8774f0070', '4d35ba6d-8646-47c9-a1e1-759d79cb0453');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('1b9ae5af-5b30-4221-bd3d-ced8774f0070', 'ded8b91c-1339-4cc9-b4bc-3d27a7e54425');
 
 -- Recipe: Unagi Sauce
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('524f75df-6999-49cc-813d-e7ea66517b28', 'Unagi Sauce', '', 'food', 'japanese', '- 60ml mirin
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('15a43080-00af-4b8d-9727-2a41eaf454b9', 'Unagi Sauce', '', 'food', 'japanese', '- 60ml mirin
 - 1½ Tbsp sake
 - 2½ Tbsp sugar
 - 60ml soy sauce', '- In a small saucepan, add the mirin, sake and sugar. Turn on the heat to medium and whisk all the ingredients together.
@@ -1106,12 +1106,12 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - A great way to dress up frozen unagi. Leftovers can be used to dress fried rice for a sweeter taste.', '**Name:** Just One Cookbook
 **URL:** https://www.justonecookbook.com/homemade-unagi-sauce/
 **Type:** copy
-**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('524f75df-6999-49cc-813d-e7ea66517b28', '15c3d6b7-d766-4bd1-b3fc-3516efc12743');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('524f75df-6999-49cc-813d-e7ea66517b28', 'c09aa1f2-1457-42ac-8db4-eb62fa0c0cde');
+**Modifications:** minimal', 'croach', '2023-09-14 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('15a43080-00af-4b8d-9727-2a41eaf454b9', '4eeaa8c2-2c13-4890-ac1d-1fd6e62b78d2');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('15a43080-00af-4b8d-9727-2a41eaf454b9', 'dad6b78e-d9c6-4ac7-8703-a609b1fefddc');
 
 -- Recipe: Vietnamese Noodle Salad
-INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('2eb005bf-ea8b-4056-ac97-7e21d342706b', 'Vietnamese Noodle Salad', '', 'food', 'vietnamese', '### For the chicken & marinade:
+INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, method, notes, sources, created_by_name, created_at, updated_at) VALUES ('42b51b69-3da6-4032-9129-80855a661953', 'Vietnamese Noodle Salad', '', 'food', 'vietnamese', '### For the chicken & marinade:
 - 450 g boneless, skinless chicken thighs
 - 2 cloves garlic, minced
 - 1 lime, juiced
@@ -1149,8 +1149,8 @@ INSERT INTO recipes (id, title, description, recipe_type, cuisine, ingredients, 
 - We haven''t actually tried this with the chicken yet, do that!', '**Name:** The Woks of Life
 **URL:** https://thewoksoflife.com/vietnamese-rice-noodle-salad-chicken/
 **Type:** string
-**Modifications:** removed meat', 'meggles', '2024-03-24 00:00:00', '2026-01-31 13:53:15');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2eb005bf-ea8b-4056-ac97-7e21d342706b', '380ae7f7-bb10-4dae-b21d-2528ab0517e5');
-INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('2eb005bf-ea8b-4056-ac97-7e21d342706b', '64f3e53f-948b-4b98-bb9e-9782d8cc9738');
+**Modifications:** removed meat', 'meggles', '2024-03-24 00:00:00', '2026-02-02 22:09:32');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('42b51b69-3da6-4032-9129-80855a661953', '8b6b1c24-e64f-4ce0-9aa8-08c1d6e3feac');
+INSERT INTO recipe_tags (recipe_id, tag_id) VALUES ('42b51b69-3da6-4032-9129-80855a661953', '17350f9f-f2dd-4d3d-a77d-cdad7ea7fb02');
 
 COMMIT;

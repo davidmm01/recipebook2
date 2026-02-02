@@ -22,9 +22,10 @@ const (
 )
 
 var (
-	db         *sql.DB
-	dbMutex    sync.RWMutex
-	bucketName string
+	db             *sql.DB
+	dbMutex        sync.RWMutex
+	bucketName     string
+	dbSyncDisabled bool
 )
 
 // Icon represents a recipe icon
@@ -771,6 +772,10 @@ func downloadDBFromGCS(ctx context.Context) error {
 // increases the bill since you pay for CPU even between requests. Not worth it
 // at this stage.
 func uploadDBToGCS(ctx context.Context) error {
+	if dbSyncDisabled {
+		return nil
+	}
+
 	// Force WAL checkpoint so all writes are flushed to the main .db file.
 	// Without this, recent writes may only exist in the -wal file and won't
 	// be included when we read/upload the main database file.
@@ -1322,8 +1327,8 @@ func createIcon(ctx context.Context, filename, iconURL string) (string, error) {
 	return id, nil
 }
 
-// GetAllTags returns all unique tags in the database, optionally filtered by recipe type
-func GetAllTags(ctx context.Context, recipeType string) ([]string, error) {
+// GetAllTagsWithCounts returns all tags with their usage counts, optionally filtered by recipe type
+func GetAllTagsWithCounts(ctx context.Context, recipeType string) ([]TagWithCount, error) {
 	dbMutex.RLock()
 	defer dbMutex.RUnlock()
 
@@ -1331,19 +1336,24 @@ func GetAllTags(ctx context.Context, recipeType string) ([]string, error) {
 	var args []interface{}
 
 	if recipeType != "" {
-		// Filter tags by recipe type
 		query = `
-			SELECT DISTINCT t.name
+			SELECT t.name, COUNT(rt.recipe_id) as count
 			FROM tags t
-			JOIN recipe_tags rt ON t.id = rt.tag_id
-			JOIN recipes r ON rt.recipe_id = r.id
-			WHERE r.recipe_type = ?
-			ORDER BY t.name
+			LEFT JOIN recipe_tags rt ON t.id = rt.tag_id
+			LEFT JOIN recipes r ON rt.recipe_id = r.id AND r.recipe_type = ?
+			GROUP BY t.id, t.name
+			HAVING count > 0
+			ORDER BY count DESC, t.name ASC
 		`
 		args = append(args, recipeType)
 	} else {
-		// Get all tags
-		query = `SELECT name FROM tags ORDER BY name`
+		query = `
+			SELECT t.name, COUNT(rt.recipe_id) as count
+			FROM tags t
+			LEFT JOIN recipe_tags rt ON t.id = rt.tag_id
+			GROUP BY t.id, t.name
+			ORDER BY count DESC, t.name ASC
+		`
 	}
 
 	rows, err := db.QueryContext(ctx, query, args...)
@@ -1352,10 +1362,10 @@ func GetAllTags(ctx context.Context, recipeType string) ([]string, error) {
 	}
 	defer rows.Close()
 
-	var tags []string
+	var tags []TagWithCount
 	for rows.Next() {
-		var tag string
-		if err := rows.Scan(&tag); err != nil {
+		var tag TagWithCount
+		if err := rows.Scan(&tag.Name, &tag.Count); err != nil {
 			return nil, err
 		}
 		tags = append(tags, tag)
@@ -1402,6 +1412,12 @@ func GetAllCuisines(ctx context.Context, recipeType string) ([]string, error) {
 	}
 
 	return cuisines, rows.Err()
+}
+
+// TagWithCount represents a tag with its usage count
+type TagWithCount struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
 }
 
 // Helper functions for tag management

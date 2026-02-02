@@ -46,11 +46,11 @@ function RecipeFilters({ onFilterChange, recipeType }) {
     });
   }, [search, selectedTags, selectedCuisine, sortBy, onFilterChange]);
 
-  const handleTagToggle = (tag) => {
+  const handleTagToggle = (tagName) => {
     setSelectedTags(prev =>
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
+      prev.includes(tagName)
+        ? prev.filter(t => t !== tagName)
+        : [...prev, tagName]
     );
   };
 
@@ -120,14 +120,14 @@ function RecipeFilters({ onFilterChange, recipeType }) {
           <div style={styles.tagContainer}>
             {availableTags.map(tag => (
               <button
-                key={tag}
-                onClick={() => handleTagToggle(tag)}
+                key={tag.name}
+                onClick={() => handleTagToggle(tag.name)}
                 style={{
                   ...styles.tagButton,
-                  ...(selectedTags.includes(tag) ? styles.tagButtonActive : {})
+                  ...(selectedTags.includes(tag.name) ? styles.tagButtonActive : {})
                 }}
               >
-                {tag}
+                {tag.name}
               </button>
             ))}
           </div>

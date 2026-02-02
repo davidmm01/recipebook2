@@ -1,7 +1,7 @@
 {
   "environment": "local",
   "port": "8080",
-  "db_bucket_name": "local-recipebook-db",
-  "images_bucket_name": "local-recipebook-images",
+  "db_bucket_name": "recipebook2-d0440-recipebook-db",
+  "db_sync_disabled": true,
   "firebase_service_account_path": "./service-account.json"
 }

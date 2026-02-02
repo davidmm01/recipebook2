@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { createRecipe, updateRecipe } from '../utils/api';
 import IconManager from './IconManager';
 import ImageManager from './ImageManager';
+import TagPicker from './TagPicker';
+import CuisinePicker from './CuisinePicker';
 import MDEditor from '@uiw/react-md-editor';
 
 function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRecipeType = 'food' }) {
@@ -12,7 +14,7 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
     description: '',
     type: defaultRecipeType,
     cuisine: '',
-    tags: '',
+    tags: [],
     ingredients: '',
     method: '',
     notes: '',
@@ -31,7 +33,7 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
         description: initialRecipe.description || '',
         type: initialRecipe.type || defaultRecipeType,
         cuisine: initialRecipe.cuisine || '',
-        tags: initialRecipe.tags ? initialRecipe.tags.join(', ') : '',
+        tags: initialRecipe.tags || [],
         ingredients: initialRecipe.ingredients || '',
         method: initialRecipe.method || '',
         notes: initialRecipe.notes || '',
@@ -50,15 +52,8 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
     setError('');
 
     try {
-      // Convert tags string to array
-      const tagsArray = formData.tags
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
-
       const recipeData = {
         ...formData,
-        tags: tagsArray
       };
 
       if (isEditing) {
@@ -74,7 +69,7 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
           description: '',
           type: defaultRecipeType,
           cuisine: '',
-          tags: '',
+          tags: [],
           ingredients: '',
           method: '',
           notes: '',
@@ -155,25 +150,19 @@ function RecipeForm({ initialRecipe, onRecipeCreated, onRecipeUpdated, defaultRe
         <div style={styles.row}>
           <div style={styles.field}>
             <label style={styles.label}>Cuisine</label>
-            <input
-              type="text"
-              name="cuisine"
+            <CuisinePicker
               value={formData.cuisine}
-              onChange={handleChange}
-              style={styles.input}
-              placeholder="e.g., italian, mexican, chinese"
+              onChange={(cuisine) => setFormData(prev => ({ ...prev, cuisine }))}
+              recipeType={formData.type}
             />
           </div>
 
           <div style={styles.field}>
             <label style={styles.label}>Tags</label>
-            <input
-              type="text"
-              name="tags"
-              value={formData.tags}
-              onChange={handleChange}
-              style={styles.input}
-              placeholder="pasta, quick, vegetarian (comma-separated)"
+            <TagPicker
+              selectedTags={formData.tags}
+              onChange={(tags) => setFormData(prev => ({ ...prev, tags }))}
+              recipeType={formData.type}
             />
           </div>
         </div>

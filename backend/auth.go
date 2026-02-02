@@ -15,13 +15,13 @@ import (
 var firebaseAuth *auth.Client
 
 // InitFirebase initializes Firebase Admin SDK
-func InitFirebase(ctx context.Context) error {
+func InitFirebase(ctx context.Context, configPath string) error {
 	// If running in GCP (Cloud Run), Firebase will use Application Default Credentials
-	// For local development, set GOOGLE_APPLICATION_CREDENTIALS env var to service account JSON
+	// For local development, set firebase_service_account_path in config or GOOGLE_APPLICATION_CREDENTIALS env var
 	var app *firebase.App
 	var err error
 
-	if path := serviceAccountPath(); path != "" {
+	if path := serviceAccountPath(configPath); path != "" {
 		app, err = firebase.NewApp(ctx, nil, option.WithCredentialsFile(path))
 	} else {
 		// Use default credentials (works in Cloud Run)
@@ -41,8 +41,12 @@ func InitFirebase(ctx context.Context) error {
 	return nil
 }
 
-func serviceAccountPath() string {
-	// Check for service account file path in environment
+func serviceAccountPath(configPath string) string {
+	// Check config file path first
+	if configPath != "" {
+		return configPath
+	}
+	// Fall back to environment variable
 	if path := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"); path != "" {
 		return path
 	}
