@@ -33,15 +33,17 @@ auto-promote-admin: ## Background: auto-promote all local dev users to admin
 		sleep 2; \
 	done
 
-db-setup: ## Setup database with recipes
-	@cd backend && make import-and-load
-	@echo ""
-	@echo "Database setup complete!"
-
-db-reset: ## Delete old database and recreate with fresh data
-	@echo "Resetting database..."
-	@rm -f /tmp/recipes.db
-	@cd backend && make import-and-load
+db-reset: ## Pull latest database backup from GCP
+	@echo "Pulling latest database backup from GCP..."
+	@rm -f /tmp/recipes.db /tmp/recipes.db-wal /tmp/recipes.db-shm
+	@LATEST_BACKUP=$$(gsutil ls -l gs://recipebook2-d0440-recipebook-backups/*.db 2>/dev/null | grep -v TOTAL | sort -k2 | tail -1 | awk '{print $$3}'); \
+	if [ -z "$$LATEST_BACKUP" ]; then \
+		echo "No backups found, downloading from primary DB bucket..."; \
+		gsutil cp gs://recipebook2-d0440-recipebook-db/recipes.db /tmp/recipes.db; \
+	else \
+		echo "Downloading: $$LATEST_BACKUP"; \
+		gsutil cp "$$LATEST_BACKUP" /tmp/recipes.db; \
+	fi
 	@echo ""
 	@echo "Database reset complete!"
 

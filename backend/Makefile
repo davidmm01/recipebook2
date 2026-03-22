@@ -78,21 +78,4 @@ dev: ## Run in development mode with auto-reload (requires air)
 install-dev-tools: ## Install development tools
 	go install github.com/air-verse/air@latest
 
-db-init: ## Initialize database schema
-	@echo "Initializing database schema..."
-	@sqlite3 /tmp/recipes.db < schema.sql
-	@echo "Database schema initialized"
-
-import-recipes: ## Generate SQL import script from YAML recipes
-	go run cmd/import-recipes/main.go .
-	@echo ""
-	@echo "Generated import.sql file with $(shell grep -c "^-- Recipe:" import.sql) recipes"
-	@echo ""
-	@echo "To import into your database, run:"
-	@echo "  sqlite3 /tmp/recipes.db < import.sql"
-
-import-and-load: db-init import-recipes ## Initialize schema, generate and load recipes into database
-	@sqlite3 /tmp/recipes.db < import.sql
-	@echo "Successfully imported recipes into database"
-
 all: lint test build ## Run lint, test, and build
