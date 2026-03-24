@@ -51,6 +51,15 @@ func clearTables(t *testing.T) {
 	}
 }
 
+func makeTestUser(uid, email, role string) *DBUser {
+	ctx := context.Background()
+	user, err := CreateUser(ctx, uid, email, role)
+	if err != nil {
+		panic("makeTestUser failed: " + err.Error())
+	}
+	return user
+}
+
 func makeTestRecipe(title string) *Recipe {
 	return &Recipe{
 		Title:       title,
@@ -742,6 +751,130 @@ func TestDeleteMakeLog_Success(t *testing.T) {
 	}
 	if len(logs) != 0 {
 		t.Errorf("expected 0 logs after delete, got %d", len(logs))
+	}
+}
+
+// --- User tests ---
+
+func TestCreateUser_Success(t *testing.T) {
+	clearTables(t)
+
+	user := makeTestUser("uid-1", "alice@example.com", "viewer")
+	if user.FirebaseUID != "uid-1" {
+		t.Errorf("expected UID 'uid-1', got '%s'", user.FirebaseUID)
+	}
+	if user.Role != "viewer" {
+		t.Errorf("expected role 'viewer', got '%s'", user.Role)
+	}
+}
+
+func TestGetUserByUID_Found(t *testing.T) {
+	clearTables(t)
+	makeTestUser("uid-1", "alice@example.com", "editor")
+
+	user, err := GetUserByUID(context.Background(), "uid-1")
+	if err != nil {
+		t.Fatalf("GetUserByUID failed: %v", err)
+	}
+	if user == nil {
+		t.Fatal("expected user, got nil")
+	}
+	if user.Email != "alice@example.com" {
+		t.Errorf("expected email 'alice@example.com', got '%s'", user.Email)
+	}
+	if user.Role != "editor" {
+		t.Errorf("expected role 'editor', got '%s'", user.Role)
+	}
+}
+
+func TestGetUserByUID_NotFound(t *testing.T) {
+	clearTables(t)
+
+	user, err := GetUserByUID(context.Background(), "nonexistent-uid")
+	if err != nil {
+		t.Fatalf("GetUserByUID failed: %v", err)
+	}
+	if user != nil {
+		t.Errorf("expected nil for missing user, got %+v", user)
+	}
+}
+
+func TestGetAllUsers_Empty(t *testing.T) {
+	clearTables(t)
+
+	users, err := GetAllUsers(context.Background())
+	if err != nil {
+		t.Fatalf("GetAllUsers failed: %v", err)
+	}
+	if len(users) != 0 {
+		t.Errorf("expected 0 users, got %d", len(users))
+	}
+}
+
+func TestGetAllUsers_ReturnsAll(t *testing.T) {
+	clearTables(t)
+	makeTestUser("uid-1", "alice@example.com", "viewer")
+	makeTestUser("uid-2", "bob@example.com", "editor")
+	makeTestUser("uid-3", "carol@example.com", "admin")
+
+	users, err := GetAllUsers(context.Background())
+	if err != nil {
+		t.Fatalf("GetAllUsers failed: %v", err)
+	}
+	if len(users) != 3 {
+		t.Errorf("expected 3 users, got %d", len(users))
+	}
+}
+
+func TestGetAllUsers_OrderedByEmail(t *testing.T) {
+	clearTables(t)
+	makeTestUser("uid-1", "zara@example.com", "viewer")
+	makeTestUser("uid-2", "alice@example.com", "viewer")
+	makeTestUser("uid-3", "mike@example.com", "viewer")
+
+	users, err := GetAllUsers(context.Background())
+	if err != nil {
+		t.Fatalf("GetAllUsers failed: %v", err)
+	}
+	if users[0].Email != "alice@example.com" {
+		t.Errorf("expected first user to be alice@example.com, got '%s'", users[0].Email)
+	}
+	if users[2].Email != "zara@example.com" {
+		t.Errorf("expected last user to be zara@example.com, got '%s'", users[2].Email)
+	}
+}
+
+func TestUpdateUserRole_Success(t *testing.T) {
+	clearTables(t)
+	makeTestUser("uid-1", "alice@example.com", "viewer")
+
+	if err := UpdateUserRole(context.Background(), "uid-1", "admin"); err != nil {
+		t.Fatalf("UpdateUserRole failed: %v", err)
+	}
+
+	user, err := GetUserByUID(context.Background(), "uid-1")
+	if err != nil {
+		t.Fatalf("GetUserByUID failed: %v", err)
+	}
+	if user.Role != "admin" {
+		t.Errorf("expected role 'admin', got '%s'", user.Role)
+	}
+}
+
+func TestUpdateUserDisplayName_Success(t *testing.T) {
+	clearTables(t)
+	makeTestUser("uid-1", "alice@example.com", "viewer")
+
+	if err := UpdateUserDisplayName(context.Background(), "uid-1", "Alice Smith"); err != nil {
+		t.Fatalf("UpdateUserDisplayName failed: %v", err)
+	}
+
+	user, err := GetUserByUID(context.Background(), "uid-1")
+	if err != nil {
+		t.Fatalf("GetUserByUID failed: %v", err)
+	}
+	if user.DisplayName != "Alice Smith" {
+		t.Errorf("expected display name 'Alice Smith', got '%s'", user.DisplayName)
 	}
 }
 
