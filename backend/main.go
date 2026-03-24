@@ -9,6 +9,13 @@ import (
 	"strings"
 )
 
+// AuthFunc validates a request and returns the caller's Firebase UID.
+type AuthFunc func(r *http.Request) (string, error)
+
+// authenticate is the auth function used by all handlers.
+// Overridden in tests to avoid live Firebase calls.
+var authenticate AuthFunc = authenticateRequest
+
 func main() {
 	ctx := context.Background()
 
@@ -105,7 +112,7 @@ func recipesHandler(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodPost:
 		// Auth required for writes
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -167,7 +174,7 @@ func recipeByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodPut:
 		// Auth required for writes
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -191,8 +198,7 @@ func recipeByIDHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(recipe)
 
 	case http.MethodDelete:
-		// Auth required for writes
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -216,6 +222,7 @@ func recipeByIDHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
+
 		isOwner := recipe.CreatedByUserID != nil && *recipe.CreatedByUserID == userID
 		if caller.Role != "admin" && !isOwner {
 			http.Error(w, "Forbidden", http.StatusForbidden)
@@ -309,7 +316,7 @@ func imageUploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Auth required
-	userID, err := authenticateRequest(r)
+	userID, err := authenticate(r)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -390,7 +397,7 @@ func iconsHandler(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodPost:
 		// Auth required for uploads
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -470,7 +477,7 @@ func makeLogsHandler(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodPost:
 		// Auth required for creating make logs
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -514,7 +521,7 @@ func makeLogByIDHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPut:
 		// Auth required for updating make logs
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -540,7 +547,7 @@ func makeLogByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	case http.MethodDelete:
 		// Auth required for deleting make logs
-		userID, err := authenticateRequest(r)
+		userID, err := authenticate(r)
 		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
