@@ -12,7 +12,7 @@ func userProfileHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Auth required
-	userID, err := authenticateRequest(r)
+	userID, err := authenticate(r)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return

@@ -52,8 +52,7 @@ func clearTables(t *testing.T) {
 }
 
 func makeTestUser(uid, email, role string) *DBUser {
-	ctx := context.Background()
-	user, err := CreateUser(ctx, uid, email, role)
+	user, err := CreateUser(context.Background(), uid, email, role)
 	if err != nil {
 		panic("makeTestUser failed: " + err.Error())
 	}
