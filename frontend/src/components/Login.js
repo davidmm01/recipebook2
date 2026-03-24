@@ -27,40 +27,39 @@ function Login({ user, onProfileClick }) {
   };
 
   if (user) {
+    const emailDisplay = user.email.length > 22 ? user.email.slice(0, 22) + '…' : user.email;
     return (
-      <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-        <p>
-          Logged in as: {user.email}
-          <RoleDisplay />
-        </p>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button
-            onClick={onProfileClick}
-            style={{
-              padding: '10px 20px',
-              cursor: 'pointer',
-              backgroundColor: 'white',
-              border: '1px solid #007bff',
-              color: '#007bff',
-              borderRadius: '4px'
-            }}
-          >
-            Profile
-          </button>
-          <button
-            onClick={handleSignOut}
-            style={{
-              padding: '10px 20px',
-              cursor: 'pointer',
-              backgroundColor: '#dc3545',
-              border: 'none',
-              color: 'white',
-              borderRadius: '4px'
-            }}
-          >
-            Sign Out
-          </button>
-        </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '14px', color: '#333' }} title={user.email}>{emailDisplay}</span>
+        <RoleDisplay />
+        <button
+          onClick={onProfileClick}
+          style={{
+            padding: '4px 10px',
+            fontSize: '13px',
+            cursor: 'pointer',
+            backgroundColor: 'white',
+            border: '1px solid #007bff',
+            color: '#007bff',
+            borderRadius: '4px'
+          }}
+        >
+          Profile
+        </button>
+        <button
+          onClick={handleSignOut}
+          style={{
+            padding: '4px 10px',
+            fontSize: '13px',
+            cursor: 'pointer',
+            backgroundColor: 'white',
+            border: '1px solid #dc3545',
+            color: '#dc3545',
+            borderRadius: '4px'
+          }}
+        >
+          Sign Out
+        </button>
       </div>
     );
   }
