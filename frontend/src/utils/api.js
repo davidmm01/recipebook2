@@ -207,6 +207,19 @@ export async function updateUserProfile(updates) {
   });
 }
 
+// Admin API functions
+
+export async function getAdminUsers() {
+  return await authenticatedFetch('/admin/users');
+}
+
+export async function updateUserRole(uid, role) {
+  return await authenticatedFetch(`/admin/users/${uid}/role`, {
+    method: 'PUT',
+    body: JSON.stringify({ role }),
+  });
+}
+
 // Make Log API functions
 
 export async function getMakeLogs(recipeId) {

@@ -227,6 +227,56 @@ func TestCuisinesHandler_Get(t *testing.T) {
 	}
 }
 
+// --- Admin handlers ---
+
+func TestAdminUsersListHandler_Unauthorized(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/admin/users", nil)
+	w := httptest.NewRecorder()
+
+	adminUsersListHandler(w, req)
+
+	if w.Code != http.StatusUnauthorized {
+		t.Errorf("expected 401, got %d", w.Code)
+	}
+}
+
+func TestAdminUsersListHandler_MethodNotAllowed(t *testing.T) {
+	for _, method := range []string{http.MethodPost, http.MethodPut, http.MethodDelete} {
+		req := httptest.NewRequest(method, "/admin/users", nil)
+		w := httptest.NewRecorder()
+
+		adminUsersListHandler(w, req)
+
+		if w.Code != http.StatusMethodNotAllowed {
+			t.Errorf("method %s: expected 405, got %d", method, w.Code)
+		}
+	}
+}
+
+func TestAdminUpdateRoleHandler_Unauthorized(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPut, "/admin/users/some-uid/role", nil)
+	w := httptest.NewRecorder()
+
+	adminUpdateRoleHandler(w, req)
+
+	if w.Code != http.StatusUnauthorized {
+		t.Errorf("expected 401, got %d", w.Code)
+	}
+}
+
+func TestAdminUpdateRoleHandler_MethodNotAllowed(t *testing.T) {
+	for _, method := range []string{http.MethodGet, http.MethodPost, http.MethodDelete} {
+		req := httptest.NewRequest(method, "/admin/users/some-uid/role", nil)
+		w := httptest.NewRecorder()
+
+		adminUpdateRoleHandler(w, req)
+
+		if w.Code != http.StatusMethodNotAllowed {
+			t.Errorf("method %s: expected 405, got %d", method, w.Code)
+		}
+	}
+}
+
 // --- Make logs handler ---
 
 func TestMakeLogsHandler_GetEmpty(t *testing.T) {

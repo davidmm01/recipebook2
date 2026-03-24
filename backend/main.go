@@ -54,6 +54,9 @@ func main() {
 	http.HandleFunc("/icons", corsMiddleware(iconsHandler))
 	// User profile endpoint
 	http.HandleFunc("/user/profile", corsMiddleware(userProfileHandler))
+	// Admin endpoints
+	http.HandleFunc("/admin/users", corsMiddleware(adminUsersListHandler))
+	http.HandleFunc("/admin/users/", corsMiddleware(adminUpdateRoleHandler))
 	// Make log endpoints
 	http.HandleFunc("/make-logs/", corsMiddleware(makeLogsHandler))
 	http.HandleFunc("/make-log/", corsMiddleware(makeLogByIDHandler))
@@ -194,7 +197,32 @@ func recipeByIDHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		log.Printf("Deleting recipe - authenticated user: %s", userID)
+
+		// Fetch recipe to check ownership
+		recipe, err := GetRecipeByID(r.Context(), recipeID)
+		if err != nil {
+			log.Printf("Error fetching recipe for delete: %v", err)
+			http.Error(w, "Failed to fetch recipe", http.StatusInternalServerError)
+			return
+		}
+		if recipe == nil {
+			http.Error(w, "Recipe not found", http.StatusNotFound)
+			return
+		}
+
+		// Check permission: admin can delete any recipe; others can only delete their own
+		caller, err := GetUserByUID(r.Context(), userID)
+		if err != nil || caller == nil {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		isOwner := recipe.CreatedByUserID != nil && *recipe.CreatedByUserID == userID
+		if caller.Role != "admin" && !isOwner {
+			http.Error(w, "Forbidden", http.StatusForbidden)
+			return
+		}
+
+		log.Printf("Deleting recipe %s - user: %s (role: %s, owner: %v)", recipeID, userID, caller.Role, isOwner)
 
 		if err := DeleteRecipe(r.Context(), recipeID); err != nil {
 			log.Printf("Error deleting recipe: %v", err)

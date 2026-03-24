@@ -7,6 +7,7 @@ import RecipeForm from './components/RecipeForm';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeFilters from './components/RecipeFilters';
 import UserProfile from './components/UserProfile';
+import UserManagement from './components/UserManagement';
 import { useUserRole } from './hooks/useUserRole';
 
 function App() {
@@ -20,8 +21,9 @@ function App() {
   });
   const [filters, setFilters] = useState({});
   const [showProfile, setShowProfile] = useState(false);
+  const [showUserManagement, setShowUserManagement] = useState(false);
   const [recipeType, setRecipeType] = useState('food');
-  const { canEdit } = useUserRole(user);
+  const { canEdit, isAdmin } = useUserRole(user);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -67,12 +69,32 @@ function App() {
         <div style={{ flex: 1 }}></div>
         <h1 style={{ margin: 0, flex: 1, textAlign: 'center' }}>recipebook2</h1>
         <div style={{ flex: 1, display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'flex-end' }}>
+          {isAdmin && (
+            <button
+              onClick={() => setShowUserManagement(true)}
+              style={{
+                padding: '4px 10px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                backgroundColor: 'white',
+                border: '1px solid #6c757d',
+                color: '#6c757d',
+                borderRadius: '4px'
+              }}
+            >
+              Manage Users
+            </button>
+          )}
           <Login user={user} onProfileClick={() => setShowProfile(true)} />
         </div>
       </div>
 
       {showProfile && (
         <UserProfile onClose={() => setShowProfile(false)} />
+      )}
+
+      {showUserManagement && (
+        <UserManagement onClose={() => setShowUserManagement(false)} />
       )}
 
       {user && (

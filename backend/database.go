@@ -1677,6 +1677,33 @@ func UpdateUserRole(ctx context.Context, firebaseUID, role string) error {
 	return nil
 }
 
+// GetAllUsers returns all users ordered by email
+func GetAllUsers(ctx context.Context) ([]DBUser, error) {
+	dbMutex.RLock()
+	defer dbMutex.RUnlock()
+
+	query := `SELECT firebase_uid, email, display_name, role, created_at, last_login_at FROM users ORDER BY email`
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []DBUser
+	for rows.Next() {
+		var user DBUser
+		var displayName sql.NullString
+		if err := rows.Scan(&user.FirebaseUID, &user.Email, &displayName, &user.Role, &user.CreatedAt, &user.LastLoginAt); err != nil {
+			return nil, err
+		}
+		if displayName.Valid {
+			user.DisplayName = displayName.String
+		}
+		users = append(users, user)
+	}
+	return users, rows.Err()
+}
+
 // Make log management functions
 
 // GetMakeLogsByRecipe returns all make logs for a given recipe

@@ -259,7 +259,7 @@ function RecipeDetail({ recipeId, onBack }) {
             ✏️ Edit Recipe
           </button>
         )}
-        {isAdmin && (
+        {(isAdmin || (user && recipe.createdByUserId === user.uid)) && (
           <button
             onClick={handleDelete}
             style={{...styles.backButton, ...styles.deleteButton}}
