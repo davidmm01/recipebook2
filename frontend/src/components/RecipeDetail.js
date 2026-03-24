@@ -22,6 +22,7 @@ function RecipeDetail({ recipeId, onBack }) {
   const [editFormData, setEditFormData] = useState({ madeAt: '', notes: '' });
   const [cookingMode, setCookingMode] = useState(false);
   const [wakeLock, setWakeLock] = useState(null);
+  const [shareCopied, setShareCopied] = useState(false);
   const user = auth.currentUser;
   const { canEdit, isAdmin } = useUserRole(user);
 
@@ -77,6 +78,25 @@ function RecipeDetail({ recipeId, onBack }) {
   if (!recipe) {
     return <div style={styles.container}>Recipe not found</div>;
   }
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/recipes/${recipeId}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: recipe.title, text: recipe.description || recipe.title, url });
+      } catch (err) {
+        if (err.name !== 'AbortError') console.error('Share failed:', err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+      } catch (err) {
+        console.error('Clipboard write failed:', err);
+      }
+    }
+  };
 
   const handleRecipeUpdated = async () => {
     // Refresh recipe data after update
@@ -224,6 +244,12 @@ function RecipeDetail({ recipeId, onBack }) {
       <div style={{display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap'}}>
         <button onClick={onBack} style={styles.backButton}>
           ← Back to Recipes
+        </button>
+        <button
+          onClick={handleShare}
+          style={{...styles.backButton, color: '#6f42c1', borderColor: '#6f42c1'}}
+        >
+          {shareCopied ? '✓ Copied!' : '🔗 Copy Link'}
         </button>
         {canEdit && (
           <button

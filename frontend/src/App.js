@@ -14,7 +14,10 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [showForm, setShowForm] = useState(false);
-  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+  const [selectedRecipeId, setSelectedRecipeId] = useState(() => {
+    const match = window.location.pathname.match(/^\/recipes\/([^/]+)$/);
+    return match ? match[1] : null;
+  });
   const [filters, setFilters] = useState({});
   const [showProfile, setShowProfile] = useState(false);
   const [recipeType, setRecipeType] = useState('food');
@@ -28,6 +31,15 @@ function App() {
     });
 
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const match = window.location.pathname.match(/^\/recipes\/([^/]+)$/);
+      setSelectedRecipeId(match ? match[1] : null);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const handleRecipeCreated = () => {
@@ -68,7 +80,10 @@ function App() {
           {selectedRecipeId ? (
             <RecipeDetail
               recipeId={selectedRecipeId}
-              onBack={() => setSelectedRecipeId(null)}
+              onBack={() => {
+                window.history.pushState(null, '', '/');
+                setSelectedRecipeId(null);
+              }}
             />
           ) : (
             <>
@@ -144,7 +159,10 @@ function App() {
 
               <RecipeList
                 key={`${refreshTrigger}-${recipeType}`}
-                onRecipeClick={(recipeId) => setSelectedRecipeId(recipeId)}
+                onRecipeClick={(recipeId) => {
+                  window.history.pushState(null, '', `/recipes/${recipeId}`);
+                  setSelectedRecipeId(recipeId);
+                }}
                 filters={{ ...filters, type: recipeType }}
               />
             </>
