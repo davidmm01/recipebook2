@@ -36,13 +36,13 @@ auto-promote-admin: ## Background: auto-promote all local dev users to admin
 db-reset: ## Pull latest database backup from GCP
 	@echo "Pulling latest database backup from GCP..."
 	@rm -f /tmp/recipes.db /tmp/recipes.db-wal /tmp/recipes.db-shm
-	@LATEST_BACKUP=$$(gsutil ls -l gs://recipebook2-d0440-recipebook-backups/*.db 2>/dev/null | grep -v TOTAL | sort -k2 | tail -1 | awk '{print $$3}'); \
+	@LATEST_BACKUP=$$(gcloud storage ls -l gs://recipebook2-d0440-recipebook-backups/*.db 2>/dev/null | grep -v TOTAL | sort -k2 | tail -1 | awk '{print $$3}'); \
 	if [ -z "$$LATEST_BACKUP" ]; then \
 		echo "No backups found, downloading from primary DB bucket..."; \
-		gsutil cp gs://recipebook2-d0440-recipebook-db/recipes.db /tmp/recipes.db; \
+		gcloud storage cp gs://recipebook2-d0440-recipebook-db/recipes.db /tmp/recipes.db; \
 	else \
 		echo "Downloading: $$LATEST_BACKUP"; \
-		gsutil cp "$$LATEST_BACKUP" /tmp/recipes.db; \
+		gcloud storage cp "$$LATEST_BACKUP" /tmp/recipes.db; \
 	fi
 	@echo ""
 	@echo "Database reset complete!"
